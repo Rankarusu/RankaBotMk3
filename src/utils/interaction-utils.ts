@@ -1,9 +1,8 @@
-import { Message } from 'discord.js';
 import {
   CommandInteraction,
-  DiscordAPIError,
-  MessageComponentInteraction,
   InteractionReplyOptions,
+  Message,
+  MessageComponentInteraction,
   MessageEmbed,
 } from 'discord.js';
 

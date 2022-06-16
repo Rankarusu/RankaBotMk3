@@ -1,5 +1,6 @@
 import {
   Client,
+  CommandInteraction,
   Constants,
   Interaction,
   Message,
@@ -8,12 +9,11 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import { CommandHandler } from '../events/command-handler';
-import { MessageHandler } from '../events/message-handler';
-import { ReactionHandler } from '../events/reaction-handler';
-import { PartialUtils } from '../utils/partial-utils';
-import { CommandInteraction, ButtonInteraction } from 'discord.js';
-//import handlers
+import { CommandHandler, MessageHandler, ReactionHandler } from '../events';
+import { Logger } from '../services';
+import { PartialUtils } from '../utils';
+
+const LogMessages = require('../../config/logs.json');
 
 export class Bot {
   private ready = false;
@@ -35,7 +35,6 @@ export class Bot {
 
   private registerListeners(): void {
     this.client.on(Constants.Events.CLIENT_READY, () => {
-      console.log('Bot is ready!');
       this.onReady();
     });
     this.client.on(Constants.Events.MESSAGE_CREATE, (msg: Message) =>
@@ -58,16 +57,17 @@ export class Bot {
     try {
       await this.client.login(token);
     } catch (error) {
-      //TODO: actual logging
-      console.error(error);
+      Logger.error(LogMessages.error.clientLogin, error);
+      return;
     }
   }
 
   private async onReady(): Promise<void> {
     let userTag = this.client.user?.tag;
-    //TODO: actual logging
-    console.log(`Logged in as ${userTag}`);
+    Logger.info(LogMessages.info.clientLogin.replaceAll('{USER_TAG}', userTag));
+
     this.ready = true;
+    Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}'));
   }
 
   private async onMessage(msg: Message): Promise<void> {
@@ -83,8 +83,7 @@ export class Bot {
     try {
       await this.messageHandler.process(msg);
     } catch (error) {
-      console.error(error);
-      //TODO: actual logging
+      Logger.error(LogMessages.error.message, error);
     }
   }
 
@@ -97,7 +96,7 @@ export class Bot {
       try {
         await this.commandHandler.process(interaction);
       } catch (error) {
-        console.error(error);
+        Logger.error(LogMessages.error.command, error);
       }
       // else if(interaction instanceof ButtonInteraction){}
       //TODO: buttoninteraction later
@@ -126,7 +125,7 @@ export class Bot {
         reactor
       );
     } catch (error) {
-      console.error(error);
+      Logger.error(LogMessages.error.reaction, error);
     }
   }
 }

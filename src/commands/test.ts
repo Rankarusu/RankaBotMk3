@@ -1,8 +1,8 @@
-import { Command, CommandDeferType } from './command';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
-import { InteractionUtils } from '../utils/interaction-utils';
+import { InteractionUtils } from '../utils';
+import { Command, CommandDeferType } from './command';
 
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

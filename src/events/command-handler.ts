@@ -1,14 +1,16 @@
-import { EventHandler } from './event-handler';
-import { CommandInteraction } from 'discord.js';
-import { Command, CommandDeferType } from '../commands/command';
-import { InteractionUtils } from '../utils/interaction-utils';
+import {
+  CommandInteraction,
+  NewsChannel,
+  TextChannel,
+  ThreadChannel,
+} from 'discord.js';
+import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
+import { Logger } from '../services';
+import { InteractionUtils } from '../utils/interaction-utils';
+import { EventHandler } from './event-handler';
 
-enum bleh {
-  PUBLIC = 'PUBLIC',
-  HIDDEN = 'HIDDEN',
-  NONE = 'NONE',
-}
+const LogMessages = require('../../config/logs.json');
 
 export class CommandHandler implements EventHandler {
   constructor(public commands: Command[]) {}
@@ -26,8 +28,11 @@ export class CommandHandler implements EventHandler {
       (command) => command.metadata.name === interaction.commandName
     );
     if (!command) {
-      console.error('Command not found');
-      //TODO: actual logging
+      Logger.error(
+        LogMessages.error.commandNotFound
+          .replaceAll('{INTERACTION_ID}', interaction.id)
+          .replaceAll('{COMMAND_NAME}', interaction.commandName)
+      );
       return;
     }
 
@@ -53,7 +58,28 @@ export class CommandHandler implements EventHandler {
       //we can run checks here
       await command.execute(interaction, data);
     } catch (error) {
-      console.error(error);
+      Logger.error(
+        interaction.channel instanceof TextChannel ||
+          interaction.channel instanceof NewsChannel ||
+          interaction.channel instanceof ThreadChannel
+          ? LogMessages.error.commandGuild
+              .replaceAll('{INTERACTION_ID}', interaction.id)
+              .replaceAll('{COMMAND_NAME}', interaction.commandName)
+              .replaceAll('{USER_TAG}', interaction.user.tag)
+              .replaceAll('{USER_ID}', interaction.user.id)
+              .replaceAll('{CHANNEL_NAME}', interaction.channel.name)
+              .replaceAll('{CHANNEL_ID}', interaction.channel.id)
+              .replaceAll('{GUILD_NAME}', interaction.guild.name)
+              .replaceAll('{GUILD_ID}', interaction.guild.id)
+          : LogMessages.error.commandOther
+              .replaceAll('{INTERACTION_ID}', interaction.id)
+              .replaceAll('{COMMAND_NAME}', interaction.commandName)
+              .replaceAll('{USER_TAG}', interaction.user.tag)
+              .replaceAll('{USER_ID}', interaction.user.id),
+        error
+      );
     }
+
+    //TODO: put send error function here
   }
 }

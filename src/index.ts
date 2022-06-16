@@ -58,6 +58,7 @@ async function start(): Promise<void> {
   try {
     let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
       commands.map((command) => command.metadata);
+
     Logger.info(
       LogMessages.info.commandActionCreating.replaceAll(
         '{COMMAND_LIST}',

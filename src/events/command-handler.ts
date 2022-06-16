@@ -7,7 +7,7 @@ import {
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
-import { InteractionUtils } from '../utils/interaction-utils';
+import { InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
 
 const LogMessages = require('../../config/logs.json');
@@ -23,6 +23,29 @@ export class CommandHandler implements EventHandler {
       return;
     }
 
+    Logger.info(
+      interaction.channel instanceof TextChannel ||
+        interaction.channel instanceof NewsChannel ||
+        interaction.channel instanceof ThreadChannel
+        ? LogMessages.info.commandGuild
+            .replaceAll('{INTERACTION_ID}', interaction.id)
+            .replaceAll('{COMMAND_NAME}', interaction.commandName)
+            .replaceAll('{USER_TAG}', interaction.user.tag)
+            .replaceAll('{USER_ID}', interaction.user.id)
+            .replaceAll(
+              '{ARGUMENTS}',
+              StringUtils.prettifyCommandOptions(interaction.options.data)
+            )
+            .replaceAll('{CHANNEL_NAME}', interaction.channel.name)
+            .replaceAll('{CHANNEL_ID}', interaction.channel.id)
+            .replaceAll('{GUILD_NAME}', interaction.guild.name)
+            .replaceAll('{GUILD_ID}', interaction.guild.id)
+        : LogMessages.info.commandOther
+            .replaceAll('{INTERACTION_ID}', interaction.id)
+            .replaceAll('{COMMAND_NAME}', interaction.commandName)
+            .replaceAll('{USER_TAG}', interaction.user.tag)
+            .replaceAll('{USER_ID}', interaction.user.id)
+    );
     // find the command that the user watch executed
     let command = this.commands.find(
       (command) => command.metadata.name === interaction.commandName

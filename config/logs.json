@@ -3,6 +3,8 @@
     "appStarted": "Application started.",
     "clientLogin": "Client logged in as '{USER_TAG}'.",
     "clientReady": "Client is ready.",
+    "commandGuild": "[{INTERACTION_ID}] '{USER_TAG}' ({USER_ID}) used {COMMAND_NAME} with ({ARGUMENTS}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID})",
+    "commandOther": "[{INTERACTION_ID}] '{USER_TAG}' ({USER_ID}) used {COMMAND_NAME} with ({ARGUMENTS})",
     "commandActionCreating": "Creating commands: \n{COMMAND_LIST}"
   },
   "warn": {},

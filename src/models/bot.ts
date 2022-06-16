@@ -53,6 +53,7 @@ export class Bot {
       ) => this.onReaction(msgReaction, user)
     );
   }
+
   private async login(token: string): Promise<void> {
     try {
       await this.client.login(token);

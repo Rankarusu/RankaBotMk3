@@ -1,4 +1,5 @@
 import { DiscordAPIError } from 'discord.js';
+import { Response } from 'node-fetch';
 import pino from 'pino';
 
 let logger = pino({
@@ -38,7 +39,7 @@ export class Logger {
 
   public static async error(msg: string, obj?: any): Promise<void> {
     if (!obj) {
-      //only log message iff there is no error object
+      //only log message if there is no error object
       logger.error(msg);
       return;
     }
@@ -62,7 +63,7 @@ export class Logger {
           path: obj.url,
           status: obj.status,
           statusName: obj.statusText,
-          headers: obj.headers,
+          headers: obj.headers.raw(),
           body: resText,
         })
         .error(msg);

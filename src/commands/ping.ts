@@ -19,6 +19,12 @@ export class PingCommand implements Command {
     interaction: CommandInteraction,
     data: EventData
   ): Promise<void> {
-    await InteractionUtils.send(interaction, 'Pong!', true);
+    await InteractionUtils.send(
+      interaction,
+      `🏓 Pong! ${
+        Date.now() - interaction.createdTimestamp
+      } ms \n 🏸 API Latency: ${Math.round(interaction.client.ws.ping)} ms`,
+      true
+    );
   }
 }

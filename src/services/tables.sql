@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS exp(
+user_id INTEGER NOT NULL PRIMARY KEY,
+guild_id INTEGER NOT NULL,
+xp INTEGER,
+level INTEGER,
+xp_lock TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reminder(
+message_id INTEGER NOT NULL PRIMARY KEY,
+user_id INTEGER NOT NULL,
+guild_id INTEGER NOT NULL,
+channel_id INTEGER NOT NULL,
+message TEXT,
+invoke_time TIMESTAMP,
+parsed_time TIMESTAMP
+);

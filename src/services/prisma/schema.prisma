@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Exp {
+  userId  Int       @id @map("user_id")
+  guildId Int       @map("guild_id")
+  xp      Int?
+  level   Int?
+  xpLock  DateTime? @map("xp_lock") @db.Timestamp(6)
+
+  @@map("exp")
+}
+
+model Reminder {
+  messageId  Int       @id @map("message_id")
+  userId     Int       @map("user_id")
+  guildId    Int?      @map("guild_id")
+  channelId  Int?      @map("channel_id")
+  message    String?
+  invokeTime DateTime? @map("invoke_time") @db.Timestamp(6)
+  parsedTime DateTime? @map("parsed_time") @db.Timestamp(6)
+
+  @@map("reminder")
+}

@@ -1,5 +1,6 @@
 node_modules
 .env
-src/config.json
 dist
 config/config.json
+docker-compose.yml
+src/services/prisma/migrations

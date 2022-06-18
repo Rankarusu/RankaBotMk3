@@ -79,7 +79,7 @@ export class Logger {
         })
         .error(obj, msg);
     } else {
-      logger.error(msg, obj);
+      logger.error(obj, msg);
     }
   }
 }

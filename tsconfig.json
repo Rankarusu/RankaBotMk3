@@ -16,6 +16,9 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "node"
   },
+  "types": [
+    "node"
+  ],
   "include": [
     "src",
   ],

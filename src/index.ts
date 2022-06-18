@@ -16,10 +16,10 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 
-import { Logger } from './services';
+import { Logger, Db } from './services';
 
 const Config = require('../config/config.json');
-const LogMessages = require('../config/logs.json');
+const LogMessages = require('../logs/logs.json');
 const rest = new REST().setToken(Config.client.token);
 
 async function start(): Promise<void> {
@@ -73,7 +73,20 @@ async function start(): Promise<void> {
     Logger.error(LogMessages.error.commandActionCreating, error);
   }
 
+  //Connect to Database
+  try {
+    await Db.$connect(); //technically not necessary, but will retrieve first call immediately
+    Logger.info(LogMessages.info.databaseConnect);
+  } catch (error) {
+    Logger.error(LogMessages.error.databaseConnect, error);
+  }
+
+  //Finally start the bot
   await bot.start();
 }
+
+process.on('unhandledRejection', (error) => {
+  Logger.error(LogMessages.error.unhandledRejection, error);
+});
 
 start().catch((error) => Logger.error(LogMessages.error.unspecified, error));

@@ -13,7 +13,7 @@ import { CommandHandler, MessageHandler, ReactionHandler } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
-const LogMessages = require('../../config/logs.json');
+const LogMessages = require('../../logs/logs.json');
 
 export class Bot {
   private ready = false;
@@ -30,7 +30,7 @@ export class Bot {
 
   public async start(): Promise<void> {
     this.registerListeners();
-    await this.client.login(this.token);
+    await this.login(this.token);
   }
 
   private registerListeners(): void {

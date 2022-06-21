@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Logger } from '.';
 import 'dotenv/config';
+import { LogEvent, QueryEvent } from '../models/prisma-events';
 const Config = require('../../config/config.json');
 const LogMessages = require('../../logs/logs.json');
 
@@ -25,18 +26,45 @@ const Db =
         url,
       },
     },
-    log: ['query', 'info', 'warn', 'error'], //logs to stdout by default
-    //TODO: event based logging so we can let pino handle it.
+    //we emit events for all log messages so we can use pino to catch them and have a streamlined logger.
+    log: [
+      {
+        emit: 'event',
+        level: 'query',
+      },
+      {
+        emit: 'event',
+        level: 'error',
+      },
+      {
+        emit: 'event',
+        level: 'info',
+      },
+      {
+        emit: 'event',
+        level: 'warn',
+      },
+    ],
   });
 
 if (Config.env === 'development') {
   global.Db = Db;
 }
 
-// TODO: find out why this does not work
-// Db.$on('beforeExit', async () => {
-//   Logger.info(LogMessages.info.databaseBeforeExit);
-//   await Db.$disconnect();
-// });
+Db.$on('query', (e: QueryEvent) => {
+  Logger.info(LogMessages.info.prismaQuery.replaceAll('{QUERY}', e.query));
+});
+
+Db.$on('error', (e: LogEvent) => {
+  Logger.info(LogMessages.error.prismaError.replaceAll('{TEXT}', e.message));
+});
+
+Db.$on('warn', (e: LogEvent) => {
+  Logger.info(LogMessages.warn.prisma.replaceAll('{TEXT}', e.message));
+});
+
+Db.$on('info', (e: LogEvent) => {
+  Logger.info(LogMessages.info.prismaInfo.replaceAll('{TEXT}', e.message));
+});
 
 export { Db };

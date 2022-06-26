@@ -7,7 +7,7 @@ import {
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
-import { InteractionUtils, StringUtils } from '../utils';
+import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
 
 const LogMessages = require('../../logs/logs.json');
@@ -81,6 +81,8 @@ export class CommandHandler implements EventHandler {
       //we can run checks here
       await command.execute(interaction, data);
     } catch (error) {
+      await this.sendError(interaction, data);
+
       Logger.error(
         interaction.channel instanceof TextChannel ||
           interaction.channel instanceof NewsChannel ||
@@ -104,5 +106,18 @@ export class CommandHandler implements EventHandler {
     }
 
     //TODO: put send error function here
+  }
+  private async sendError(
+    interaction: CommandInteraction,
+    data: EventData
+  ): Promise<void> {
+    {
+      // data.fields = {
+      //   ERROR_CODE: interaction.id,
+      //   GUILD_ID: interaction.guild.id,
+      // };
+      const embed = EmbedUtils.errorEmbed(data);
+      await InteractionUtils.send(interaction, embed);
+    }
   }
 }

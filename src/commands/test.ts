@@ -5,8 +5,10 @@ import {
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
 import { InteractionUtils } from '../utils';
+import { EmbedUtils } from '../utils/embed-utils';
 import { Command, CommandDeferType } from './command';
 
+const Config = require('../../config/config.json');
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'test',
@@ -56,6 +58,18 @@ export class TestCommand implements Command {
     interaction: CommandInteraction,
     data: EventData
   ): Promise<void> {
-    await InteractionUtils.send(interaction, 'Test', true);
+    // await InteractionUtils.send(interaction, 'Test', true);
+    data.description = 'Test failed';
+    await this.sendError(interaction, data);
+  }
+
+  private async sendError(
+    interaction: CommandInteraction,
+    data: EventData
+  ): Promise<void> {
+    {
+      const embed = EmbedUtils.errorEmbed(data);
+      await InteractionUtils.send(interaction, embed);
+    }
   }
 }

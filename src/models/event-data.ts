@@ -1,3 +1,4 @@
 export class EventData {
-  constructor() {}
+  public description: string;
+  public fields: { [key: string]: string } = {};
 }

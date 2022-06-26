@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import { Logger } from '.';
+import { Prisma, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
+import { Logger } from '.';
 import { LogEvent, QueryEvent } from '../models/prisma-events';
 const Config = require('../../config/config.json');
 const LogMessages = require('../../logs/logs.json');
@@ -11,14 +11,17 @@ const LogMessages = require('../../logs/logs.json');
 declare global {
   namespace NodeJS {
     interface Global {
-      Db: PrismaClient;
+      Db: PrismaClient<Prisma.PrismaClientOptions, 'info' | 'warn' | 'error'>;
     }
   }
 }
 
 const db = Config.db;
 const url = `${db.engine}://${db.user}:${db.password}@${db.host}:${db.port}/${db.database}?schema=${db.schema}`;
-const Db =
+const Db: PrismaClient<
+  Prisma.PrismaClientOptions,
+  'query' | 'info' | 'warn' | 'error'
+> =
   global.Db ||
   new PrismaClient({
     datasources: {

@@ -1,6 +1,6 @@
 import { REST } from '@discordjs/rest';
 import { Client, IntentsString, PartialTypes } from 'discord.js';
-import { Command, PingCommand, TestCommand } from './commands';
+import { Command, PingCommand, RemindCommand, TestCommand } from './commands';
 import {
   CommandHandler,
   MessageHandler,
@@ -16,7 +16,7 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 
-import { Logger, Db } from './services';
+import { Db, Logger } from './services';
 
 const Config = require('../config/config.json');
 const LogMessages = require('../logs/logs.json');
@@ -29,9 +29,11 @@ async function start(): Promise<void> {
   });
 
   //Commands
-  let commands: Command[] = [new PingCommand(), new TestCommand()].sort(
-    (a, b) => (a.metadata.name < b.metadata.name ? -1 : 1)
-  );
+  let commands: Command[] = [
+    new PingCommand(),
+    new TestCommand(),
+    new RemindCommand(),
+  ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   //Reactions
   let reactions: Reaction[] = [];

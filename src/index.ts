@@ -17,6 +17,7 @@ import {
 } from 'discord-api-types/v10';
 
 import { Db, Logger } from './services';
+import { ReminderScheduler } from './services/reminder';
 
 const Config = require('../config/config.json');
 const LogMessages = require('../logs/logs.json');
@@ -82,6 +83,10 @@ async function start(): Promise<void> {
   } catch (error) {
     Logger.error(LogMessages.error.databaseConnect, error);
   }
+
+  //start reminder scheduler
+  const reminderScheduler = new ReminderScheduler(client);
+  reminderScheduler.start();
 
   //Finally start the bot
   await bot.start();

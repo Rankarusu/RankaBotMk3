@@ -71,27 +71,40 @@ export class RemindCommand implements Command {
     const notificationMessage =
       interaction.options.getString('notification-text') || 'do something';
 
+    // const reminder: Reminder = {
+    //   messageId: interaction.id,
+    //   userId: interaction.user.id,
+    //   guildId: interaction.guild.id || null,
+    //   channelId: interaction.channel.id,
+    //   message: notificationMessage,
+    //   invokeTime: interaction.createdAt,
+    //   parsedTime,
+    // };
+
+    const unixTime = Math.floor(parsedTime.getTime() / 1000);
+    const embed = EmbedUtils.successEmbed(
+      `Alright. I'm going to remind you to **${notificationMessage}** at <t:${unixTime}:f>`
+    );
+
+    const confirmation = await InteractionUtils.send(interaction, embed);
+    //we cannot reply to interactions after 15 minutes, so we need to get a reference to the confirmation message
+
     const reminder: Reminder = {
       messageId: interaction.id,
       userId: interaction.user.id,
-      guildId: interaction.guild.id,
+      guildId: interaction.guild.id || null,
       channelId: interaction.channel.id,
       message: notificationMessage,
       invokeTime: interaction.createdAt,
       parsedTime,
     };
+
     try {
       await Db.reminder.create({ data: reminder });
     } catch {
+      confirmation.delete();
       data.description = `Could not create reminder`;
       throw new Error(`Could not create reminder`);
     }
-
-    const unixTime = Math.floor(parsedTime.getTime() / 1000);
-    const embed = EmbedUtils.successEmbed(
-      `Alright. I'm going to rent you to **${reminder.message}** at <t:${unixTime}:f>`
-    );
-
-    await InteractionUtils.send(interaction, embed);
   }
 }

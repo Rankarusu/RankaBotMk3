@@ -18,16 +18,18 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/rest": "^0.5.0",
-    "@prisma/client": "^3.15.2",
+    "@prisma/client": "^4.0.0",
     "discord-api-types": "^0.33.5",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
+    "node-cron": "^3.0.1",
     "node-fetch": "^2.6.7",
     "pino": "^8.0.0",
     "pino-pretty": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",
+    "@types/node-cron": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "chrono-node": "^2.3.8",
@@ -39,7 +41,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2",
-    "prisma": "^3.15.2",
+    "prisma": "^4.0.0",
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.4"

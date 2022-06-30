@@ -10,7 +10,8 @@
     "databaseBeforeExit": "Database disconnecting.",
     "databaseDisconnect": "Database disconnected.",
     "prismaQuery": "[Prisma] {QUERY}",
-    "prismaInfo": "[Prisma] {TEXT}"
+    "prismaInfo": "[Prisma] {TEXT}",
+    "cronInfo": "[Cron] {TEXT}"
   },
   "warn": {
     "prismaWarn": "[Prisma] {TEXT}"
@@ -23,6 +24,7 @@
     "clientLogin": "An error occurred while attempting to login.",
     "message": "An error occurred while processing a message.",
     "reaction": "An error occurred while processing a reaction.",
+    "fetchUser": "An error occurred while fetching a user.",
     "command": "An error occurred while processing a command interaction.",
     "commandNotFound": "[{INTERACTION_ID}] A command with the name '{COMMAND_NAME}' could not be found.",
     "commandGuild": "[{INTERACTION_ID}] An error occurred while executing the '{COMMAND_NAME}' command for user '{USER_TAG}' ({USER_ID}) in channel '{CHANNEL_NAME}' ({CHANNEL_ID}) in guild '{GUILD_NAME}' ({GUILD_ID}).",

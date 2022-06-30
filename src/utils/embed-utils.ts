@@ -23,4 +23,12 @@ export class EmbedUtils {
       .setTimestamp();
     return embed;
   }
+  public static infoEmbed(message: string, title?: string) {
+    let embed = new MessageEmbed()
+      .setTitle(title || 'Info')
+      .setColor(Config.colors.info)
+      .setDescription(message)
+      .setTimestamp();
+    return embed;
+  }
 }

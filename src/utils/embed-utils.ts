@@ -15,20 +15,26 @@ export class EmbedUtils {
     }
     return embed;
   }
+
   public static successEmbed(message: string, title?: string) {
     let embed = new MessageEmbed()
-      .setTitle(title || 'Success!')
       .setColor(Config.colors.success)
       .setDescription(message)
       .setTimestamp();
+    if (title) {
+      embed.setTitle(title);
+    }
     return embed;
   }
+
   public static infoEmbed(message: string, title?: string) {
     let embed = new MessageEmbed()
-      .setTitle(title || 'Info')
-      .setColor(Config.colors.info)
+      .setColor(Config.colors.default)
       .setDescription(message)
       .setTimestamp();
+    if (title) {
+      embed.setTitle(title);
+    }
     return embed;
   }
 }

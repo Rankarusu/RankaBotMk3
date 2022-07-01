@@ -22,25 +22,45 @@ export class ReminderScheduler {
     reminders.forEach(async (reminder) => {
       if (reminder.parsedTime < now) {
         //fetch message object
-        const msg = await ClientUtils.getMessage(
-          this.client,
-          reminder.channelId,
-          reminder.messageId
+
+        const embed = EmbedUtils.infoEmbed(
+          `<@${reminder.userId}>, ${reminder.message}`,
+          'Reminder'
         );
-        const embed = EmbedUtils.infoEmbed(reminder.message, 'Reminder');
-        MessageUtils.reply(msg, embed);
-        // TODO: handling of deleted messages.
+        try {
+          //send message as reply
+          const msg = await ClientUtils.getMessage(
+            this.client,
+            reminder.channelId,
+            reminder.messageId
+          );
+          await MessageUtils.reply(msg, embed);
+        } catch (DiscordAPIError) {
+          //in case message was deleted, just send message to channel
+          const channel = await ClientUtils.getChannel(
+            this.client,
+            reminder.channelId
+          );
+          await MessageUtils.send(channel, embed);
+        }
+
+        // delete from db
+        await Db.reminder.delete({ where: { messageId: reminder.messageId } });
         //TODO: more logging
       }
     });
   }
 
   public async start() {
-    cron.schedule('30 * * * * *', () => {
+    // run every 20 seconds
+    cron.schedule('0,20,40 * * * * *', () => {
       this.remind();
     });
     Logger.info(
-      LogMessages.cronInfo.replaceAll('{TEXT}', 'Reminder scheduler started')
+      LogMessages.info.cronInfo.replaceAll(
+        '{TEXT}',
+        'Reminder scheduler started'
+      )
     );
   }
 }

@@ -19,8 +19,8 @@ import {
 import { Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
 
-const Config = require('../config/config.json');
-const LogMessages = require('../logs/logs.json');
+import Config from '../config/config.json';
+import LogMessages from '../logs/logs.json';
 const rest = new REST().setToken(Config.client.token);
 
 async function start(): Promise<void> {

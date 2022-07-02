@@ -13,7 +13,7 @@ import { CommandHandler, MessageHandler, ReactionHandler } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
-const LogMessages = require('../../logs/logs.json');
+import LogMessages from '../../logs/logs.json';
 
 export class Bot {
   private ready = false;
@@ -68,7 +68,7 @@ export class Bot {
     Logger.info(LogMessages.info.clientLogin.replaceAll('{USER_TAG}', userTag));
 
     this.ready = true;
-    Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}'));
+    Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}', userTag));
   }
 
   private async onMessage(msg: Message): Promise<void> {

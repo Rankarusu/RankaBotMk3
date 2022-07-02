@@ -8,7 +8,7 @@ import { InteractionUtils } from '../utils';
 import { EmbedUtils } from '../utils/embed-utils';
 import { Command, CommandDeferType } from './command';
 
-const Config = require('../../config/config.json');
+import Config from '../../config/config.json';
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'test',

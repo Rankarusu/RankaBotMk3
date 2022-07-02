@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import { Logger } from '.';
+import Config from '../../config/config.json';
+import LogMessages from '../../logs/logs.json';
 import { LogEvent, QueryEvent } from '../models/prisma-events';
-const Config = require('../../config/config.json');
-const LogMessages = require('../../logs/logs.json');
 
 //prevent hot reloading from creating instances of the prisma client
 //for that we declare prisma globally as globals are not reset by hot reload
@@ -63,7 +63,7 @@ Db.$on('error', (e: LogEvent) => {
 });
 
 Db.$on('warn', (e: LogEvent) => {
-  Logger.info(LogMessages.warn.prisma.replaceAll('{TEXT}', e.message));
+  Logger.info(LogMessages.warn.prismaWarn.replaceAll('{TEXT}', e.message));
 });
 
 Db.$on('info', (e: LogEvent) => {

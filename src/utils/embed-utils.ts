@@ -1,12 +1,12 @@
-import { MessageEmbed } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
+import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
-const Config = require('../../config/config.json');
 
 export class EmbedUtils {
   public static errorEmbed(data: EventData) {
     let embed = new MessageEmbed()
       .setTitle('Error')
-      .setColor(Config.colors.error)
+      .setColor(Config.colors.error as ColorResolvable)
       .setDescription(data.description)
       .setTimestamp();
 
@@ -18,7 +18,7 @@ export class EmbedUtils {
 
   public static successEmbed(message: string, title?: string) {
     let embed = new MessageEmbed()
-      .setColor(Config.colors.success)
+      .setColor(Config.colors.success as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
     if (title) {
@@ -29,7 +29,7 @@ export class EmbedUtils {
 
   public static infoEmbed(message: string, title?: string) {
     let embed = new MessageEmbed()
-      .setColor(Config.colors.default)
+      .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
     if (title) {

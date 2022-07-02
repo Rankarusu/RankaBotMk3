@@ -19,6 +19,7 @@
   "error": {
     "unspecified": "An unspecified error occurred",
     "unhandledRejection": "An unhandled promise rejection occurred",
+    "commandActionCreating": "An error ocurred while creating commands",
     "commandAction": "An error occurred why running a command action.",
     "commandActionNotFound": "Could not find command with name '{COMMAND_NAME}'",
     "clientLogin": "An error occurred while attempting to login.",

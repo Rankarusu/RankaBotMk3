@@ -10,7 +10,7 @@ import { Logger } from '../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
 
-const LogMessages = require('../../logs/logs.json');
+import LogMessages from '../../logs/logs.json';
 
 export class CommandHandler implements EventHandler {
   constructor(public commands: Command[]) {}

@@ -23,8 +23,7 @@ export class PingCommand implements Command {
       interaction,
       `🏓 Pong! ${
         Date.now() - interaction.createdTimestamp
-      } ms \n 🏸 API Latency: ${Math.round(interaction.client.ws.ping)} ms`,
-      true
+      } ms \n 🏸 API Latency: ${Math.round(interaction.client.ws.ping)} ms`
     );
   }
 }

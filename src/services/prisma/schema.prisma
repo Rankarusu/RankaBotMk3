@@ -18,13 +18,14 @@ model Exp {
 }
 
 model Reminder {
-  messageId  String   @id @map("message_id")
-  userId     String   @map("user_id")
-  guildId    String?  @map("guild_id")
-  channelId  String?  @map("channel_id")
-  message    String?
-  invokeTime DateTime @map("invoke_time") @db.Timestamp(6)
-  parsedTime DateTime @map("parsed_time") @db.Timestamp(6)
+  interactionId String   @id @map("interaction_id")
+  messageId     String   @map("message_id")
+  userId        String   @map("user_id")
+  guildId       String?  @map("guild_id")
+  channelId     String?  @map("channel_id")
+  message       String?
+  invokeTime    DateTime @map("invoke_time") @db.Timestamp(6)
+  parsedTime    DateTime @map("parsed_time") @db.Timestamp(6)
 
   @@map("reminder")
 }

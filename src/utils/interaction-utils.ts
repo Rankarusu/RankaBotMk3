@@ -1,3 +1,5 @@
+import { APIActionRowComponent } from 'discord-api-types/v10';
+import { MessageActionRow, MessageEditOptions } from 'discord.js';
 import {
   CommandInteraction,
   InteractionReplyOptions,
@@ -25,6 +27,7 @@ export class InteractionUtils {
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | MessageEmbed | InteractionReplyOptions,
+    components?: MessageActionRow[],
     hidden: boolean = false
   ): Promise<Message> {
     try {
@@ -38,17 +41,36 @@ export class InteractionUtils {
         return (await interaction.followUp({
           ...options,
           ephemeral: hidden,
+          components,
         })) as Message;
       } else {
         return (await interaction.reply({
           ...options,
           ephemeral: hidden,
           fetchReply: true,
+          components,
         })) as Message;
       }
     } catch (error) {
       //TODO: filter out
 
+      throw error;
+    }
+  }
+
+  public static async editReply(
+    intr: CommandInteraction | MessageComponentInteraction,
+    content: string | MessageEmbed
+  ): Promise<Message> {
+    try {
+      let options: MessageEditOptions =
+        typeof content === 'string'
+          ? { content }
+          : content instanceof MessageEmbed
+          ? { embeds: [content] }
+          : content;
+      return (await intr.editReply(options)) as Message;
+    } catch (error) {
       throw error;
     }
   }

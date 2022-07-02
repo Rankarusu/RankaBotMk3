@@ -81,8 +81,6 @@ export class CommandHandler implements EventHandler {
       //we can run checks here
       await command.execute(interaction, data);
     } catch (error) {
-      await this.sendError(interaction, data);
-
       Logger.error(
         interaction.channel instanceof TextChannel ||
           interaction.channel instanceof NewsChannel ||
@@ -103,6 +101,7 @@ export class CommandHandler implements EventHandler {
               .replaceAll('{USER_ID}', interaction.user.id),
         error
       );
+      // await this.sendError(interaction, data);
     }
 
     //TODO: put send error function here

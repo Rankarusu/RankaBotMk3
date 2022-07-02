@@ -11,7 +11,9 @@
     "CEST",
     "chrono",
     "datasources",
-    "pino"
+    "discordjs",
+    "pino",
+    "Termi"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

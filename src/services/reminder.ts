@@ -45,7 +45,9 @@ export class ReminderScheduler {
         }
 
         // delete from db
-        await Db.reminder.delete({ where: { messageId: reminder.messageId } });
+        await Db.reminder.delete({
+          where: { interactionId: reminder.interactionId },
+        });
         //TODO: more logging
       }
     });

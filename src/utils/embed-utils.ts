@@ -37,4 +37,21 @@ export class EmbedUtils {
     }
     return embed;
   }
+
+  public static reminderListEmbed(
+    message: string,
+    list: { id: string; text: string }[]
+  ) {
+    let embed = new MessageEmbed()
+      .setTitle('Reminders')
+      .setColor(Config.colors.default as ColorResolvable)
+      .setDescription(message)
+      .setFooter({ text: 'Use `/remind delete <ID>` to delete a reminder' });
+    if (list) {
+      list.forEach((item) => {
+        embed.addField(item.id, item.text, false);
+      });
+    }
+    return embed;
+  }
 }

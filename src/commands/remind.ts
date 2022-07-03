@@ -7,7 +7,13 @@ import {
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
 import { Db } from '../services';
-import { DateUtils, EmbedUtils, InteractionUtils, RemindUtils } from '../utils';
+import {
+  DateUtils,
+  EmbedUtils,
+  InteractionUtils,
+  RemindUtils,
+  DbUtils,
+} from '../utils';
 import { Command, CommandDeferType } from './command';
 
 export class RemindCommand implements Command {
@@ -61,10 +67,9 @@ export class RemindCommand implements Command {
   ): Promise<void> {
     if (interaction.options.getSubcommand() === 'list') {
       //TODO: maybe put split subcommands in multiple files if possible
-      const reminders: Reminder[] = await Db.reminder.findMany({
-        where: { userId: interaction.user.id },
-        orderBy: { parsedTime: 'asc' },
-      });
+      const reminders: Reminder[] = await DbUtils.getRemindersByUserId(
+        interaction.user.id
+      );
 
       if (reminders.length === 0) {
         const message =
@@ -149,7 +154,7 @@ export class RemindCommand implements Command {
       };
 
       try {
-        await Db.reminder.create({ data: reminder });
+        await DbUtils.createReminder(reminder);
       } catch {
         confirmation.delete();
         const message = 'Could not create reminder';

@@ -2,9 +2,7 @@ import { Client } from 'discord.js';
 import * as cron from 'node-cron';
 import { Logger } from '.';
 import LogMessages from '../../logs/logs.json';
-import { ClientUtils, EmbedUtils } from '../utils';
-import { MessageUtils } from '../utils/message-utils';
-import { Db } from './db';
+import { ClientUtils, DbUtils, EmbedUtils, MessageUtils } from '../utils';
 
 export class ReminderScheduler {
   client: Client;
@@ -17,7 +15,7 @@ export class ReminderScheduler {
   // fire everything
   // delete from db
   private async remind() {
-    const reminders = await Db.reminder.findMany();
+    const reminders = await DbUtils.getAllReminders();
     const now = new Date();
     reminders.forEach(async (reminder) => {
       if (reminder.parsedTime < now) {
@@ -45,9 +43,7 @@ export class ReminderScheduler {
         }
 
         // delete from db
-        await Db.reminder.delete({
-          where: { interactionId: reminder.interactionId },
-        });
+        await DbUtils.deleteReminderById(reminder.interactionId);
         //TODO: more logging
       }
     });

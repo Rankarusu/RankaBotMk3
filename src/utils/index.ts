@@ -1,3 +1,4 @@
+export { DbUtils } from './db-utils';
 export { ClientUtils } from './client-utils';
 export { DateUtils } from './date-utils';
 export { EmbedUtils } from './embed-utils';

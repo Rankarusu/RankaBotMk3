@@ -3,9 +3,7 @@ import { Message, SelectMenuInteraction } from 'discord.js';
 import { SelectMenu, SelectMenuDeferType } from '.';
 import { EventData } from '../models/event-data';
 import { Db } from '../services';
-import { RemindUtils } from '../utils';
-import { EmbedUtils } from '../utils/embed-utils';
-import { InteractionUtils } from '../utils/interaction-utils';
+import { DbUtils, EmbedUtils, InteractionUtils, RemindUtils } from '../utils';
 
 export class DeleteReminderSelectMenu implements SelectMenu {
   ids: string[] = ['delete-reminder'];
@@ -27,10 +25,9 @@ export class DeleteReminderSelectMenu implements SelectMenu {
       },
     });
 
-    const reminders: Reminder[] = await Db.reminder.findMany({
-      where: { userId: interaction.user.id },
-      orderBy: { parsedTime: 'asc' },
-    });
+    const reminders: Reminder[] = await DbUtils.getRemindersByUserId(
+      interaction.user.id
+    );
 
     if (reminders.length === 0) {
       const embed = EmbedUtils.infoEmbed('No reminders set at the moment');

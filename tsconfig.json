@@ -15,13 +15,13 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "types": [
     "node"
   ],
   "include": [
-    "src",
+    "src"
   ],
   "exclude": [
     "node_modules",

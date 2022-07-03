@@ -9,7 +9,7 @@
     "prisma:pull": "npx prisma db pull --schema src/services/prisma/schema.prisma",
     "prisma:migrate": "npx prisma migrate dev --schema src/services/prisma/schema.prisma init",
     "start": "ts-node src/index.ts",
-    "start:dev": "ts-node-dev --project tsconfig.json src/index.ts",
+    "start:dev": "ts-node-dev --respawn --transpile-only --exit-child --watch src src/index.ts",
     "start:prod": "npm run build && node dist/index.js",
     "watch": "tsc --watch"
   },

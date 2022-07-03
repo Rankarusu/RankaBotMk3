@@ -13,6 +13,7 @@
     "datasources",
     "discordjs",
     "pino",
+    "rankabotmk",
     "Termi"
   ],
   "[prisma]": {

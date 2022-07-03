@@ -9,7 +9,12 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import { CommandHandler, MessageHandler, ReactionHandler } from '../events';
+import {
+  CommandHandler,
+  MessageHandler,
+  ReactionHandler,
+  SelectMenuHandler,
+} from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
@@ -25,7 +30,8 @@ export class Bot {
     // private guildLeaveHandler: GuildLeaveHandler,
     private messageHandler: MessageHandler,
     private commandHandler: CommandHandler,
-    private reactionHandler: ReactionHandler
+    private reactionHandler: ReactionHandler,
+    private selectMenuHandler: SelectMenuHandler
   ) {}
 
   public async start(): Promise<void> {
@@ -93,14 +99,23 @@ export class Bot {
       return;
     }
 
-    if (interaction instanceof CommandInteraction) {
+    if (interaction.isCommand()) {
       try {
         await this.commandHandler.process(interaction);
       } catch (error) {
         Logger.error(LogMessages.error.command, error);
       }
       // else if(interaction instanceof ButtonInteraction){}
-      //TODO: buttoninteraction later
+      //TODO: buttonInteraction later
+    } else if (interaction.isSelectMenu()) {
+      try {
+        await this.selectMenuHandler.process(
+          interaction,
+          interaction.message as Message
+        );
+      } catch (error) {
+        Logger.error(LogMessages.error.selectMenu, error);
+      }
     }
   }
 

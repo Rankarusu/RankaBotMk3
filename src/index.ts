@@ -5,6 +5,7 @@ import {
   CommandHandler,
   MessageHandler,
   ReactionHandler,
+  SelectMenuHandler,
   TriggerHandler,
 } from './events';
 import { Bot } from './models/bot';
@@ -21,6 +22,8 @@ import { ReminderScheduler } from './services/reminder';
 
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
+import { SelectMenu } from './menus/select-menu';
+import { DeleteReminderSelectMenu } from './menus/delete-reminder-menu';
 const rest = new REST().setToken(Config.client.token);
 
 async function start(): Promise<void> {
@@ -42,11 +45,15 @@ async function start(): Promise<void> {
   //Triggers
   let triggers: Trigger[] = [];
 
+  //Select Menus
+  let menus: SelectMenu[] = [new DeleteReminderSelectMenu()];
+
   //Event Handlers
   let commandHandler = new CommandHandler(commands);
   let triggerHandler = new TriggerHandler(triggers);
   let messageHandler = new MessageHandler(triggerHandler);
   let reactionHandler = new ReactionHandler(reactions);
+  let selectMenuHandler = new SelectMenuHandler(menus);
 
   //Bot
   let bot = new Bot(
@@ -54,7 +61,8 @@ async function start(): Promise<void> {
     client,
     messageHandler,
     commandHandler,
-    reactionHandler
+    reactionHandler,
+    selectMenuHandler
   );
 
   //Register Commands

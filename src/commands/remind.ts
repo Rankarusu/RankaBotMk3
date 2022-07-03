@@ -4,15 +4,10 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import {
-  CommandInteraction,
-  MessageActionRow,
-  MessageSelectMenu,
-  PermissionString,
-} from 'discord.js';
+import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
 import { Db } from '../services';
-import { EmbedUtils, InteractionUtils } from '../utils';
+import { DateUtils, EmbedUtils, InteractionUtils, RemindUtils } from '../utils';
 import { Command, CommandDeferType } from './command';
 
 export class RemindCommand implements Command {
@@ -70,6 +65,7 @@ export class RemindCommand implements Command {
         where: { userId: interaction.user.id },
         orderBy: { parsedTime: 'asc' },
       });
+
       if (reminders.length === 0) {
         const message =
           'You have no reminders set at the moment. Use `/remind set` to set one.';
@@ -77,48 +73,11 @@ export class RemindCommand implements Command {
         throw new Error(message);
       }
 
-      const reminderList = reminders.map((reminder, index) => {
-        return {
-          //TODO: make a util function for this
-          time: reminder.parsedTime.toLocaleString(),
-          id: `ID: ${(index + 1).toString().padStart(3, '0')}`,
-          text: `<t:${Math.floor(reminder.parsedTime.getTime() / 1000)}:f> | ${
-            reminder.message
-          }`,
-          message: reminder.message,
-          interactionId: reminder.interactionId,
-        };
-      });
+      const embed = RemindUtils.createReminderListEmbed(reminders);
+      const rowData = RemindUtils.getRowData(reminders);
+      const row = RemindUtils.createDeleteReminderActionRow(rowData);
 
-      const embed = EmbedUtils.reminderListEmbed(
-        'Here is a list of all your set reminders.',
-        reminderList
-      );
-
-      const rowData = reminderList.map((reminder) => {
-        return {
-          label: reminder.id,
-          description: `${reminder.time} | ${reminder.message}`,
-          value: reminder.interactionId,
-        };
-      });
-
-      const row = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('reminder-id')
-          .setPlaceholder('Select a reminder to delete')
-          .addOptions(rowData)
-          .setMinValues(1)
-          .setMaxValues(rowData.length)
-      );
-
-      await InteractionUtils.send(interaction, embed);
-      await InteractionUtils.send(
-        interaction,
-        'You can also delete set reminders with the following menu.',
-        [row],
-        true
-      );
+      await InteractionUtils.send(interaction, embed, [row]);
     } else if (interaction.options.getSubcommand() === 'set') {
       let time = interaction.options.getString('time');
       let parsedTime: Date;
@@ -164,7 +123,7 @@ export class RemindCommand implements Command {
         throw new Error(message);
       }
 
-      const unixTime = Math.floor(parsedTime.getTime() / 1000);
+      const unixTime = DateUtils.getUnixTime(parsedTime);
       const processingEmbed = EmbedUtils.infoEmbed(
         "I'm processing your request..."
       );

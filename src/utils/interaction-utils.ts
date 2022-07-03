@@ -1,17 +1,17 @@
-import { APIActionRowComponent } from 'discord-api-types/v10';
-import { MessageActionRow, MessageEditOptions } from 'discord.js';
 import {
   CommandInteraction,
   InteractionReplyOptions,
   Message,
+  MessageActionRow,
   MessageComponentInteraction,
+  MessageEditOptions,
   MessageEmbed,
 } from 'discord.js';
 
 export class InteractionUtils {
   public static async deferReply(
     interaction: CommandInteraction | MessageComponentInteraction,
-    hidden: boolean
+    hidden: boolean = false
   ): Promise<void> {
     try {
       return await interaction.deferReply({
@@ -58,9 +58,20 @@ export class InteractionUtils {
     }
   }
 
+  public static async deferUpdate(
+    intr: MessageComponentInteraction
+  ): Promise<void> {
+    try {
+      return await intr.deferUpdate();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
-    content: string | MessageEmbed
+    content: string | MessageEmbed,
+    components?: MessageActionRow[]
   ): Promise<Message> {
     try {
       let options: MessageEditOptions =
@@ -69,6 +80,7 @@ export class InteractionUtils {
           : content instanceof MessageEmbed
           ? { embeds: [content] }
           : content;
+      options.components = components;
       return (await intr.editReply(options)) as Message;
     } catch (error) {
       throw error;

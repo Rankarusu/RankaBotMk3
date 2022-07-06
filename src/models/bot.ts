@@ -1,6 +1,5 @@
 import {
   Client,
-  CommandInteraction,
   Constants,
   Interaction,
   Message,
@@ -19,6 +18,7 @@ import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
 import LogMessages from '../../logs/logs.json';
+import { Command } from '../commands';
 
 export class Bot {
   private ready = false;
@@ -143,5 +143,9 @@ export class Bot {
     } catch (error) {
       Logger.error(LogMessages.error.reaction, error);
     }
+  }
+
+  public getCommands(): Command[] {
+    return this.commandHandler.commands;
   }
 }

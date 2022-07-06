@@ -6,13 +6,12 @@ import {
 } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
-import { Db } from '../services';
 import {
   DateUtils,
+  DbUtils,
   EmbedUtils,
   InteractionUtils,
   RemindUtils,
-  DbUtils,
 } from '../utils';
 import { Command, CommandDeferType } from './command';
 

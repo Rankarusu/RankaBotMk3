@@ -79,6 +79,7 @@ export class CommandHandler implements EventHandler {
 
     try {
       //we can run checks here
+      // TODO: check for permissions
       await command.execute(interaction, data);
     } catch (error) {
       Logger.error(
@@ -101,7 +102,7 @@ export class CommandHandler implements EventHandler {
               .replaceAll('{USER_ID}', interaction.user.id),
         error
       );
-      // await this.sendError(interaction, data);
+      await this.sendError(interaction, data);
     }
 
     //TODO: put send error function here

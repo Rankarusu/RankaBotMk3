@@ -8,7 +8,6 @@ import { InteractionUtils } from '../utils';
 import { EmbedUtils } from '../utils/embed-utils';
 import { Command, CommandDeferType } from './command';
 
-import Config from '../../config/config.json';
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'test',
@@ -51,6 +50,7 @@ export class TestCommand implements Command {
     ],
   };
   // cooldown?: RateLimiter;
+  public hidden?: boolean = true;
   public helpText?: string = 'usage: /ping';
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
   public requireClientPerms: PermissionString[] = [];

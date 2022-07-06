@@ -54,4 +54,35 @@ export class EmbedUtils {
     }
     return embed;
   }
+
+  public static helpEmbed(commands: string, iconUrl: string) {
+    let embed = new MessageEmbed()
+      .setTitle('Help')
+      .setColor(Config.colors.default as ColorResolvable)
+      .setDescription('Welcome to the RankaBotMk3 help dialog!')
+      .addField('Commands', commands)
+      .setThumbnail(iconUrl)
+      .setTimestamp();
+    return embed;
+  }
+
+  public static cmdHelpEmbed(
+    cmd: string,
+    iconUrl: string,
+    desc,
+    usage,
+    subcommands: string[]
+  ) {
+    let embed = new MessageEmbed()
+      .setTitle(`Help for \`${cmd}\``)
+      .setColor(Config.colors.default as ColorResolvable)
+      .setDescription(desc)
+      .addField('Usage', usage)
+      .setThumbnail(iconUrl)
+      .setTimestamp();
+    if (subcommands.length > 0) {
+      embed.addField('Subcommands', subcommands.join('\n'));
+    }
+    return embed;
+  }
 }

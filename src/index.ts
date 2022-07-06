@@ -1,6 +1,12 @@
 import { REST } from '@discordjs/rest';
 import { Client, IntentsString, PartialTypes } from 'discord.js';
-import { Command, PingCommand, RemindCommand, TestCommand } from './commands';
+import {
+  Command,
+  HelpCommand,
+  PingCommand,
+  RemindCommand,
+  TestCommand,
+} from './commands';
 import {
   CommandHandler,
   MessageHandler,
@@ -22,9 +28,12 @@ import { ReminderScheduler } from './services/reminder';
 
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
-import { SelectMenu } from './menus/select-menu';
 import { DeleteReminderSelectMenu } from './menus/delete-reminder-menu';
+import { SelectMenu } from './menus/select-menu';
 const rest = new REST().setToken(Config.client.token);
+
+//for help command
+export let bot: Bot;
 
 async function start(): Promise<void> {
   const client = new Client({
@@ -37,6 +46,7 @@ async function start(): Promise<void> {
     new PingCommand(),
     new TestCommand(),
     new RemindCommand(),
+    new HelpCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   //Reactions
@@ -56,7 +66,7 @@ async function start(): Promise<void> {
   let selectMenuHandler = new SelectMenuHandler(menus);
 
   //Bot
-  let bot = new Bot(
+  bot = new Bot(
     Config.client.token,
     client,
     messageHandler,

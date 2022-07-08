@@ -1,12 +1,15 @@
 import {
   CommandInteraction,
+  GuildChannel,
   InteractionReplyOptions,
   Message,
   MessageActionRow,
   MessageComponentInteraction,
   MessageEditOptions,
   MessageEmbed,
+  ThreadChannel,
 } from 'discord.js';
+import { Command } from '../commands';
 
 export class InteractionUtils {
   public static async deferReply(
@@ -85,5 +88,18 @@ export class InteractionUtils {
     } catch (error) {
       throw error;
     }
+  }
+
+  public static canUse(
+    command: Command,
+    interaction: CommandInteraction
+  ): boolean {
+    return (
+      (interaction.channel instanceof GuildChannel ||
+        interaction.channel instanceof ThreadChannel) &&
+      interaction.channel
+        .permissionsFor(interaction.client.user)
+        .has(command.requireClientPerms)
+    );
   }
 }

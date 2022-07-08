@@ -58,7 +58,7 @@ export class RemindCommand implements Command {
   - "in 3 days | do the thing"
   - "2d | unmute someone`;
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
-  public requireClientPerms: PermissionString[] = [];
+  public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
 
   public async execute(
     interaction: CommandInteraction,
@@ -125,6 +125,7 @@ export class RemindCommand implements Command {
         const message = 'Termi was banned for that. Do you want to follow him?';
         data.description = message;
         throw new Error(message);
+        //TODO use warnings rather than errors
       }
 
       const unixTime = DateUtils.getUnixTime(parsedTime);

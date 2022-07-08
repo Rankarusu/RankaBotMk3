@@ -50,10 +50,12 @@ export class TestCommand implements Command {
     ],
   };
   // cooldown?: RateLimiter;
-  public hidden?: boolean = true;
   public helpText?: string = 'usage: /ping';
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
-  public requireClientPerms: PermissionString[] = [];
+  public requireClientPerms: PermissionString[] = ['ADMINISTRATOR'];
+  public developerOnly?: boolean = true;
+
+  //TODO: check permissions and whether user is in dm channel, requirement of guild
   public async execute(
     interaction: CommandInteraction,
     data: EventData

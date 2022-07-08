@@ -16,6 +16,19 @@ export class EmbedUtils {
     return embed;
   }
 
+  public static warnEmbed(data: EventData) {
+    let embed = new MessageEmbed()
+      .setTitle('Warning')
+      .setColor(Config.colors.warning as ColorResolvable)
+      .setDescription(data.description)
+      .setTimestamp();
+
+    for (let key in data.fields) {
+      embed.addField(key, data.fields[key], true);
+    }
+    return embed;
+  }
+
   public static successEmbed(message: string, title?: string) {
     let embed = new MessageEmbed()
       .setColor(Config.colors.success as ColorResolvable)

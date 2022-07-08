@@ -6,8 +6,8 @@ import { EventData } from '../models/event-data';
 export interface Command {
   metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
   helpText?: string;
-  hidden?: boolean;
   //TODO: admin only flag
+  developerOnly?: boolean;
   // cooldown?: RateLimiter;
   deferType: CommandDeferType;
   requireClientPerms: PermissionString[];

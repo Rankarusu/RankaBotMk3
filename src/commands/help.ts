@@ -27,7 +27,8 @@ export class HelpCommand implements Command {
   // cooldown?: RateLimiter;
   public helpText?: string = 'Hey, no recursing!';
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
-  public requireClientPerms: PermissionString[] = [];
+  public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
+
   public async execute(
     interaction: CommandInteraction,
     data: EventData
@@ -39,22 +40,33 @@ export class HelpCommand implements Command {
       console.log(iconUrl);
       const commands = bot.getCommands();
       const prettyCommands = commands
+        .filter((command: Command) => {
+          return (
+            !command.developerOnly &&
+            InteractionUtils.canUse(command, interaction)
+          );
+        })
         .map((command: Command) => {
-          if (!command.hidden) {
-            return `\`${command.metadata.name}\` - ${command.metadata.description}`;
-          }
+          return `\`${command.metadata.name}\` - ${command.metadata.description}`;
         })
         .join('\n');
-
+      console.log('test');
+      console.log(prettyCommands);
       const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
       InteractionUtils.send(interaction, embed);
     } else {
       //specific command
       const cmdhelp = bot
         .getCommands()
+        .filter((command: Command) => {
+          return (
+            !command.developerOnly &&
+            InteractionUtils.canUse(command, interaction)
+          );
+        })
         .find((command) => command.metadata.name === cmd.toLowerCase());
       if (!cmdhelp) {
-        const message = `Command \`${cmd.toLowerCase()}\` not found.`;
+        const message = `Command \`${cmd.toLowerCase()}\` not found or you may not use it`;
         data.description = message;
         throw new Error(message);
       } else {

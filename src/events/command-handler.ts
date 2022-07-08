@@ -1,5 +1,6 @@
 import {
   CommandInteraction,
+  GuildChannel,
   NewsChannel,
   TextChannel,
   ThreadChannel,
@@ -78,9 +79,17 @@ export class CommandHandler implements EventHandler {
     let data = new EventData();
 
     try {
-      //we can run checks here
-      // TODO: check for permissions
-      await command.execute(interaction, data);
+      // check if user is eligible to use the command
+      if (
+        !command.developerOnly &&
+        !InteractionUtils.canUse(command, interaction)
+      ) {
+        data.description = "You don't have permission to use this command";
+        const embed = EmbedUtils.warnEmbed(data);
+        await InteractionUtils.send(interaction, embed);
+      } else {
+        await command.execute(interaction, data);
+      }
     } catch (error) {
       Logger.error(
         interaction.channel instanceof TextChannel ||
@@ -104,8 +113,6 @@ export class CommandHandler implements EventHandler {
       );
       await this.sendError(interaction, data);
     }
-
-    //TODO: put send error function here
   }
   private async sendError(
     interaction: CommandInteraction,

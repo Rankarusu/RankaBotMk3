@@ -17,8 +17,14 @@ import {
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
+import { REST } from '@discordjs/rest';
+import {
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  Routes,
+} from 'discord-api-types/v10';
 import LogMessages from '../../logs/logs.json';
 import { Command } from '../commands';
+import Config from '../../config/config.json';
 
 export class Bot {
   private ready = false;
@@ -75,6 +81,7 @@ export class Bot {
 
     this.ready = true;
     Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}', userTag));
+    await this.registerGuildCommands();
   }
 
   private async onMessage(msg: Message): Promise<void> {
@@ -147,5 +154,30 @@ export class Bot {
 
   public getCommands(): Command[] {
     return this.commandHandler.commands;
+  }
+
+  private async registerGuildCommands() {
+    //TODO: find a better place to put this.
+    const rest = new REST().setToken(Config.client.token);
+    const commands = this.getCommands();
+    const commandsJson = commands.map((command) => command.metadata);
+    const guildIds = this.client.guilds.cache.map((guild) => guild.id);
+    //per guild
+    try {
+      guildIds.forEach(async (guildId) => {
+        await rest.put(
+          Routes.applicationGuildCommands(Config.client.id, guildId),
+          { body: commandsJson }
+        );
+      });
+    } catch (error) {
+      Logger.error(LogMessages.error.commandActionCreating, error);
+    }
+    Logger.info(
+      LogMessages.info.commandActionCreating.replaceAll(
+        '{COMMAND_LIST}',
+        commands.map((command) => command.metadata.name).join('\n')
+      )
+    );
   }
 }

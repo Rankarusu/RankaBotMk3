@@ -81,7 +81,8 @@ export class CommandHandler implements EventHandler {
     try {
       // check if user is eligible to use the command
       if (
-        !command.developerOnly &&
+        (command.developerOnly &&
+          !InteractionUtils.isDeveloper(interaction.user)) ||
         !InteractionUtils.canUse(command, interaction)
       ) {
         data.description = "You don't have permission to use this command";

@@ -37,7 +37,6 @@ export class HelpCommand implements Command {
     const iconUrl = interaction.client.user.avatarURL();
 
     if (!cmd) {
-      console.log(iconUrl);
       const commands = bot.getCommands();
       const prettyCommands = commands
         .filter((command: Command) => {
@@ -50,8 +49,6 @@ export class HelpCommand implements Command {
           return `\`${command.metadata.name}\` - ${command.metadata.description}`;
         })
         .join('\n');
-      console.log('test');
-      console.log(prettyCommands);
       const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
       InteractionUtils.send(interaction, embed);
     } else {

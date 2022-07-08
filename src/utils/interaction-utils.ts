@@ -8,8 +8,10 @@ import {
   MessageEditOptions,
   MessageEmbed,
   ThreadChannel,
+  User,
 } from 'discord.js';
 import { Command } from '../commands';
+import Config from '../../config/config.json';
 
 export class InteractionUtils {
   public static async deferReply(
@@ -98,8 +100,12 @@ export class InteractionUtils {
       (interaction.channel instanceof GuildChannel ||
         interaction.channel instanceof ThreadChannel) &&
       interaction.channel
-        .permissionsFor(interaction.client.user)
+        .permissionsFor(interaction.user)
         .has(command.requireClientPerms)
     );
+  }
+
+  public static isDeveloper(user: User): boolean {
+    return Config.developers.includes(user.id);
   }
 }

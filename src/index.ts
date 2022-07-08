@@ -76,9 +76,9 @@ async function start(): Promise<void> {
   );
 
   //Register Commands
+  let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[];
   try {
-    let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
-      commands.map((command) => command.metadata);
+    commandsJson = commands.map((command) => command.metadata);
 
     Logger.info(
       LogMessages.info.commandActionCreating.replaceAll(
@@ -87,6 +87,7 @@ async function start(): Promise<void> {
       )
     );
 
+    //globally
     await rest.put(Routes.applicationCommands(Config.client.id), {
       body: commandsJson,
     });

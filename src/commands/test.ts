@@ -14,44 +14,44 @@ export class TestCommand implements Command {
     description: 'test',
     dm_permission: true,
     default_member_permissions: undefined,
-    options: [
-      {
-        name: 'test-option',
-        type: ApplicationCommandOptionType.String,
-        description: 'test-option-description',
-        required: true,
-        choices: [
-          {
-            name: 'test-option-choice-A',
-            value: 'A',
-          },
-          {
-            name: 'test-option-choice-B',
-            value: 'B',
-          },
-        ],
-      },
-      {
-        name: 'test-option2',
-        type: ApplicationCommandOptionType.String,
-        description: 'test-option-description',
-        required: true,
-        choices: [
-          {
-            name: 'test-option-choice-A',
-            value: 'A',
-          },
-          {
-            name: 'test-option-choice-B',
-            value: 'B',
-          },
-        ],
-      },
-    ],
+    options: [],
+    //   {
+    //     name: 'test-option',
+    //     type: ApplicationCommandOptionType.String,
+    //     description: 'test-option-description',
+    //     required: true,
+    //     choices: [
+    //       {
+    //         name: 'test-option-choice-A',
+    //         value: 'A',
+    //       },
+    //       {
+    //         name: 'test-option-choice-B',
+    //         value: 'B',
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     name: 'test-option2',
+    //     type: ApplicationCommandOptionType.String,
+    //     description: 'test-option-description',
+    //     required: true,
+    //     choices: [
+    //       {
+    //         name: 'test-option-choice-A',
+    //         value: 'A',
+    //       },
+    //       {
+    //         name: 'test-option-choice-B',
+    //         value: 'B',
+    //       },
+    //     ],
+    //   },
+    // ],
   };
   // cooldown?: RateLimiter;
   public helpText?: string = 'usage: /ping';
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.HIDDEN;
   public requireClientPerms: PermissionString[] = ['ADMINISTRATOR'];
   public developerOnly?: boolean = true;
 
@@ -70,8 +70,7 @@ export class TestCommand implements Command {
     data: EventData
   ): Promise<void> {
     {
-      const embed = EmbedUtils.errorEmbed(data);
-      await InteractionUtils.send(interaction, embed);
+      await InteractionUtils.send(interaction, 'Thanks for testing!');
     }
   }
 }

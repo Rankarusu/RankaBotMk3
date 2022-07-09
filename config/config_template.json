@@ -1,0 +1,32 @@
+{
+  "developers": [""],
+  "client": {
+    "id": "",
+    "token": "",
+    "secret": "",
+    "intents": [
+      "GUILDS",
+      "GUILD_MESSAGES",
+      "GUILD_MESSAGE_REACTIONS",
+      "DIRECT_MESSAGES",
+      "DIRECT_MESSAGE_REACTIONS"
+    ],
+    "partials": ["MESSAGE", "CHANNEL", "REACTION"]
+  },
+  "db": {
+    "engine": "postgresql",
+    "user": "",
+    "password": "",
+    "host": "",
+    "port": 5432,
+    "database": "",
+    "schema": ""
+  },
+  "colors": {
+    "default": "#6a329f",
+    "success": "#00ff83",
+    "warning": "#ffcc66",
+    "error": "#ff4a4a"
+  },
+  "env": ""
+}

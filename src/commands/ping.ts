@@ -11,10 +11,14 @@ export class PingCommand implements Command {
     dm_permission: true,
     default_member_permissions: undefined,
   };
+
   // cooldown?: RateLimiter;
   public helpText?: string = 'usage: /ping';
+
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+
   public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
+
   public async execute(
     interaction: CommandInteraction,
     data: EventData

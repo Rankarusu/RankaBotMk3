@@ -1,6 +1,5 @@
 import {
   CommandInteraction,
-  GuildChannel,
   NewsChannel,
   TextChannel,
   ThreadChannel,
@@ -15,6 +14,7 @@ import LogMessages from '../../logs/logs.json';
 
 export class CommandHandler implements EventHandler {
   constructor(public commands: Command[]) {}
+
   public async process(interaction: CommandInteraction): Promise<void> {
     if (
       interaction.user.id === interaction.client.user?.id ||
@@ -48,8 +48,8 @@ export class CommandHandler implements EventHandler {
             .replaceAll('{USER_ID}', interaction.user.id)
     );
     // find the command that the user watch executed
-    let command = this.commands.find(
-      (command) => command.metadata.name === interaction.commandName
+    const command = this.commands.find(
+      (cmd) => cmd.metadata.name === interaction.commandName
     );
     if (!command) {
       Logger.error(
@@ -76,7 +76,7 @@ export class CommandHandler implements EventHandler {
       return;
     }
 
-    let data = new EventData();
+    const data = new EventData();
 
     try {
       // check if user is eligible to use the command
@@ -115,6 +115,7 @@ export class CommandHandler implements EventHandler {
       await this.sendError(interaction, data);
     }
   }
+
   private async sendError(
     interaction: CommandInteraction,
     data: EventData

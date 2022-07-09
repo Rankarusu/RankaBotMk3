@@ -5,8 +5,8 @@ import {
   MessageSelectMenu,
   MessageEmbed,
 } from 'discord.js';
+import { EmbedUtils } from '.';
 import { DateUtils } from './date-utils';
-import { EmbedUtils } from './embed-utils';
 
 export class RemindUtils {
   public static createDeleteReminderActionRow(
@@ -21,6 +21,7 @@ export class RemindUtils {
         .setMaxValues(rowData.length)
     );
   }
+
   public static createReminderListEmbed(reminders: Reminder[]): MessageEmbed {
     const reminderList = reminders.map((reminder, index) => {
       return {
@@ -40,6 +41,7 @@ export class RemindUtils {
     );
     return embed;
   }
+
   public static getRowData(reminders: Reminder[]): MessageSelectOptionData[] {
     const rowData: MessageSelectOptionData[] = reminders.map(
       (reminder, index) => {

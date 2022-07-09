@@ -48,6 +48,7 @@ export class RemindCommand implements Command {
       },
     ],
   };
+
   // cooldown?: RateLimiter;
   public helpText?: string = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
   readable offset.
@@ -57,7 +58,9 @@ export class RemindCommand implements Command {
   - "tomorrow | do dishes"
   - "in 3 days | do the thing"
   - "2d | unmute someone`;
+
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
+
   public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
 
   public async execute(
@@ -83,7 +86,7 @@ export class RemindCommand implements Command {
 
       await InteractionUtils.send(interaction, embed, [row]);
     } else if (interaction.options.getSubcommand() === 'set') {
-      let time = interaction.options.getString('time');
+      const time = interaction.options.getString('time');
       let parsedTime: Date;
       try {
         parsedTime = chrono.parseDate(

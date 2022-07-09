@@ -9,7 +9,7 @@ export class TriggerHandler implements EventHandler {
   constructor(private triggers: Trigger[]) {}
 
   public async process(msg: Message): Promise<void> {
-    let triggers = this.triggers.filter((trigger) => {
+    const triggers = this.triggers.filter((trigger) => {
       if (trigger.requireGuild && !msg.guild) {
         return false;
       }
@@ -25,7 +25,7 @@ export class TriggerHandler implements EventHandler {
       return;
     }
 
-    let data = new EventData();
+    const data = new EventData();
 
     triggers.forEach((trigger) => trigger.execute(msg, data));
   }

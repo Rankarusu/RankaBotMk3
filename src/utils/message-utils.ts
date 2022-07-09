@@ -17,7 +17,7 @@ export class MessageUtils {
     content: string | MessageEmbed | MessageOptions
   ): Promise<Message> {
     try {
-      let options: MessageOptions =
+      const options: MessageOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof MessageEmbed
@@ -34,7 +34,7 @@ export class MessageUtils {
     content: string | MessageEmbed | MessageOptions
   ): Promise<Message> {
     try {
-      let options: MessageOptions =
+      const options: MessageOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof MessageEmbed
@@ -51,7 +51,7 @@ export class MessageUtils {
     content: string | MessageEmbed | MessageEditOptions
   ): Promise<Message> {
     try {
-      let options: MessageEditOptions =
+      const options: MessageEditOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof MessageEmbed

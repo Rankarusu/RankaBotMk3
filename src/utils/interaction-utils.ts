@@ -11,12 +11,13 @@ import {
   User,
 } from 'discord.js';
 import { Command } from '../commands';
+// eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 
 export class InteractionUtils {
   public static async deferReply(
     interaction: CommandInteraction | MessageComponentInteraction,
-    hidden: boolean = false
+    hidden = false
   ): Promise<void> {
     try {
       return await interaction.deferReply({
@@ -33,10 +34,10 @@ export class InteractionUtils {
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | MessageEmbed | InteractionReplyOptions,
     components?: MessageActionRow[],
-    hidden: boolean = false
+    hidden = false
   ): Promise<Message> {
     try {
-      let options: InteractionReplyOptions =
+      const options: InteractionReplyOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof MessageEmbed
@@ -79,7 +80,7 @@ export class InteractionUtils {
     components?: MessageActionRow[]
   ): Promise<Message> {
     try {
-      let options: MessageEditOptions =
+      const options: MessageEditOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof MessageEmbed

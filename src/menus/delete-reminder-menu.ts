@@ -7,9 +7,13 @@ import { DbUtils, EmbedUtils, InteractionUtils, RemindUtils } from '../utils';
 
 export class DeleteReminderSelectMenu implements SelectMenu {
   ids: string[] = ['delete-reminder'];
+
   deferType: SelectMenuDeferType = SelectMenuDeferType.UPDATE;
+
   requireGuild: false;
+
   requireEmbedAuthorTag: false;
+
   public async execute(
     interaction: SelectMenuInteraction,
     msg: Message,

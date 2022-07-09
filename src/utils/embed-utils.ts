@@ -1,36 +1,37 @@
 import { ColorResolvable, MessageEmbed } from 'discord.js';
+// eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
 
 export class EmbedUtils {
   public static errorEmbed(data: EventData) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle('Error')
       .setColor(Config.colors.error as ColorResolvable)
       .setDescription(data.description)
       .setTimestamp();
 
-    for (let key in data.fields) {
+    for (const key in data.fields) {
       embed.addField(key, data.fields[key], true);
     }
     return embed;
   }
 
   public static warnEmbed(data: EventData) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle('Warning')
       .setColor(Config.colors.warning as ColorResolvable)
       .setDescription(data.description)
       .setTimestamp();
 
-    for (let key in data.fields) {
+    for (const key in data.fields) {
       embed.addField(key, data.fields[key], true);
     }
     return embed;
   }
 
   public static successEmbed(message: string, title?: string) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor(Config.colors.success as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
@@ -41,7 +42,7 @@ export class EmbedUtils {
   }
 
   public static infoEmbed(message: string, title?: string) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
@@ -55,7 +56,7 @@ export class EmbedUtils {
     message: string,
     list: { id: string; text: string }[]
   ) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle('Reminders')
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message)
@@ -69,7 +70,7 @@ export class EmbedUtils {
   }
 
   public static helpEmbed(commands: string, iconUrl: string) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle('Help')
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription('Welcome to the RankaBotMk3 help dialog!')
@@ -86,7 +87,7 @@ export class EmbedUtils {
     usage,
     subcommands: string[]
   ) {
-    let embed = new MessageEmbed()
+    const embed = new MessageEmbed()
       .setTitle(`Help for \`${cmd}\``)
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(desc)

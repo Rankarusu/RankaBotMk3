@@ -6,6 +6,7 @@ import { EventHandler } from './event-handler';
 
 export class SelectMenuHandler implements EventHandler {
   constructor(public menus: SelectMenu[]) {}
+
   public async process(
     intr: SelectMenuInteraction,
     msg: Message
@@ -16,7 +17,7 @@ export class SelectMenuHandler implements EventHandler {
     }
 
     // Try to find the menu the user wants
-    let menu = this.findMenu(intr.customId);
+    const menu = this.findMenu(intr.customId);
     if (!menu) {
       return;
     }
@@ -52,7 +53,7 @@ export class SelectMenuHandler implements EventHandler {
     }
 
     // TODO: Get data from database
-    let data = new EventData();
+    const data = new EventData();
 
     // Execute the menu
     await menu.execute(intr, msg, data);

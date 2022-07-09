@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import { Logger } from '.';
+// eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import LogMessages from '../../logs/logs.json';
 import { LogEvent, QueryEvent } from '../models/prisma-events';
@@ -9,6 +10,7 @@ import { LogEvent, QueryEvent } from '../models/prisma-events';
 //for that we declare prisma globally as globals are not reset by hot reload
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
       Db: PrismaClient<Prisma.PrismaClientOptions, 'info' | 'warn' | 'error'>;

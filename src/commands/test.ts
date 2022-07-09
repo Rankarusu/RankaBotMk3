@@ -1,11 +1,7 @@
-import {
-  ApplicationCommandOptionType,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-} from 'discord-api-types/v10';
+import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../models/event-data';
 import { InteractionUtils } from '../utils';
-import { EmbedUtils } from '../utils/embed-utils';
 import { Command, CommandDeferType } from './command';
 
 export class TestCommand implements Command {
@@ -49,10 +45,14 @@ export class TestCommand implements Command {
     //   },
     // ],
   };
+
   // cooldown?: RateLimiter;
   public helpText?: string = 'usage: /ping';
+
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
+
   public requireClientPerms: PermissionString[] = ['ADMINISTRATOR'];
+
   public developerOnly?: boolean = true;
 
   //TODO: check permissions and whether user is in dm channel, requirement of guild

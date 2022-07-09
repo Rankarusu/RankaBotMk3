@@ -18,12 +18,10 @@ import { Logger } from '../services';
 import { PartialUtils } from '../utils';
 
 import { REST } from '@discordjs/rest';
-import {
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-  Routes,
-} from 'discord-api-types/v10';
+import { Routes } from 'discord-api-types/v10';
 import LogMessages from '../../logs/logs.json';
 import { Command } from '../commands';
+// eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 
 export class Bot {
@@ -76,7 +74,7 @@ export class Bot {
   }
 
   private async onReady(): Promise<void> {
-    let userTag = this.client.user?.tag;
+    const userTag = this.client.user?.tag;
     Logger.info(LogMessages.info.clientLogin.replaceAll('{USER_TAG}', userTag));
 
     this.ready = true;

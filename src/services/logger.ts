@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */ //needed because we eventually pass errors to the logger which assume any type
 import { DiscordAPIError } from 'discord.js';
 import { Response } from 'node-fetch';
 import pino from 'pino';
 
-let logger = pino({
+const logger = pino({
   formatters: {
     level: (label) => {
       //by default pino uses numbers as log level, but labels are more readable

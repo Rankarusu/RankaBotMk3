@@ -26,6 +26,7 @@ import {
 import { Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
 
+// eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { DeleteReminderSelectMenu } from './menus/delete-reminder-menu';
@@ -42,7 +43,7 @@ async function start(): Promise<void> {
   });
 
   //Commands
-  let commands: Command[] = [
+  const commands: Command[] = [
     new PingCommand(),
     new TestCommand(),
     new RemindCommand(),
@@ -50,20 +51,20 @@ async function start(): Promise<void> {
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   //Reactions
-  let reactions: Reaction[] = [];
+  const reactions: Reaction[] = [];
 
   //Triggers
-  let triggers: Trigger[] = [];
+  const triggers: Trigger[] = [];
 
   //Select Menus
-  let menus: SelectMenu[] = [new DeleteReminderSelectMenu()];
+  const menus: SelectMenu[] = [new DeleteReminderSelectMenu()];
 
   //Event Handlers
-  let commandHandler = new CommandHandler(commands);
-  let triggerHandler = new TriggerHandler(triggers);
-  let messageHandler = new MessageHandler(triggerHandler);
-  let reactionHandler = new ReactionHandler(reactions);
-  let selectMenuHandler = new SelectMenuHandler(menus);
+  const commandHandler = new CommandHandler(commands);
+  const triggerHandler = new TriggerHandler(triggers);
+  const messageHandler = new MessageHandler(triggerHandler);
+  const reactionHandler = new ReactionHandler(reactions);
+  const selectMenuHandler = new SelectMenuHandler(menus);
 
   //Bot
   bot = new Bot(

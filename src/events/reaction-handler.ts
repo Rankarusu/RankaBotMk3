@@ -13,7 +13,7 @@ export class ReactionHandler implements EventHandler {
     if (reactor.id === msgReaction.client.user?.id || reactor.bot) {
       return;
     }
-    let reaction = this.findReaction(msgReaction.emoji.name);
+    const reaction = this.findReaction(msgReaction.emoji.name);
     if (!reaction) {
       return;
     }
@@ -32,7 +32,7 @@ export class ReactionHandler implements EventHandler {
       return;
     }
 
-    let data = new EventData();
+    const data = new EventData();
 
     await reaction.execute(msgReaction, msg, reactor, data);
   }

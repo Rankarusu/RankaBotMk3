@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "build": "tsc",
     "prisma:gen": "npx prisma generate --schema src/services/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema src/services/prisma/schema.prisma",
@@ -26,14 +29,14 @@
     "node-fetch": "^2.6.7",
     "pino": "^8.0.0",
     "pino-pretty": "^8.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "chrono-node": "^2.3.8"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",
     "@types/node-cron": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
-    "chrono-node": "^2.3.8",
     "eslint": "^8.14.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-node": "^4.1.0",

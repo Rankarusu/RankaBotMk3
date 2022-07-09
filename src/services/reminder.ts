@@ -6,9 +6,11 @@ import { ClientUtils, DbUtils, EmbedUtils, MessageUtils } from '../utils';
 
 export class ReminderScheduler {
   client: Client;
+
   constructor(client: Client) {
     this.client = client;
   }
+
   // get all reminders from database
   // prepare reminders that are due in the next X minutes
   // check every 30 seconds if the reminder is due

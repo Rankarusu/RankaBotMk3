@@ -56,10 +56,10 @@ export class RemindCommand implements Command {
   readable offset.
 
   Examples:
-  - "next thursday at 3pm | do something funny"
-  - "tomorrow | do dishes"
-  - "in 3 days | do the thing"
-  - "2d | unmute someone`;
+  - \`next thursday at 3pm\` \`do something funny\`
+  - \`tomorrow\` \`do dishes\`
+  - \`in 3 days\` \`do the thing\`
+  - \`2d\` \`unmute someone\``;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

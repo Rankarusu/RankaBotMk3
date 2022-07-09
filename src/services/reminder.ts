@@ -46,7 +46,6 @@ export class ReminderScheduler {
 
         // delete from db
         await DbUtils.deleteReminderById(reminder.interactionId);
-        //TODO: more logging
       }
     });
   }

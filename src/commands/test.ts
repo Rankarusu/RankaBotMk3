@@ -10,7 +10,6 @@ export class TestCommand implements Command {
     description: 'test',
     dm_permission: true,
     default_member_permissions: undefined,
-    options: [],
     //   {
     //     name: 'test-option',
     //     type: ApplicationCommandOptionType.String,
@@ -55,7 +54,6 @@ export class TestCommand implements Command {
 
   public developerOnly?: boolean = true;
 
-  //TODO: check permissions and whether user is in dm channel, requirement of guild
   public async execute(
     interaction: CommandInteraction,
     data: EventData
@@ -70,6 +68,7 @@ export class TestCommand implements Command {
     data: EventData
   ): Promise<void> {
     {
+      console.log();
       await InteractionUtils.send(interaction, 'Thanks for testing!');
     }
   }

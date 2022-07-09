@@ -133,6 +133,9 @@ export class CommandHandler implements EventHandler {
               .replaceAll('{USER_ID}', interaction.user.id),
         error
       );
+      if (!data.description) {
+        data.description = 'An error occurred';
+      }
       await this.sendError(interaction, data);
     }
   }

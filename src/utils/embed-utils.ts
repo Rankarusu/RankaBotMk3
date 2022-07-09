@@ -83,8 +83,9 @@ export class EmbedUtils {
   public static cmdHelpEmbed(
     cmd: string,
     iconUrl: string,
-    desc,
-    usage,
+    desc: string,
+    usage: string,
+    options: string[],
     subcommands: string[]
   ) {
     const embed = new MessageEmbed()
@@ -94,7 +95,10 @@ export class EmbedUtils {
       .addField('Usage', usage)
       .setThumbnail(iconUrl)
       .setTimestamp();
-    if (subcommands.length > 0) {
+    if (options && options.length > 0) {
+      embed.addField('Options', options.join('\n'));
+    }
+    if (subcommands && subcommands.length > 0) {
       embed.addField('Subcommands', subcommands.join('\n'));
     }
     return embed;

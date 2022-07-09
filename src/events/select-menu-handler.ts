@@ -52,7 +52,6 @@ export class SelectMenuHandler implements EventHandler {
       return;
     }
 
-    // TODO: Get data from database
     const data = new EventData();
 
     // Execute the menu

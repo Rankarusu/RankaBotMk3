@@ -1,4 +1,5 @@
 import {
+  APIApplicationCommandSubcommandOption,
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
@@ -25,7 +26,6 @@ export class HelpCommand implements Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public helpText = 'Hey, no recursing!';
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
@@ -40,6 +40,7 @@ export class HelpCommand implements Command {
     const iconUrl = interaction.client.user.avatarURL();
 
     if (!cmd) {
+      // all commands
       const commands = bot.getCommands();
       const prettyCommands = commands
         .filter((command: Command) => {
@@ -72,17 +73,46 @@ export class HelpCommand implements Command {
       } else {
         const desc = cmdhelp.metadata.description;
         const usage = cmdhelp.helpText;
-        const subCommands = cmdhelp.metadata.options.map((option) => {
-          if (option.type === ApplicationCommandOptionType.Subcommand) {
+        let prettyOptions: string[];
+        let prettySubCommands: string[];
+        if (cmdhelp.metadata.options) {
+          const subCommands = cmdhelp.metadata.options.filter(
+            (option) =>
+              option.type === ApplicationCommandOptionType.Subcommand ||
+              option.type === ApplicationCommandOptionType.SubcommandGroup
+          );
+
+          const options = cmdhelp.metadata.options.filter(
+            (option) =>
+              option.type !== ApplicationCommandOptionType.Subcommand &&
+              option.type !== ApplicationCommandOptionType.SubcommandGroup
+          );
+
+          prettyOptions = options.map((option) => {
             return `\`${option.name}\` - ${option.description}`;
-          }
-        });
+          });
+          prettySubCommands = subCommands.map(
+            (subCommand: APIApplicationCommandSubcommandOption) => {
+              let str = `\`${subCommand.name}\` - ${subCommand.description}`;
+              //TODO: recurse
+              if (subCommand.options) {
+                subCommand.options.forEach((option, idx) => {
+                  const char = idx === options.length ? '├' : '└';
+                  str += `\n\u2005\u2005${char}─\`${option.name}\` - ${option.description}`;
+                });
+              }
+              return str;
+            }
+          );
+        }
+
         const embed = EmbedUtils.cmdHelpEmbed(
           cmdhelp.metadata.name,
           iconUrl,
           desc,
           usage,
-          subCommands
+          prettyOptions,
+          prettySubCommands
         );
         InteractionUtils.send(interaction, embed);
       }

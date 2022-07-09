@@ -10,9 +10,17 @@ import { Logger } from '../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
 
+import { RateLimiter } from 'discord.js-rate-limiter';
 import LogMessages from '../../logs/logs.json';
+// eslint-disable-next-line node/no-unpublished-import
+import Config from '../../config/config.json';
 
 export class CommandHandler implements EventHandler {
+  private rateLimiter = new RateLimiter(
+    Config.cooldowns.commands.amount,
+    Config.cooldowns.commands.interval * 1000
+  );
+
   constructor(public commands: Command[]) {}
 
   public async process(interaction: CommandInteraction): Promise<void> {
@@ -21,6 +29,14 @@ export class CommandHandler implements EventHandler {
       interaction.user.bot
     ) {
       // do not talk to yourself or other bots!
+      return;
+    }
+
+    const data = new EventData();
+
+    // Check if user is rate limited
+    const limited = this.rateLimiter.take(interaction.user.id);
+    if (limited) {
       return;
     }
 
@@ -76,8 +92,6 @@ export class CommandHandler implements EventHandler {
       return;
     }
 
-    const data = new EventData();
-
     try {
       // check if user is eligible to use the command
       if (
@@ -88,9 +102,16 @@ export class CommandHandler implements EventHandler {
         data.description = "You don't have permission to use this command";
         const embed = EmbedUtils.warnEmbed(data);
         await InteractionUtils.send(interaction, embed);
-      } else {
-        await command.execute(interaction, data);
+        return;
       }
+      //check if command is on cooldown
+      if (InteractionUtils.isOnCooldown(interaction, command)) {
+        data.description = 'Chill';
+        const embed = EmbedUtils.warnEmbed(data);
+        await InteractionUtils.send(interaction, embed);
+        return;
+      }
+      await command.execute(interaction, data);
     } catch (error) {
       Logger.error(
         interaction.channel instanceof TextChannel ||
@@ -121,10 +142,6 @@ export class CommandHandler implements EventHandler {
     data: EventData
   ): Promise<void> {
     {
-      // data.fields = {
-      //   ERROR_CODE: interaction.id,
-      //   GUILD_ID: interaction.guild.id,
-      // };
       const embed = EmbedUtils.errorEmbed(data);
       await InteractionUtils.send(interaction, embed);
     }

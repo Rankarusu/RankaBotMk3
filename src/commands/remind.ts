@@ -5,6 +5,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventData } from '../models/event-data';
 import {
   DateUtils,
@@ -49,8 +50,9 @@ export class RemindCommand implements Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
-  public helpText?: string = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
+  public cooldown = new RateLimiter(1, 5000);
+
+  public helpText = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
   readable offset.
 
   Examples:

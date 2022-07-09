@@ -13,7 +13,7 @@ export class PingCommand implements Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText?: string = 'usage: /ping';
+  public helpText = 'usage: /ping';
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 

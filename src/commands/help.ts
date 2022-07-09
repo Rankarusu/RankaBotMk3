@@ -26,7 +26,7 @@ export class HelpCommand implements Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText?: string = 'Hey, no recursing!';
+  public helpText = 'Hey, no recursing!';
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

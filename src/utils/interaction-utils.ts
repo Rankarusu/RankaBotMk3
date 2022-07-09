@@ -109,4 +109,14 @@ export class InteractionUtils {
   public static isDeveloper(user: User): boolean {
     return Config.developers.includes(user.id);
   }
+
+  public static isOnCooldown(
+    interaction: CommandInteraction,
+    command: Command
+  ): boolean {
+    if (command.cooldown) {
+      const limited = command.cooldown.take(interaction.user.id);
+      return limited;
+    }
+  }
 }

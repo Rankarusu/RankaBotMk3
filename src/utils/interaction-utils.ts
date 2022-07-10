@@ -13,6 +13,7 @@ import {
 import { Command } from '../commands';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
+import { EventData } from '../models/event-data';
 
 export class InteractionUtils {
   public static async deferReply(
@@ -91,6 +92,12 @@ export class InteractionUtils {
     } catch (error) {
       throw error;
     }
+  }
+
+  public static sendError(data: EventData, message: string) {
+    //we set event data and throw so the command handler can take over.
+    data.description = message;
+    throw new Error(message);
   }
 
   public static canUse(

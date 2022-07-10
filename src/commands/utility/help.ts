@@ -70,9 +70,10 @@ export class HelpCommand implements Command {
         })
         .find((command) => command.metadata.name === cmd.toLowerCase());
       if (!cmdhelp) {
-        const message = `Command \`${cmd.toLowerCase()}\` not found or you may not use it`;
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(
+          data,
+          `Command \`${cmd.toLowerCase()}\` not found or you may not use it`
+        );
       } else {
         const desc = cmdhelp.metadata.description;
         const usage = cmdhelp.helpText;

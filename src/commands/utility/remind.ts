@@ -105,16 +105,12 @@ export class RemindCommand implements Command {
         parsedTime.setSeconds(0);
         parsedTime.setMilliseconds(0);
       } catch (e) {
-        const message = `Could not parse the time: ${time}`;
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
       }
 
       if (!parsedTime) {
         // parsed time is null if parse is unsuccessful
-        const message = `Could not parse the time: ${time}`;
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
       }
 
       //check for too short of a notice
@@ -122,9 +118,10 @@ export class RemindCommand implements Command {
       const in2minutes = new Date();
       in2minutes.setMinutes(minutes);
       if (parsedTime < in2minutes) {
-        const message = 'Is your attention span really that small?';
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(
+          data,
+          'Is your attention span really that small?'
+        );
       }
 
       const notificationMessage =
@@ -132,9 +129,10 @@ export class RemindCommand implements Command {
 
       // send error if someone abuses mentions
       if (notificationMessage.match(/<@(.*?)>/)) {
-        const message = 'Termi was banned for that. Do you want to follow him?';
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(
+          data,
+          'Termi was banned for that. Do you want to follow him?'
+        );
       }
 
       const unixTime = DateUtils.getUnixTime(parsedTime);
@@ -166,9 +164,7 @@ export class RemindCommand implements Command {
         await DbUtils.createReminder(reminder);
       } catch {
         confirmation.delete();
-        const message = 'Could not create reminder';
-        data.description = message;
-        throw new Error(message);
+        InteractionUtils.sendError(data, 'Could not create reminder');
       }
       InteractionUtils.editReply(interaction, successEmbed);
     }

@@ -80,6 +80,7 @@ export class Bot {
     this.ready = true;
     Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}', userTag));
     await this.registerGuildCommands();
+    this.client.user.setActivity('Hello, World!');
   }
 
   private async onMessage(msg: Message): Promise<void> {
@@ -153,10 +154,6 @@ export class Bot {
   public getCommands(): Command[] {
     return this.commandHandler.commands;
   }
-
-  // public registerHelpCommand() {
-  //   this.commandHandler.commands.push(new HelpCommand());
-  // }
 
   private async registerGuildCommands() {
     //TODO: find a better place to put this.

@@ -23,7 +23,7 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 
-import { Db, Logger } from './services';
+import { ActivityScheduler, Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
 
 // eslint-disable-next-line node/no-unpublished-import
@@ -108,9 +108,11 @@ async function start(): Promise<void> {
     Logger.error(LogMessages.error.databaseConnect, error);
   }
 
-  //start reminder scheduler
+  //start schedulers
   const reminderScheduler = new ReminderScheduler(client);
   reminderScheduler.start();
+  const activityScheduler = new ActivityScheduler(client);
+  activityScheduler.start();
 
   //Finally start the bot
   await bot.start();

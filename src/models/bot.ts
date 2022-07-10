@@ -1,3 +1,5 @@
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v10';
 import {
   Client,
   Constants,
@@ -8,6 +10,8 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
+import LogMessages from '../../logs/logs.json';
+import { Command } from '../commands';
 import {
   CommandHandler,
   MessageHandler,
@@ -16,11 +20,6 @@ import {
 } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
-
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v10';
-import LogMessages from '../../logs/logs.json';
-import { Command } from '../commands';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 

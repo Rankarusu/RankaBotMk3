@@ -1,15 +1,16 @@
+import { AddUndefinedToPossiblyUndefinedPropertiesOfInterface } from 'discord-api-types/utils/internals';
 import {
-  APIApplicationCommandSubcommandOption,
+  APIApplicationCommandOption,
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
+import { capitalize, groupBy } from 'lodash';
+import { AsciiTree } from 'oo-ascii-tree';
+import { Command, CommandDeferType } from '..';
+import { bot } from '../..';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
-import { capitalize, groupBy } from 'lodash';
-
-import { bot } from '../..';
-import { Command, CommandDeferType } from '..';
 export class HelpCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'help',
@@ -69,6 +70,7 @@ export class HelpCommand implements Command {
           );
         })
         .find((command) => command.metadata.name === cmd.toLowerCase());
+
       if (!cmdhelp) {
         InteractionUtils.sendError(
           data,
@@ -81,7 +83,7 @@ export class HelpCommand implements Command {
         let prettySubCommands: string[];
         if (cmdhelp.metadata.options) {
           prettyOptions = this.getPrettyOptions(cmdhelp);
-          prettySubCommands = this.getPrettySubCommands(cmdhelp);
+          prettySubCommands = [this.getTree(cmdhelp)];
         }
 
         const embed = EmbedUtils.cmdHelpEmbed(
@@ -130,25 +132,64 @@ export class HelpCommand implements Command {
     return prettyOptions;
   }
 
-  private getPrettySubCommands(cmdhelp: Command) {
-    const subCommands = cmdhelp.metadata.options.filter(
-      (option) =>
+  // private getPrettySubCommands(cmdhelp: Command) {
+  //   const subCommands = cmdhelp.metadata.options.filter(
+  //     (option) =>
+  //       option.type === ApplicationCommandOptionType.Subcommand ||
+  //       option.type === ApplicationCommandOptionType.SubcommandGroup
+  //   );
+  //   const prettySubCommands = subCommands.map(
+  //     (subCommand: APIApplicationCommandSubcommandOption) => {
+  //       let str = `\`${subCommand.name}\` - ${subCommand.description}`;
+  //       //TODO: recurse to also handle subcommand group structures
+  //       if (subCommand.options) {
+  //         subCommand.options.forEach((option, idx) => {
+  //           const char = idx === subCommand.options.length - 1 ? '└' : '├';
+  //           str += `\n\u2005\u2005${char}─\`${option.name}\` - ${option.description}`;
+  //         });
+  //       }
+  //       return str;
+  //     }
+  //   );
+  //   return prettySubCommands;
+  // }
+
+  private getTree(cmdhelp: Command) {
+    const tree = new AsciiTree(cmdhelp.metadata.name);
+    cmdhelp.metadata.options.forEach((option) => {
+      tree.add(this.getBranch(option));
+    });
+    console.log(tree.toString());
+    return tree.toString();
+  }
+
+  private getBranch(
+    option: AddUndefinedToPossiblyUndefinedPropertiesOfInterface<APIApplicationCommandOption>
+  ): AsciiTree {
+    if (
+      !(
         option.type === ApplicationCommandOptionType.Subcommand ||
         option.type === ApplicationCommandOptionType.SubcommandGroup
-    );
-    const prettySubCommands = subCommands.map(
-      (subCommand: APIApplicationCommandSubcommandOption) => {
-        let str = `\`${subCommand.name}\` - ${subCommand.description}`;
-        //TODO: recurse to also handle subcommand group structures
-        if (subCommand.options) {
-          subCommand.options.forEach((option, idx) => {
-            const char = idx === subCommand.options.length - 1 ? '└' : '├';
-            str += `\n\u2005\u2005${char}─\`${option.name}\` - ${option.description}`;
-          });
-        }
-        return str;
+      )
+    ) {
+      return new AsciiTree(`\`${option.name}\` - ${option.description}`);
+    } else {
+      const output = new AsciiTree(
+        `\`${option.name}\` - ${option.description}`
+      );
+      if (option.options) {
+        const children = option.options.map(
+          (
+            subOption: AddUndefinedToPossiblyUndefinedPropertiesOfInterface<APIApplicationCommandOption>
+          ) => {
+            return this.getBranch(subOption);
+          }
+        );
+        children.forEach((child) => {
+          output.add(child);
+        });
       }
-    );
-    return prettySubCommands;
+      return output;
+    }
   }
 }

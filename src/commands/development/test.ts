@@ -1,4 +1,7 @@
-import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import {
+  ApplicationCommandOptionType,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { Command, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
@@ -10,40 +13,52 @@ export class TestCommand implements Command {
     description: 'test',
     dm_permission: true,
     default_member_permissions: undefined,
+    options: [
+      {
+        name: 'test-option',
+        type: ApplicationCommandOptionType.SubcommandGroup,
+        description: 'test-option-description',
 
-    //   {
-    //     name: 'test-option',
-    //     type: ApplicationCommandOptionType.String,
-    //     description: 'test-option-description',
-    //     required: true,
-    //     choices: [
-    //       {
-    //         name: 'test-option-choice-A',
-    //         value: 'A',
-    //       },
-    //       {
-    //         name: 'test-option-choice-B',
-    //         value: 'B',
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     name: 'test-option2',
-    //     type: ApplicationCommandOptionType.String,
-    //     description: 'test-option-description',
-    //     required: true,
-    //     choices: [
-    //       {
-    //         name: 'test-option-choice-A',
-    //         value: 'A',
-    //       },
-    //       {
-    //         name: 'test-option-choice-B',
-    //         value: 'B',
-    //       },
-    //     ],
-    //   },
-    // ],
+        options: [
+          {
+            name: 'test-option1',
+            type: ApplicationCommandOptionType.Subcommand,
+            description: 'test-option-description1',
+
+            options: [
+              {
+                name: 'test-option2',
+                type: ApplicationCommandOptionType.String,
+                description: 'test-option-description',
+              },
+              {
+                name: 'test-option3',
+                type: ApplicationCommandOptionType.String,
+                description: 'test-option-description',
+              },
+            ],
+          },
+          {
+            name: 'test-option10',
+            type: ApplicationCommandOptionType.Subcommand,
+            description: 'test-option-description1',
+
+            options: [
+              {
+                name: 'test-option20',
+                type: ApplicationCommandOptionType.String,
+                description: 'test-option-description',
+              },
+              {
+                name: 'test-option30',
+                type: ApplicationCommandOptionType.String,
+                description: 'test-option-description',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   };
 
   // cooldown?: RateLimiter;

@@ -4,7 +4,7 @@ import { Logger } from '.';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import LogMessages from '../../logs/logs.json';
-import { LogEvent, QueryEvent } from '../models/prisma-events';
+import { LogEvent } from '../models/prisma-events';
 
 //prevent hot reloading from creating instances of the prisma client
 //for that we declare prisma globally as globals are not reset by hot reload

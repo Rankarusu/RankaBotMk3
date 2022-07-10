@@ -1,4 +1,8 @@
 import { REST } from '@discordjs/rest';
+import {
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  Routes,
+} from 'discord-api-types/v10';
 import { Client, IntentsString, PartialTypes } from 'discord.js';
 import {
   Command,
@@ -16,16 +20,9 @@ import {
 } from './events';
 import { Bot } from './models/bot';
 import { Reaction } from './models/reaction';
-import { Trigger } from './triggers';
-
-import {
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-  Routes,
-} from 'discord-api-types/v10';
-
 import { ActivityScheduler, Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
-
+import { Trigger } from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';

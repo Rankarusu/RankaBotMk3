@@ -1,0 +1,113 @@
+diff --git a/node_modules/oo-ascii-tree/lib/ascii-tree.js b/node_modules/oo-ascii-tree/lib/ascii-tree.js
+index f73293a..3dbd1d0 100644
+--- a/node_modules/oo-ascii-tree/lib/ascii-tree.js
++++ b/node_modules/oo-ascii-tree/lib/ascii-tree.js
+@@ -20,61 +20,57 @@ class AsciiTree {
+     /**
+      * Prints the tree to an output stream.
+      */
+-    printTree(output = process.stdout) {
+-        let ancestorsPrefix = '';
+-        for (const parent of this.ancestors) {
+-            // -1 represents a "hidden" root, and so it's children
+-            // will all appear as roots (level 0).
+-            if (parent.level <= 0) {
+-                continue;
+-            }
+-            if (parent.last) {
+-                ancestorsPrefix += '  ';
+-            }
+-            else {
+-                ancestorsPrefix += ' │';
+-            }
++     printTree(output = process.stdout) {
++      let ancestorsPrefix = '';
++      for (const parent of this.ancestors) {
++        // -1 represents a "hidden" root, and so it's children
++        // will all appear as roots (level 0).
++        if (parent.level <= 0) {
++          continue;
+         }
+-        let myPrefix = '';
+-        let multilinePrefix = '';
+-        if (this.level > 0) {
+-            if (this.last) {
+-                if (!this.empty) {
+-                    myPrefix += ' └─┬ ';
+-                    multilinePrefix += ' └─┬ ';
+-                }
+-                else {
+-                    myPrefix += ' └── ';
+-                    multilinePrefix = '     ';
+-                }
+-            }
+-            else {
+-                if (!this.empty) {
+-                    myPrefix += ' ├─┬ ';
+-                    multilinePrefix += ' │ │ ';
+-                }
+-                else {
+-                    myPrefix += ' ├── ';
+-                    multilinePrefix += ' │   ';
+-                }
+-            }
++        if (parent.last) {
++          ancestorsPrefix += '\u2005\u2005\u2005';
++        } else {
++          ancestorsPrefix += '\u200A│\u200A';
+         }
+-        if (this.text) {
+-            output.write(ancestorsPrefix);
+-            output.write(myPrefix);
+-            const lines = this.text.split('\n');
+-            output.write(lines[0]);
+-            output.write('\n');
+-            for (const line of lines.splice(1)) {
+-                output.write(ancestorsPrefix);
+-                output.write(multilinePrefix);
+-                output.write(line);
+-                output.write('\n');
+-            }
++      }
++      let myPrefix = '';
++      let multilinePrefix = '';
++      if (this.level > 0) {
++        if (this.last) {
++          if (!this.empty) {
++            myPrefix += '└┬';
++            multilinePrefix += '└┬';
++          } else {
++            myPrefix += '└─';
++            multilinePrefix = '\u2005\u2005\u2005\u2005\u2005';
++          }
++        } else {
++          if (!this.empty) {
++            myPrefix += '├┬';
++            multilinePrefix += '│\u2005│';
++          } else {
++            myPrefix += '├─';
++            multilinePrefix += '│\u2005\u2005';
++          }
+         }
+-        for (const child of this._children) {
+-            child.printTree(output);
++      }
++      if (this.text) {
++        output.write(ancestorsPrefix);
++        output.write(myPrefix);
++        const lines = this.text.split('\n');
++        output.write(lines[0]);
++        output.write('\n');
++        for (const line of lines.splice(1)) {
++          output.write(ancestorsPrefix);
++          output.write(multilinePrefix);
++          output.write(line);
++          output.write('\n');
+         }
++      }
++      for (const child of this._children) {
++        child.printTree(output);
++      }
+     }
+     /**
+      * Returns a string representation of the tree.

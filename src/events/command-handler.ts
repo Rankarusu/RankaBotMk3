@@ -4,14 +4,13 @@ import {
   TextChannel,
   ThreadChannel,
 } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
+import LogMessages from '../../logs/logs.json';
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
-
-import { RateLimiter } from 'discord.js-rate-limiter';
-import LogMessages from '../../logs/logs.json';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 

@@ -6,20 +6,20 @@ import {
 } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import { EventData } from '../models/event-data';
+import { EventData } from '../../models/event-data';
 import {
   DateUtils,
   DbUtils,
   EmbedUtils,
   InteractionUtils,
   RemindUtils,
-} from '../utils';
-import { Command, CommandDeferType } from './command';
+} from '../../utils';
+import { Command, CommandDeferType } from '../command';
 
 export class RemindCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'remind',
-    description: 'Reminds you of something after a certain amount of time.',
+    description: 'reminds you of something after a certain amount of time.',
     dm_permission: true,
     default_member_permissions: undefined,
     options: [
@@ -52,14 +52,18 @@ export class RemindCommand implements Command {
 
   public cooldown = new RateLimiter(1, 5000);
 
+  public category: string =
+    __dirname.split('/')[__dirname.split('/').length - 1];
+
   public helpText = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
   readable offset.
 
-  Examples:
-  - \`next thursday at 3pm\` \`do something funny\`
-  - \`tomorrow\` \`do dishes\`
-  - \`in 3 days\` \`do the thing\`
-  - \`2d\` \`unmute someone\``;
+  **Examples:**
+  - /remind set \`next thursday at 3pm\` \`do something funny\`
+  - /remind set \`tomorrow\`
+  - /remind set \`in 3 days\` \`do the thing\`
+  - /remind set \`5 mins\` \`get food\`
+  - /remind list`;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
@@ -79,7 +83,9 @@ export class RemindCommand implements Command {
         const message =
           'You have no reminders set at the moment. Use `/remind set` to set one.';
         data.description = message;
-        throw new Error(message);
+        const embed = EmbedUtils.warnEmbed(data);
+        InteractionUtils.send(interaction, embed);
+        return;
       }
 
       const embed = RemindUtils.createReminderListEmbed(reminders);
@@ -121,7 +127,6 @@ export class RemindCommand implements Command {
         throw new Error(message);
       }
 
-      //TODO: put errors in separate file
       const notificationMessage =
         interaction.options.getString('notification-text') || 'do something';
 
@@ -130,7 +135,6 @@ export class RemindCommand implements Command {
         const message = 'Termi was banned for that. Do you want to follow him?';
         data.description = message;
         throw new Error(message);
-        //TODO use warnings rather than errors
       }
 
       const unixTime = DateUtils.getUnixTime(parsedTime);

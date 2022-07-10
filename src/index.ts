@@ -76,6 +76,10 @@ async function start(): Promise<void> {
     selectMenuHandler
   );
 
+  //register help command so it can get all other commands from the handler
+  //Idea is postponed until we can have dynamic choices or more than 25 at a time.
+  // bot.registerHelpCommand();
+
   //Register Commands
   let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[];
   try {

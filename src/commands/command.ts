@@ -8,6 +8,7 @@ export interface Command {
   helpText?: string;
   developerOnly?: boolean;
   cooldown?: RateLimiter;
+  category: string;
   deferType: CommandDeferType;
   requireClientPerms: PermissionString[];
   execute(interaction: CommandInteraction, data: EventData): Promise<void>;

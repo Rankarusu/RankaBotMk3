@@ -1,5 +1,5 @@
 export { Command, CommandDeferType } from './command';
-export { HelpCommand } from './help';
-export { PingCommand } from './ping';
-export { RemindCommand } from './remind';
-export { TestCommand } from './test';
+export { TestCommand } from './development/test';
+export { HelpCommand } from './utility/help';
+export { PingCommand } from './utility/ping';
+export { RemindCommand } from './utility/remind';

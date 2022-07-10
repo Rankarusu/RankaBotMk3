@@ -1,8 +1,8 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
-import { EventData } from '../models/event-data';
-import { InteractionUtils } from '../utils';
-import { Command, CommandDeferType } from './command';
+import { Command, CommandDeferType } from '..';
+import { EventData } from '../../models/event-data';
+import { InteractionUtils } from '../../utils';
 
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -10,6 +10,7 @@ export class TestCommand implements Command {
     description: 'test',
     dm_permission: true,
     default_member_permissions: undefined,
+
     //   {
     //     name: 'test-option',
     //     type: ApplicationCommandOptionType.String,
@@ -47,6 +48,9 @@ export class TestCommand implements Command {
 
   // cooldown?: RateLimiter;
   public helpText?: string = 'usage: /ping';
+
+  public category: string =
+    __dirname.split('/')[__dirname.split('/').length - 1];
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

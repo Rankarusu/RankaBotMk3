@@ -154,6 +154,10 @@ export class Bot {
     return this.commandHandler.commands;
   }
 
+  // public registerHelpCommand() {
+  //   this.commandHandler.commands.push(new HelpCommand());
+  // }
+
   private async registerGuildCommands() {
     //TODO: find a better place to put this.
     const rest = new REST().setToken(Config.client.token);

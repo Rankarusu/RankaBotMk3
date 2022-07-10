@@ -69,14 +69,25 @@ export class EmbedUtils {
     return embed;
   }
 
-  public static helpEmbed(commands: string, iconUrl: string) {
+  public static helpEmbed(
+    commands: { [key: string]: string[] },
+    iconUrl: string
+  ) {
     const embed = new MessageEmbed()
       .setTitle('Help')
       .setColor(Config.colors.default as ColorResolvable)
-      .setDescription('Welcome to the RankaBotMk3 help dialog!')
-      .addField('Commands', commands)
+      .setDescription(
+        `Welcome to the RankaBotMk3 help dialog!\n
+        Below you can see all commands that are available to you.`
+      )
       .setThumbnail(iconUrl)
-      .setTimestamp();
+      .setTimestamp()
+      .setFooter({
+        text: 'use /help <command> for further details on a specific command',
+      });
+    Object.keys(commands).forEach((key) => {
+      embed.addField(key, commands[key].join('\n'));
+    });
     return embed;
   }
 

@@ -7,7 +7,7 @@ import {
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { capitalize, groupBy } from 'lodash';
 import { AsciiTree } from 'oo-ascii-tree';
-import { Command, CommandDeferType } from '..';
+import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
@@ -38,8 +38,7 @@ export class HelpCommand implements Command {
 
   public helpText = 'Hey, no recursing!';
 
-  public category: string =
-    __dirname.split('/')[__dirname.split('/').length - 1];
+  public category: CommandCategory = CommandCategory.UTILITY;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
@@ -155,7 +154,7 @@ export class HelpCommand implements Command {
   // }
 
   private getTree(cmdhelp: Command) {
-    const tree = new AsciiTree(cmdhelp.metadata.name);
+    const tree = new AsciiTree(`\`${cmdhelp.metadata.name}\``);
     cmdhelp.metadata.options.forEach((option) => {
       tree.add(this.getBranch(option));
     });

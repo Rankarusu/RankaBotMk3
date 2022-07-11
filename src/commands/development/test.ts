@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { CommandInteraction, PermissionString } from 'discord.js';
-import { Command, CommandDeferType } from '..';
+import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
 import { InteractionUtils } from '../../utils';
 
@@ -64,8 +64,7 @@ export class TestCommand implements Command {
   // cooldown?: RateLimiter;
   public helpText?: string = 'usage: /ping';
 
-  public category: string =
-    __dirname.split('/')[__dirname.split('/').length - 1];
+  public category: CommandCategory = CommandCategory.DEVELOPMENT;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

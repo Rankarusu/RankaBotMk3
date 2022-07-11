@@ -2,7 +2,7 @@ import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-typ
 import { CommandInteraction, PermissionString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { InteractionUtils } from '../../utils';
-import { Command, CommandDeferType } from '../command';
+import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class PingCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -14,8 +14,7 @@ export class PingCommand implements Command {
   // cooldown?: RateLimiter;
   public helpText = 'just /ping';
 
-  public category: string =
-    __dirname.split('/')[__dirname.split('/').length - 1];
+  public category: CommandCategory = CommandCategory.UTILITY;
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 

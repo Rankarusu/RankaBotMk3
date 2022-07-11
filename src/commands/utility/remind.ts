@@ -14,7 +14,7 @@ import {
   InteractionUtils,
   RemindUtils,
 } from '../../utils';
-import { Command, CommandDeferType } from '../command';
+import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class RemindCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -52,8 +52,7 @@ export class RemindCommand implements Command {
 
   public cooldown = new RateLimiter(1, 5000);
 
-  public category: string =
-    __dirname.split('/')[__dirname.split('/').length - 1];
+  public category: CommandCategory = CommandCategory.UTILITY;
 
   public helpText = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
   readable offset.

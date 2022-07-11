@@ -8,7 +8,7 @@ export interface Command {
   helpText?: string;
   developerOnly?: boolean;
   cooldown?: RateLimiter;
-  category: string;
+  category: CommandCategory;
   deferType: CommandDeferType;
   requireClientPerms: PermissionString[];
   execute(interaction: CommandInteraction, data: EventData): Promise<void>;
@@ -17,4 +17,8 @@ export enum CommandDeferType {
   PUBLIC = 'PUBLIC',
   HIDDEN = 'HIDDEN',
   NONE = 'NONE',
+}
+export enum CommandCategory {
+  UTILITY = 'Utility',
+  DEVELOPMENT = 'Development',
 }

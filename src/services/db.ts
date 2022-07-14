@@ -1,5 +1,4 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import 'dotenv/config';
 import { Logger } from '.';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';

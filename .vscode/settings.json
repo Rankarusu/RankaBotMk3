@@ -18,6 +18,7 @@
     "pino",
     "Ranka",
     "rankabotmk",
+    "RESTJSON",
     "Termi"
   ],
   "[prisma]": {

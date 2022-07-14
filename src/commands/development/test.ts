@@ -2,10 +2,15 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import {
+  CommandInteraction,
+  MessageButton,
+  MessageEmbed,
+  PermissionString,
+} from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
-import { InteractionUtils } from '../../utils';
+import { EmbedUtils, InteractionUtils, Pagination } from '../../utils';
 
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -76,18 +81,22 @@ export class TestCommand implements Command {
     interaction: CommandInteraction,
     data: EventData
   ): Promise<void> {
-    // await InteractionUtils.send(interaction, 'Test', true);
-    data.description = 'Test failed';
-    await this.sendError(interaction, data);
-  }
+    const embed1 = EmbedUtils.infoEmbed('test-body 1', 'test-title 1');
+    const embed2 = EmbedUtils.infoEmbed('test-body 2', 'test-title 2');
+    const embed3 = EmbedUtils.infoEmbed('test-body 3', 'test-title 3');
+    const embed4 = EmbedUtils.infoEmbed('test-body 4', 'test-title 4');
+    const embed5 = EmbedUtils.infoEmbed('test-body 5', 'test-title 5');
+    const btn1 = new MessageButton()
+      .setCustomId('test-btn-1')
+      .setLabel('◀')
+      .setStyle('PRIMARY');
+    const btn2 = new MessageButton()
+      .setCustomId('test-btn-2')
+      .setLabel('▶')
+      .setStyle('PRIMARY');
 
-  private async sendError(
-    interaction: CommandInteraction,
-    data: EventData
-  ): Promise<void> {
-    {
-      console.log();
-      await InteractionUtils.send(interaction, 'Thanks for testing!');
-    }
+    const pages = [embed1, embed2, embed3, embed4, embed5];
+
+    await new Pagination(interaction, pages).start();
   }
 }

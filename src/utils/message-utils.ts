@@ -1,6 +1,9 @@
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
+  DiscordAPIError,
   EmojiResolvable,
   Message,
+  MessageActionRow,
   MessageEditOptions,
   MessageEmbed,
   MessageOptions,
@@ -10,6 +13,8 @@ import {
   ThreadChannel,
   User,
 } from 'discord.js';
+
+const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
 
 export class MessageUtils {
   public static async send(
@@ -48,7 +53,8 @@ export class MessageUtils {
 
   public static async edit(
     msg: Message,
-    content: string | MessageEmbed | MessageEditOptions
+    content?: string | MessageEmbed | MessageEditOptions,
+    components?: MessageActionRow[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
@@ -57,9 +63,16 @@ export class MessageUtils {
           : content instanceof MessageEmbed
           ? { embeds: [content] }
           : content;
-      return await msg.edit(options);
+      return await msg.edit({ ...options, components });
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 

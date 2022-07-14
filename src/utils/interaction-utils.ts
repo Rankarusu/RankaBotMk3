@@ -1,7 +1,10 @@
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
   CommandInteraction,
+  DiscordAPIError,
   GuildChannel,
   InteractionReplyOptions,
+  InteractionUpdateOptions,
   Message,
   MessageActionRow,
   MessageComponentInteraction,
@@ -15,6 +18,8 @@ import { Command } from '../commands';
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
 
+const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
+
 export class InteractionUtils {
   public static async deferReply(
     interaction: CommandInteraction | MessageComponentInteraction,
@@ -25,9 +30,14 @@ export class InteractionUtils {
         ephemeral: hidden,
       });
     } catch (error) {
-      //TODO: filter out
-      console.error(error);
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -59,9 +69,14 @@ export class InteractionUtils {
         })) as Message;
       }
     } catch (error) {
-      //TODO: filter out
-
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -87,10 +102,46 @@ export class InteractionUtils {
           : content instanceof MessageEmbed
           ? { embeds: [content] }
           : content;
-      options.components = components;
-      return (await intr.editReply(options)) as Message;
+      return (await intr.editReply({ ...options, components })) as Message;
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  public static async update(
+    intr: MessageComponentInteraction,
+    content?: string | MessageEmbed | InteractionUpdateOptions,
+    components?: MessageActionRow[]
+  ): Promise<Message> {
+    try {
+      const options: InteractionUpdateOptions =
+        typeof content === 'string'
+          ? { content }
+          : content instanceof MessageEmbed
+          ? { embeds: [content] }
+          : content;
+
+      return (await intr.update({
+        ...options,
+        components,
+        fetchReply: true,
+      })) as Message;
+    } catch (error) {
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 

@@ -159,8 +159,12 @@ export class Bot {
     const rest = new REST().setToken(Config.client.token);
     const commands = this.getCommands();
     const commandsJson = commands.map((command) => command.metadata);
-    const guildIds = this.client.guilds.cache.map((guild) => guild.id);
-    //per guild
+    // const guildIds = this.client.guilds.cache.map((guild) => guild.id);
+
+    const guildIds = Config.devServers;
+    //if we register all commands globally and locally, we will see them twice on every server.
+    //we just register them on the dev servers so we get feedback immediately.
+
     try {
       guildIds.forEach(async (guildId) => {
         await rest.put(

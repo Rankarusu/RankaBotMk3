@@ -10,7 +10,8 @@ import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { EmbedUtils, InteractionUtils, PaginationEmbed } from '../../utils';
+
 export class HelpCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'help',
@@ -57,7 +58,9 @@ export class HelpCommand implements Command {
 
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
-      InteractionUtils.send(interaction, embed);
+      await new PaginationEmbed(interaction, embed).start();
+
+      // InteractionUtils.send(interaction, embed);
     } else {
       //specific command
       const cmdhelp = bot
@@ -93,6 +96,7 @@ export class HelpCommand implements Command {
           prettyOptions,
           prettySubCommands
         );
+
         InteractionUtils.send(interaction, embed);
       }
     }

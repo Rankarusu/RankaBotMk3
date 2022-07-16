@@ -13,7 +13,9 @@ import {
   EmbedUtils,
   InteractionUtils,
   RemindUtils,
+  PaginationEmbed,
 } from '../../utils';
+
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class RemindCommand implements Command {
@@ -91,7 +93,10 @@ export class RemindCommand implements Command {
       const rowData = RemindUtils.getRowData(reminders);
       const row = RemindUtils.createDeleteReminderActionRow(rowData);
 
-      await InteractionUtils.send(interaction, embed, [row]);
+      // await InteractionUtils.send(interaction, embed, [row]);
+      await new PaginationEmbed(interaction, embed, 10, undefined, [
+        row,
+      ]).start();
     } else if (interaction.options.getSubcommand() === 'set') {
       const time = interaction.options.getString('time');
       let parsedTime: Date;

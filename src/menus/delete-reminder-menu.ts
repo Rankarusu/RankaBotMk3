@@ -1,9 +1,21 @@
 import { Reminder } from '@prisma/client';
-import { Message, SelectMenuInteraction } from 'discord.js';
+import {
+  CommandInteraction,
+  Interaction,
+  Message,
+  MessageActionRow,
+  SelectMenuInteraction,
+} from 'discord.js';
 import { SelectMenu, SelectMenuDeferType } from '.';
 import { EventData } from '../models/event-data';
 import { Db } from '../services';
-import { DbUtils, EmbedUtils, InteractionUtils, RemindUtils } from '../utils';
+import {
+  DbUtils,
+  EmbedUtils,
+  InteractionUtils,
+  PaginationEmbed,
+  RemindUtils,
+} from '../utils';
 
 export class DeleteReminderSelectMenu implements SelectMenu {
   ids: string[] = ['delete-reminder'];
@@ -39,10 +51,10 @@ export class DeleteReminderSelectMenu implements SelectMenu {
       return;
     }
 
-    const embed = RemindUtils.createReminderListEmbed(reminders);
+    const embed = RemindUtils.createReminderListEmbed(reminders); //paginate this
     const rowData = RemindUtils.getRowData(reminders);
     const row = RemindUtils.createDeleteReminderActionRow(rowData);
-
-    InteractionUtils.editReply(interaction, embed, [row]);
+    await new PaginationEmbed(interaction, embed, 5, undefined, [row]).start();
+    // InteractionUtils.editReply(interaction, embed, undefined);
   }
 }

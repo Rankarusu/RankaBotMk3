@@ -7,4 +7,4 @@ export { MessageUtils } from './message-utils';
 export { PartialUtils } from './partial-utils';
 export { RemindUtils } from './remind-utils';
 export { StringUtils } from './string-utils';
-export { Pagination } from './pagination-utils';
+export { PaginationEmbed } from './pagination-utils';

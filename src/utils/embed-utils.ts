@@ -77,7 +77,9 @@ export class EmbedUtils {
       .setTitle('Help')
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(
-        `Welcome to the RankaBotMk3 help dialog!\n
+        `Welcome to the fully automated, paginated and generally very based RankaBotMk3 help dialog!
+        (Seriously, I put a lot of effort into this. Please use it.)
+        
         Below you can see all commands that are available to you.`
       )
       .setThumbnail(iconUrl)

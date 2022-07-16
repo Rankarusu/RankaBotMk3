@@ -18,7 +18,11 @@ import { Command } from '../commands';
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
 
-const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
+const IGNORED_ERRORS = [
+  RESTJSONErrorCodes.UnknownMessage,
+  RESTJSONErrorCodes.UnknownInteraction,
+  RESTJSONErrorCodes.InteractionHasAlreadyBeenAcknowledged,
+];
 
 export class InteractionUtils {
   public static async deferReply(

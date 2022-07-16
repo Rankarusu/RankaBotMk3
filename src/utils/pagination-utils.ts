@@ -3,6 +3,7 @@ import {
   EmbedField,
   Message,
   MessageActionRow,
+  MessageComponentInteraction,
   MessageEmbed,
   User,
   UserResolvable,
@@ -11,7 +12,7 @@ import { InteractionUtils } from './interaction-utils';
 import { MessageUtils } from './message-utils';
 
 export class PaginationEmbed {
-  interaction: CommandInteraction;
+  interaction: CommandInteraction | MessageComponentInteraction;
 
   author: UserResolvable;
 
@@ -30,7 +31,7 @@ export class PaginationEmbed {
   private footerText = 'Page';
 
   constructor(
-    interaction: CommandInteraction,
+    interaction: CommandInteraction | MessageComponentInteraction,
     pages: MessageEmbed[] | MessageEmbed,
     limit?: number,
     timeout?: number,
@@ -55,49 +56,68 @@ export class PaginationEmbed {
     });
   }
 
-  async start(): Promise<void> {
+  async start(initial = true): Promise<void> {
+    //we use the initial flag to determine if we create the first time or edit it.
+    // we need to create a new object either time, so we have only one function as we only change editReply and send
     const row = new MessageActionRow().addComponents([
       {
         type: 'BUTTON',
         style: 'PRIMARY',
-        label: '⏮',
+        emoji: '⏮',
         customId: 'first',
       },
       {
         type: 'BUTTON',
         style: 'PRIMARY',
-        label: '◀',
+        emoji: '◀',
         customId: 'previous',
       },
       {
         type: 'BUTTON',
         style: 'DANGER',
-        label: '⏹',
+        emoji: '⏹',
         customId: 'stop',
       },
       {
         type: 'BUTTON',
         style: 'PRIMARY',
-        label: '▶',
+        emoji: '▶',
         customId: 'next',
       },
       {
         type: 'BUTTON',
         style: 'PRIMARY',
-        label: '⏭',
+        emoji: '⏭',
         customId: 'last',
       },
     ]);
     if (this.pages.length < 2) {
       //no need for pagination
-      InteractionUtils.send(this.interaction, this.pages[0], this.actionRows);
+      if (initial) {
+        InteractionUtils.send(this.interaction, this.pages[0], this.actionRows);
+      } else {
+        InteractionUtils.editReply(
+          this.interaction,
+          this.pages[0],
+          this.actionRows
+        );
+      }
       return;
     }
-    this.message = await InteractionUtils.send(
-      this.interaction,
-      this.pages[0],
-      [...this.actionRows, row]
-    );
+    if (initial) {
+      this.message = await InteractionUtils.send(
+        this.interaction,
+        this.pages[0],
+        [...this.actionRows, row]
+      );
+    } else {
+      this.message = await InteractionUtils.editReply(
+        this.interaction,
+        this.pages[0],
+        [...this.actionRows, row]
+      );
+    }
+
     const interactionCollector = this.message.createMessageComponentCollector({
       max: this.pages.length * 5,
       filter: (x) => {
@@ -106,9 +126,7 @@ export class PaginationEmbed {
     });
     setTimeout(async () => {
       interactionCollector.stop('Timeout');
-      await this?.message?.edit({
-        components: [],
-      });
+      await InteractionUtils.editReply(this.interaction, undefined, []);
     }, this.timeout);
     interactionCollector.on('collect', async (interaction) => {
       const { customId } = interaction;
@@ -143,110 +161,6 @@ export class PaginationEmbed {
         this.index = newPageIndex;
 
         await InteractionUtils.update(
-          interaction,
-          this.pages[this.index],
-          undefined
-        );
-      }
-    });
-    interactionCollector.on('end', async () => {
-      //empty out action rows after timeout
-      await MessageUtils.edit(this.message, undefined, []);
-    });
-  }
-
-  async edit(): Promise<void> {
-    const row = new MessageActionRow().addComponents([
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        label: '⏮',
-        customId: 'first',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        label: '◀',
-        customId: 'previous',
-      },
-      {
-        type: 'BUTTON',
-        style: 'DANGER',
-        label: '⏹',
-        customId: 'stop',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        label: '▶',
-        customId: 'next',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        label: '⏭',
-        customId: 'last',
-      },
-    ]);
-    if (this.pages.length < 2) {
-      //no need for pagination
-      InteractionUtils.editReply(
-        this.interaction,
-        this.pages[0],
-        this.actionRows
-      );
-      return;
-    }
-    this.message = await InteractionUtils.editReply(
-      this.interaction,
-      this.pages[0],
-      [...this.actionRows, row]
-    );
-    const interactionCollector = this.message.createMessageComponentCollector({
-      max: this.pages.length * 5,
-      filter: (x) => {
-        return this.author && x.user.id === (this.author as User).id;
-      },
-    });
-    setTimeout(async () => {
-      interactionCollector.stop('Timeout');
-      await this?.message?.edit({
-        components: [],
-      });
-    }, this.timeout);
-    interactionCollector.on('collect', async (interaction) => {
-      const { customId } = interaction;
-      let newPageIndex: number;
-      switch (customId) {
-        case 'first':
-          newPageIndex = 0;
-          break;
-        case 'previous':
-          newPageIndex = this.index - 1;
-          break;
-        case 'stop':
-          newPageIndex = NaN;
-          break;
-        case 'next':
-          newPageIndex = this.index + 1;
-          break;
-        case 'last':
-          newPageIndex = this.pages.length - 1;
-          break;
-      }
-      if (isNaN(newPageIndex)) {
-        //empty out action rows on stop command
-        interactionCollector.stop('Stopped by user');
-        await InteractionUtils.editReply(interaction, undefined, []);
-      } else {
-        //keep page index in bounds
-        newPageIndex = Math.min(
-          Math.max(newPageIndex, 0),
-          this.pages.length - 1
-        );
-        this.index = newPageIndex;
-
-        await InteractionUtils.editReply(
           interaction,
           this.pages[this.index],
           undefined
@@ -294,7 +208,6 @@ export class PaginationEmbed {
       return new MessageEmbed(embedJson).setFields(fieldArr);
     });
 
-    console.log(pages.length);
     return pages;
   }
 }

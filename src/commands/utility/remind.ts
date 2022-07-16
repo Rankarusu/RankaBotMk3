@@ -93,7 +93,6 @@ export class RemindCommand implements Command {
       const rowData = RemindUtils.getRowData(reminders);
       const row = RemindUtils.createDeleteReminderActionRow(rowData);
 
-      // await InteractionUtils.send(interaction, embed, [row]);
       await new PaginationEmbed(interaction, embed, 10, undefined, [
         row,
       ]).start();

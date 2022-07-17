@@ -21,4 +21,5 @@ export enum CommandDeferType {
 export enum CommandCategory {
   UTILITY = 'Utility',
   DEVELOPMENT = 'Development',
+  MODERATION = 'Moderation',
 }

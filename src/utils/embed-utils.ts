@@ -1,4 +1,4 @@
-import { ColorResolvable, MessageEmbed } from 'discord.js';
+import { ColorResolvable, GuildMember, MessageEmbed } from 'discord.js';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
@@ -48,6 +48,29 @@ export class EmbedUtils {
       .setTimestamp();
     if (title) {
       embed.setTitle(title);
+    }
+    return embed;
+  }
+
+  public static memberEmbed(
+    member: GuildMember,
+    message: string,
+    reason?: string,
+    title?: string
+  ) {
+    const embed = new MessageEmbed()
+      .setColor(member.displayHexColor as ColorResolvable)
+      .setDescription(message)
+      .setTimestamp()
+      .setAuthor({
+        name: member.user.tag,
+        iconURL: member.displayAvatarURL(),
+      });
+    if (title) {
+      embed.setTitle(title);
+    }
+    if (reason) {
+      embed.addField('Reason', reason);
     }
     return embed;
   }

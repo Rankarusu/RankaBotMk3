@@ -7,6 +7,7 @@ import { Client, IntentsString, PartialTypes } from 'discord.js';
 import {
   Command,
   HelpCommand,
+  KickCommand,
   PingCommand,
   RemindCommand,
   TestCommand,
@@ -44,6 +45,7 @@ async function start(): Promise<void> {
     new TestCommand(),
     new RemindCommand(),
     new HelpCommand(),
+    new KickCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   //Reactions

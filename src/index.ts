@@ -26,7 +26,6 @@ import { Trigger } from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
-import { DeleteReminderSelectMenu } from './menus/delete-reminder-menu';
 import { SelectMenu } from './menus/select-menu';
 const rest = new REST().setToken(Config.client.token);
 
@@ -54,7 +53,7 @@ async function start(): Promise<void> {
   const triggers: Trigger[] = [];
 
   //Select Menus
-  const menus: SelectMenu[] = [new DeleteReminderSelectMenu()];
+  const menus: SelectMenu[] = [];
 
   //Event Handlers
   const commandHandler = new CommandHandler(commands);

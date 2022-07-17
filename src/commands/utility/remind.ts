@@ -4,16 +4,22 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
-import { RateLimiter } from 'discord.js-rate-limiter';
+import {
+  CommandInteraction,
+  MessageActionRow,
+  MessageEmbed,
+  PermissionString,
+  User,
+} from 'discord.js';
 import { EventData } from '../../models/event-data';
 import {
   DateUtils,
   DbUtils,
   EmbedUtils,
   InteractionUtils,
-  RemindUtils,
+  MessageUtils,
   PaginationEmbed,
+  RemindUtils,
 } from '../../utils';
 
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -52,7 +58,7 @@ export class RemindCommand implements Command {
     ],
   };
 
-  public cooldown = new RateLimiter(1, 5000);
+  // public cooldown = new RateLimiter(1, 5000);
 
   public category: CommandCategory = CommandCategory.UTILITY;
 
@@ -75,27 +81,39 @@ export class RemindCommand implements Command {
     data: EventData
   ): Promise<void> {
     if (interaction.options.getSubcommand() === 'list') {
-      //TODO: maybe put split subcommands in multiple files if possible
-      const reminders: Reminder[] = await DbUtils.getRemindersByUserId(
-        interaction.user.id
+      // let paginationEmbed: PaginationEmbed;
+      const paginationEmbed = await this.createPaginationEmbed(
+        interaction,
+        data
       );
+      await paginationEmbed.start();
 
-      if (reminders.length === 0) {
-        const message =
-          'You have no reminders set at the moment. Use `/remind set` to set one.';
-        data.description = message;
-        const embed = EmbedUtils.warnEmbed(data);
-        InteractionUtils.send(interaction, embed);
-        return;
-      }
+      const msg = paginationEmbed.message;
+      const interactionCollector = msg.createMessageComponentCollector({
+        componentType: 'SELECT_MENU',
+        max: 5,
+        filter: (x) => {
+          return (
+            interaction.user && x.user.id === (interaction.user as User).id
+          );
+        },
+      });
 
-      const embed = RemindUtils.createReminderListEmbed(reminders);
-      const rowData = RemindUtils.getRowData(reminders);
-      const row = RemindUtils.createDeleteReminderActionRow(rowData);
+      setTimeout(async () => {
+        interactionCollector.stop('Timeout');
+        await InteractionUtils.editReply(interaction, undefined, []);
+      }, 600000);
 
-      await new PaginationEmbed(interaction, embed, 10, undefined, [
-        row,
-      ]).start();
+      interactionCollector.on('collect', async (intr) => {
+        intr.deferUpdate();
+        const { values } = intr;
+        await DbUtils.deleteRemindersById(values);
+        await this.updatePaginationEmbed(interaction, data, paginationEmbed);
+      });
+      interactionCollector.on('end', async () => {
+        //empty out action rows after timeout
+        await MessageUtils.edit(msg, undefined, []);
+      });
     } else if (interaction.options.getSubcommand() === 'set') {
       const time = interaction.options.getString('time');
       let parsedTime: Date;
@@ -162,6 +180,7 @@ export class RemindCommand implements Command {
         invokeTime: interaction.createdAt,
         parsedTime,
       };
+      //TODO: handle upper limit for reminders per user
 
       try {
         await DbUtils.createReminder(reminder);
@@ -170,6 +189,56 @@ export class RemindCommand implements Command {
         InteractionUtils.sendError(data, 'Could not create reminder');
       }
       InteractionUtils.editReply(interaction, successEmbed);
+    }
+  }
+
+  private async createPaginationEmbed(
+    interaction: CommandInteraction,
+    data: EventData
+  ) {
+    const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
+    let embed: MessageEmbed | MessageEmbed[];
+    const rows: MessageActionRow[] = [];
+    if (reminders.length === 0) {
+      const message =
+        'You have no reminders set at the moment. Use `/remind set` to set one.';
+      data.description = message;
+      embed = EmbedUtils.warnEmbed(data);
+      InteractionUtils.send(interaction, embed, []);
+    } else {
+      embed = RemindUtils.createReminderListEmbed(reminders);
+      rows.push(RemindUtils.createDeleteReminderActionRow(reminders));
+    }
+    const paginationEmbed = new PaginationEmbed(
+      interaction,
+      embed,
+      5,
+      undefined,
+      rows
+    );
+
+    return paginationEmbed;
+  }
+
+  private async updatePaginationEmbed(
+    interaction: CommandInteraction,
+    data: EventData,
+    paginationEmbed: PaginationEmbed
+  ) {
+    const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
+    if (reminders.length === 0) {
+      const message =
+        'You have no reminders set at the moment. Use `/remind set` to set one.';
+      data.description = message;
+      const embed = EmbedUtils.warnEmbed(data);
+      InteractionUtils.editReply(interaction, embed, []);
+    } else {
+      const selectMenu = RemindUtils.createDeleteReminderActionRow(reminders);
+      paginationEmbed.changePages(
+        RemindUtils.createReminderListEmbed(reminders),
+        [selectMenu]
+      );
+      paginationEmbed.editReply();
     }
   }
 }

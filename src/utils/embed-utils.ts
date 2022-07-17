@@ -59,8 +59,8 @@ export class EmbedUtils {
     const embed = new MessageEmbed()
       .setTitle('Reminders')
       .setColor(Config.colors.default as ColorResolvable)
-      .setDescription(message)
-      .setFooter({ text: 'Use the menu below to delete reminders' });
+      .setDescription(message);
+    // .setFooter({ text: 'Use the menu below to delete reminders' });
     if (list) {
       list.forEach((item) => {
         embed.addField(item.id, item.text, false);

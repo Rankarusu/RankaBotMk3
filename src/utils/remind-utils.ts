@@ -1,21 +1,22 @@
 import { Reminder } from '@prisma/client';
 import {
-  MessageSelectOptionData,
   MessageActionRow,
-  MessageSelectMenu,
   MessageEmbed,
+  MessageSelectMenu,
+  MessageSelectOptionData,
 } from 'discord.js';
 import { EmbedUtils } from '.';
 import { DateUtils } from './date-utils';
 
 export class RemindUtils {
   public static createDeleteReminderActionRow(
-    rowData: MessageSelectOptionData[]
+    reminders: Reminder[]
   ): MessageActionRow {
+    const rowData = this.getRowData(reminders);
     return new MessageActionRow().addComponents(
       new MessageSelectMenu()
         .setCustomId('delete-reminder')
-        .setPlaceholder('Select a reminder to delete')
+        .setPlaceholder('Select one or more reminders to delete')
         .addOptions(rowData)
         .setMinValues(1)
         .setMaxValues(rowData.length)
@@ -42,7 +43,7 @@ export class RemindUtils {
     return embed;
   }
 
-  public static getRowData(reminders: Reminder[]): MessageSelectOptionData[] {
+  private static getRowData(reminders: Reminder[]): MessageSelectOptionData[] {
     const rowData: MessageSelectOptionData[] = reminders.map(
       (reminder, index) => {
         return {

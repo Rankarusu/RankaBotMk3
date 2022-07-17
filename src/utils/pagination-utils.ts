@@ -24,7 +24,9 @@ export class PaginationEmbed {
 
   limit?: number;
 
-  actionRows?: MessageActionRow[];
+  paginationButtons?: MessageActionRow;
+
+  additionalRows?: MessageActionRow[];
 
   private index = 0;
 
@@ -35,7 +37,7 @@ export class PaginationEmbed {
     pages: MessageEmbed[] | MessageEmbed,
     limit?: number,
     timeout?: number,
-    actionRows?: MessageActionRow[]
+    additionalRows?: MessageActionRow[]
   ) {
     this.interaction = interaction;
     this.limit = limit ? limit : 50;
@@ -45,7 +47,7 @@ export class PaginationEmbed {
       this.pages = pages;
     }
     this.author = interaction.user;
-    this.actionRows = actionRows;
+    this.additionalRows = additionalRows;
     this.timeout = timeout ? timeout : 60000;
 
     this.pages.map((page, pageIndex) => {
@@ -54,12 +56,7 @@ export class PaginationEmbed {
         text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
       });
     });
-  }
-
-  async start(initial = true): Promise<void> {
-    //we use the initial flag to determine if we create the first time or edit it.
-    // we need to create a new object either time, so we have only one function as we only change editReply and send
-    const row = new MessageActionRow().addComponents([
+    this.paginationButtons = new MessageActionRow().addComponents([
       {
         type: 'BUTTON',
         style: 'PRIMARY',
@@ -91,34 +88,15 @@ export class PaginationEmbed {
         customId: 'last',
       },
     ]);
-    if (this.pages.length < 2) {
-      //no need for pagination
-      if (initial) {
-        InteractionUtils.send(this.interaction, this.pages[0], this.actionRows);
-      } else {
-        InteractionUtils.editReply(
-          this.interaction,
-          this.pages[0],
-          this.actionRows
-        );
-      }
-      return;
-    }
-    if (initial) {
-      this.message = await InteractionUtils.send(
-        this.interaction,
-        this.pages[0],
-        [...this.actionRows, row]
-      );
-    } else {
-      this.message = await InteractionUtils.editReply(
-        this.interaction,
-        this.pages[0],
-        [...this.actionRows, row]
-      );
-    }
+  }
+
+  async start(): Promise<void> {
+    //we use the initial flag to determine if we create the first time or edit it.
+    // we need to create a new object either time, so we have only one function as we only change editReply and send
+    this.message = await this.send();
 
     const interactionCollector = this.message.createMessageComponentCollector({
+      componentType: 'BUTTON',
       max: this.pages.length * 5,
       filter: (x) => {
         return this.author && x.user.id === (this.author as User).id;
@@ -173,7 +151,7 @@ export class PaginationEmbed {
     });
   }
 
-  public paginateEmbed(embed: MessageEmbed, limit: number) {
+  private paginateEmbed(embed: MessageEmbed, limit: number) {
     //splits embed fields into multiple pages with same header, footer, etc.
 
     const fields = embed.fields;
@@ -209,5 +187,53 @@ export class PaginationEmbed {
     });
 
     return pages;
+  }
+
+  public async send(): Promise<Message> {
+    let message: Message;
+    if (this.pages.length < 2) {
+      //no need for pagination
+      message = await InteractionUtils.send(
+        this.interaction,
+        this.pages[0],
+        this.additionalRows
+      );
+    } else {
+      message = await InteractionUtils.send(this.interaction, this.pages[0], [
+        ...this.additionalRows,
+        this.paginationButtons,
+      ]);
+    }
+    return message;
+  }
+
+  public async editReply() {
+    let message: Message;
+    if (this.pages.length < 2) {
+      message = await InteractionUtils.editReply(
+        this.interaction,
+        this.pages[0],
+        this.additionalRows
+      );
+    } else {
+      message = await InteractionUtils.editReply(
+        this.interaction,
+        this.pages[0],
+        [...this.additionalRows, this.paginationButtons]
+      );
+    }
+    return message;
+  }
+
+  public async changePages(
+    pages: MessageEmbed | MessageEmbed[],
+    additionalRows?: MessageActionRow[]
+  ) {
+    if (pages instanceof MessageEmbed) {
+      this.pages = this.paginateEmbed(pages, this.limit);
+    } else {
+      this.pages = pages;
+    }
+    this.additionalRows = additionalRows;
   }
 }

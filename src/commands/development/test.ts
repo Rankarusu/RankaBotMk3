@@ -5,12 +5,11 @@ import {
 import {
   CommandInteraction,
   MessageButton,
-  MessageEmbed,
   PermissionString,
 } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils, Pagination } from '../../utils';
+import { EmbedUtils, PaginationEmbed } from '../../utils';
 
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -97,6 +96,6 @@ export class TestCommand implements Command {
 
     const pages = [embed1, embed2, embed3, embed4, embed5];
 
-    await new Pagination(interaction, pages).start();
+    await new PaginationEmbed(interaction, pages).start();
   }
 }

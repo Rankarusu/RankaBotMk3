@@ -1,4 +1,5 @@
 import {
+  ChatInputCommandInteraction,
   CommandInteraction,
   NewsChannel,
   TextChannel,
@@ -22,7 +23,9 @@ export class CommandHandler implements EventHandler {
 
   constructor(public commands: Command[]) {}
 
-  public async process(interaction: CommandInteraction): Promise<void> {
+  public async process(
+    interaction: ChatInputCommandInteraction
+  ): Promise<void> {
     if (
       interaction.user.id === interaction.client.user?.id ||
       interaction.user.bot

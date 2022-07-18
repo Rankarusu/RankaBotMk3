@@ -1,9 +1,10 @@
 import { Reminder } from '@prisma/client';
 import {
-  MessageActionRow,
-  MessageEmbed,
-  MessageSelectMenu,
-  MessageSelectOptionData,
+  ActionRowBuilder,
+  EmbedBuilder,
+  SelectMenuBuilder,
+  EmbedField,
+  SelectMenuOptionBuilder,
 } from 'discord.js';
 import { EmbedUtils } from '.';
 import { DateUtils } from './date-utils';
@@ -11,10 +12,10 @@ import { DateUtils } from './date-utils';
 export class RemindUtils {
   public static createDeleteReminderActionRow(
     reminders: Reminder[]
-  ): MessageActionRow {
+  ): ActionRowBuilder {
     const rowData = this.getRowData(reminders);
-    return new MessageActionRow().addComponents(
-      new MessageSelectMenu()
+    return new ActionRowBuilder().addComponents(
+      new SelectMenuBuilder()
         .setCustomId('delete-reminder')
         .setPlaceholder('Select one or more reminders to delete')
         .addOptions(rowData)
@@ -23,7 +24,7 @@ export class RemindUtils {
     );
   }
 
-  public static createReminderListEmbed(reminders: Reminder[]): MessageEmbed {
+  public static createReminderListEmbed(reminders: Reminder[]): EmbedBuilder {
     const reminderList = reminders.map((reminder, index) => {
       return {
         time: reminder.parsedTime.toLocaleString(),
@@ -35,24 +36,30 @@ export class RemindUtils {
         interactionId: reminder.interactionId,
       };
     });
+    const embedList: EmbedField[] = reminderList.map((reminder) => {
+      return {
+        name: reminder.id,
+        value: reminder.text,
+        inline: false,
+      };
+    });
 
     const embed = EmbedUtils.reminderListEmbed(
       'Here is a list of all your set reminders.',
-      reminderList
+      embedList
     );
     return embed;
   }
 
-  private static getRowData(reminders: Reminder[]): MessageSelectOptionData[] {
-    const rowData: MessageSelectOptionData[] = reminders.map(
+  private static getRowData(reminders: Reminder[]): SelectMenuOptionBuilder[] {
+    const rowData: SelectMenuOptionBuilder[] = reminders.map(
       (reminder, index) => {
-        return {
-          label: `ID: ${(index + 1).toString().padStart(3, '0')}`,
-          description: `${reminder.parsedTime.toLocaleString()} | ${
-            reminder.message
-          }`,
-          value: reminder.interactionId,
-        };
+        return new SelectMenuOptionBuilder()
+          .setLabel(`ID: ${(index + 1).toString().padStart(3, '0')}`)
+          .setDescription(
+            `${reminder.parsedTime.toLocaleString()} | ${reminder.message}`
+          )
+          .setValue(reminder.interactionId);
       }
     );
     return rowData;

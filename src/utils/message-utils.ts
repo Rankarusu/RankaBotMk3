@@ -1,11 +1,11 @@
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
+  ActionRowBuilder,
   DiscordAPIError,
+  EmbedBuilder,
   EmojiResolvable,
   Message,
-  MessageActionRow,
   MessageEditOptions,
-  MessageEmbed,
   MessageOptions,
   MessageReaction,
   StartThreadOptions,
@@ -15,17 +15,18 @@ import {
 } from 'discord.js';
 
 const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
+//TODO: find out how to handle components without typescript complaining
 
 export class MessageUtils {
   public static async send(
     target: User | TextBasedChannel,
-    content: string | MessageEmbed | MessageOptions
+    content: string | EmbedBuilder | MessageOptions
   ): Promise<Message> {
     try {
       const options: MessageOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
       return await target.send(options);
@@ -36,13 +37,13 @@ export class MessageUtils {
 
   public static async reply(
     msg: Message,
-    content: string | MessageEmbed | MessageOptions
+    content: string | EmbedBuilder | MessageOptions
   ): Promise<Message> {
     try {
       const options: MessageOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
       return await msg.reply(options);
@@ -53,21 +54,21 @@ export class MessageUtils {
 
   public static async edit(
     msg: Message,
-    content?: string | MessageEmbed | MessageEditOptions,
-    components?: MessageActionRow[]
+    content?: string | EmbedBuilder | MessageEditOptions,
+    components?: ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
       return await msg.edit({ ...options, components });
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
-        IGNORED_ERRORS.includes(error.code)
+        IGNORED_ERRORS.includes(error.code as number)
       ) {
         return;
       } else {

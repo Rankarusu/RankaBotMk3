@@ -1,37 +1,39 @@
-import { ColorResolvable, GuildMember, MessageEmbed } from 'discord.js';
+import {
+  ColorResolvable,
+  GuildMember,
+  EmbedBuilder,
+  EmbedField,
+} from 'discord.js';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
 
 export class EmbedUtils {
   public static errorEmbed(data: EventData) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle('Error')
       .setColor(Config.colors.error as ColorResolvable)
       .setDescription(data.description)
       .setTimestamp();
 
-    for (const key in data.fields) {
-      embed.addField(key, data.fields[key], true);
-    }
+    embed.addFields(data.fields);
     return embed;
   }
 
   public static warnEmbed(data: EventData) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle('Warning')
       .setColor(Config.colors.warning as ColorResolvable)
       .setDescription(data.description)
       .setTimestamp();
 
-    for (const key in data.fields) {
-      embed.addField(key, data.fields[key], true);
-    }
+    embed.addFields(data.fields);
+
     return embed;
   }
 
   public static successEmbed(message: string, title?: string) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(Config.colors.success as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
@@ -42,7 +44,7 @@ export class EmbedUtils {
   }
 
   public static infoEmbed(message: string, title?: string) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
@@ -58,7 +60,7 @@ export class EmbedUtils {
     reason?: string,
     title?: string
   ) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(member.displayHexColor as ColorResolvable)
       .setDescription(message)
       .setTimestamp()
@@ -70,24 +72,19 @@ export class EmbedUtils {
       embed.setTitle(title);
     }
     if (reason) {
-      embed.addField('Reason', reason);
+      embed.addFields([{ name: 'Reason', value: reason }]);
     }
     return embed;
   }
 
-  public static reminderListEmbed(
-    message: string,
-    list: { id: string; text: string }[]
-  ) {
-    const embed = new MessageEmbed()
+  public static reminderListEmbed(message: string, list: EmbedField[]) {
+    const embed = new EmbedBuilder()
       .setTitle('Reminders')
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message);
     // .setFooter({ text: 'Use the menu below to delete reminders' });
     if (list) {
-      list.forEach((item) => {
-        embed.addField(item.id, item.text, false);
-      });
+      embed.addFields(list);
     }
     return embed;
   }
@@ -96,7 +93,7 @@ export class EmbedUtils {
     commands: { [key: string]: string[] },
     iconUrl: string
   ) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle('Help')
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(
@@ -110,9 +107,10 @@ export class EmbedUtils {
       .setFooter({
         text: 'use /help <command> for further details on a specific command',
       });
-    Object.keys(commands).forEach((key) => {
-      embed.addField(key, commands[key].join('\n'));
+    const fields: EmbedField[] = Object.keys(commands).map((key) => {
+      return { name: key, value: commands[key].join('\n'), inline: false };
     });
+    embed.addFields(fields);
     return embed;
   }
 
@@ -124,18 +122,18 @@ export class EmbedUtils {
     options: string[],
     subcommands: string[]
   ) {
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle(`Help for \`${cmd}\``)
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(desc)
-      .addField('Usage', usage)
+      .addFields([{ name: 'Usage', value: usage }])
       .setThumbnail(iconUrl)
       .setTimestamp();
     if (options && options.length > 0) {
-      embed.addField('Options', options.join('\n'));
+      embed.addFields([{ name: 'Options', value: options.join('\n') }]);
     }
     if (subcommands && subcommands.length > 0) {
-      embed.addField('Subcommands', subcommands.join('\n'));
+      embed.addFields([{ name: 'Subcommands', value: subcommands.join('\n') }]);
     }
     return embed;
   }

@@ -1,12 +1,15 @@
 import {
   CommandInteraction,
-  EmbedField,
   Message,
-  MessageActionRow,
+  ActionRowBuilder,
   MessageComponentInteraction,
-  MessageEmbed,
+  EmbedBuilder,
   User,
   UserResolvable,
+  ComponentType,
+  ButtonStyle,
+  ButtonBuilder,
+  APIEmbedField,
 } from 'discord.js';
 import { InteractionUtils } from './interaction-utils';
 import { MessageUtils } from './message-utils';
@@ -18,15 +21,15 @@ export class PaginationEmbed {
 
   message: Message;
 
-  pages: MessageEmbed[];
+  pages: EmbedBuilder[];
 
   timeout?: number;
 
   limit?: number;
 
-  paginationButtons?: MessageActionRow;
+  paginationButtons?: ActionRowBuilder;
 
-  additionalRows?: MessageActionRow[];
+  additionalRows?: ActionRowBuilder[];
 
   private index = 0;
 
@@ -34,14 +37,14 @@ export class PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
-    pages: MessageEmbed[] | MessageEmbed,
+    pages: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
     timeout?: number,
-    additionalRows?: MessageActionRow[]
+    additionalRows?: ActionRowBuilder[]
   ) {
     this.interaction = interaction;
     this.limit = limit ? limit : 50;
-    if (pages instanceof MessageEmbed) {
+    if (pages instanceof EmbedBuilder) {
       this.pages = this.paginateEmbed(pages, this.limit);
     } else {
       this.pages = pages;
@@ -51,42 +54,40 @@ export class PaginationEmbed {
     this.timeout = timeout ? timeout : 60000;
 
     this.pages.map((page, pageIndex) => {
-      if (page.footer && (page.footer.text || page.footer.iconURL)) return page;
+      if (
+        page.data.footer &&
+        (page.data.footer.text || page.data.footer.icon_url)
+      )
+        return page;
       return page.setFooter({
         text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
       });
     });
-    this.paginationButtons = new MessageActionRow().addComponents([
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        emoji: '⏮',
-        customId: 'first',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        emoji: '◀',
-        customId: 'previous',
-      },
-      {
-        type: 'BUTTON',
-        style: 'DANGER',
-        emoji: '⏹',
-        customId: 'stop',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        emoji: '▶',
-        customId: 'next',
-      },
-      {
-        type: 'BUTTON',
-        style: 'PRIMARY',
-        emoji: '⏭',
-        customId: 'last',
-      },
+    this.paginationButtons = new ActionRowBuilder().addComponents([
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Primary)
+        .setCustomId('first')
+        .setEmoji('⏮'),
+
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Primary)
+        .setCustomId('previous')
+        .setEmoji('◀'),
+
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Danger)
+        .setCustomId('stop')
+        .setEmoji('⏹'),
+
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Primary)
+        .setCustomId('next')
+        .setEmoji('▶'),
+
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Primary)
+        .setCustomId('last')
+        .setEmoji('⏭'),
     ]);
   }
 
@@ -96,7 +97,7 @@ export class PaginationEmbed {
     this.message = await this.send();
 
     const interactionCollector = this.message.createMessageComponentCollector({
-      componentType: 'BUTTON',
+      componentType: ComponentType.Button,
       max: this.pages.length * 5,
       filter: (x) => {
         return this.author && x.user.id === (this.author as User).id;
@@ -151,12 +152,12 @@ export class PaginationEmbed {
     });
   }
 
-  private paginateEmbed(embed: MessageEmbed, limit: number) {
+  private paginateEmbed(embed: EmbedBuilder, limit: number) {
     //splits embed fields into multiple pages with same header, footer, etc.
 
-    const fields = embed.fields;
+    const fields = embed.data.fields;
 
-    const splitFields: EmbedField[][] = [[]];
+    const splitFields: APIEmbedField[][] = [[]];
     let idx = 0;
     fields.forEach((field) => {
       //get amount of full lines in current index
@@ -180,10 +181,10 @@ export class PaginationEmbed {
       }
     });
 
-    const pages: MessageEmbed[] = splitFields.map((fieldArr) => {
+    const pages: EmbedBuilder[] = splitFields.map((fieldArr) => {
       //copy the initial embed but replace
       const embedJson = embed.toJSON();
-      return new MessageEmbed(embedJson).setFields(fieldArr);
+      return new EmbedBuilder(embedJson).setFields(fieldArr);
     });
 
     return pages;
@@ -204,6 +205,7 @@ export class PaginationEmbed {
         this.paginationButtons,
       ]);
     }
+    console.log(this.pages, this.paginationButtons, this.additionalRows);
     return message;
   }
 
@@ -226,10 +228,10 @@ export class PaginationEmbed {
   }
 
   public async changePages(
-    pages: MessageEmbed | MessageEmbed[],
-    additionalRows?: MessageActionRow[]
+    pages: EmbedBuilder | EmbedBuilder[],
+    additionalRows?: ActionRowBuilder[]
   ) {
-    if (pages instanceof MessageEmbed) {
+    if (pages instanceof EmbedBuilder) {
       this.pages = this.paginateEmbed(pages, this.limit);
     } else {
       this.pages = pages;

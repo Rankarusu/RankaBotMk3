@@ -1,15 +1,16 @@
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
+  ActionRowBuilder,
   CommandInteraction,
   DiscordAPIError,
+  EmbedBuilder,
   GuildChannel,
   InteractionReplyOptions,
+  InteractionResponse,
   InteractionUpdateOptions,
   Message,
-  MessageActionRow,
   MessageComponentInteraction,
   MessageEditOptions,
-  MessageEmbed,
   ThreadChannel,
   User,
 } from 'discord.js';
@@ -23,12 +24,12 @@ const IGNORED_ERRORS = [
   RESTJSONErrorCodes.UnknownInteraction,
   RESTJSONErrorCodes.InteractionHasAlreadyBeenAcknowledged,
 ];
-
+//TODO: find out how to handle components without typescript complaining
 export class InteractionUtils {
   public static async deferReply(
     interaction: CommandInteraction | MessageComponentInteraction,
     hidden = false
-  ): Promise<void> {
+  ): Promise<InteractionResponse> {
     try {
       return await interaction.deferReply({
         ephemeral: hidden,
@@ -36,7 +37,7 @@ export class InteractionUtils {
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
-        IGNORED_ERRORS.includes(error.code)
+        IGNORED_ERRORS.includes(error.code as number)
       ) {
         return;
       } else {
@@ -47,15 +48,15 @@ export class InteractionUtils {
 
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
-    content: string | MessageEmbed | InteractionReplyOptions,
-    components?: MessageActionRow[],
+    content: string | EmbedBuilder | InteractionReplyOptions,
+    components?: ActionRowBuilder[],
     hidden = false
   ): Promise<Message> {
     try {
       const options: InteractionReplyOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
       if (interaction.deferred || interaction.replied) {
@@ -75,7 +76,7 @@ export class InteractionUtils {
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
-        IGNORED_ERRORS.includes(error.code)
+        IGNORED_ERRORS.includes(error.code as number)
       ) {
         return;
       } else {
@@ -86,7 +87,7 @@ export class InteractionUtils {
 
   public static async deferUpdate(
     intr: MessageComponentInteraction
-  ): Promise<void> {
+  ): Promise<InteractionResponse> {
     try {
       return await intr.deferUpdate();
     } catch (error) {
@@ -96,21 +97,21 @@ export class InteractionUtils {
 
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
-    content: string | MessageEmbed,
-    components?: MessageActionRow[]
+    content: string | EmbedBuilder,
+    components?: ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
       return (await intr.editReply({ ...options, components })) as Message;
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
-        IGNORED_ERRORS.includes(error.code)
+        IGNORED_ERRORS.includes(error.code as number)
       ) {
         return;
       } else {
@@ -121,14 +122,14 @@ export class InteractionUtils {
 
   public static async update(
     intr: MessageComponentInteraction,
-    content?: string | MessageEmbed | InteractionUpdateOptions,
-    components?: MessageActionRow[]
+    content?: string | EmbedBuilder | InteractionUpdateOptions,
+    components?: ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: InteractionUpdateOptions =
         typeof content === 'string'
           ? { content }
-          : content instanceof MessageEmbed
+          : content instanceof EmbedBuilder
           ? { embeds: [content] }
           : content;
 
@@ -140,7 +141,7 @@ export class InteractionUtils {
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
-        IGNORED_ERRORS.includes(error.code)
+        IGNORED_ERRORS.includes(error.code as number)
       ) {
         return;
       } else {

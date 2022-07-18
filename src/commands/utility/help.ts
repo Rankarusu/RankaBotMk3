@@ -166,7 +166,6 @@ export class HelpCommand implements Command {
     cmdhelp.metadata.options.forEach((option) => {
       tree.add(this.getBranch(option));
     });
-    console.log(tree.toString());
     return tree.toString();
   }
 

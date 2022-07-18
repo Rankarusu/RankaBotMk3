@@ -2,13 +2,15 @@ import { Reminder } from '@prisma/client';
 import * as chrono from 'chrono-node';
 import {
   ApplicationCommandOptionType,
+  ComponentType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
+  ActionRowBuilder,
+  ChatInputCommandInteraction,
   CommandInteraction,
-  MessageActionRow,
-  MessageEmbed,
-  PermissionString,
+  EmbedBuilder,
+  PermissionsString,
   User,
 } from 'discord.js';
 import { EventData } from '../../models/event-data';
@@ -74,10 +76,10 @@ export class RemindCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
-  public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
+  public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: CommandInteraction,
+    interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
     if (interaction.options.getSubcommand() === 'list') {
@@ -90,7 +92,7 @@ export class RemindCommand implements Command {
 
       const msg = paginationEmbed.message;
       const interactionCollector = msg.createMessageComponentCollector({
-        componentType: 'SELECT_MENU',
+        componentType: ComponentType.SelectMenu,
         max: 5,
         filter: (x) => {
           return (
@@ -197,8 +199,8 @@ export class RemindCommand implements Command {
     data: EventData
   ) {
     const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
-    let embed: MessageEmbed | MessageEmbed[];
-    const rows: MessageActionRow[] = [];
+    let embed: EmbedBuilder | EmbedBuilder[];
+    const rows: ActionRowBuilder[] = [];
     if (reminders.length === 0) {
       const message =
         'You have no reminders set at the moment. Use `/remind set` to set one.';

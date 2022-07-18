@@ -1,11 +1,12 @@
 import {
   ApplicationCommandOptionType,
+  ButtonStyle,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
-  CommandInteraction,
-  MessageButton,
-  PermissionString,
+  ButtonBuilder,
+  ChatInputCommandInteraction,
+  PermissionsString,
 } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
@@ -72,12 +73,12 @@ export class TestCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
-  public requireClientPerms: PermissionString[] = ['ADMINISTRATOR'];
+  public requireClientPerms: PermissionsString[] = ['Administrator'];
 
   public developerOnly?: boolean = true;
 
   public async execute(
-    interaction: CommandInteraction,
+    interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
     const embed1 = EmbedUtils.infoEmbed('test-body 1', 'test-title 1');
@@ -85,14 +86,14 @@ export class TestCommand implements Command {
     const embed3 = EmbedUtils.infoEmbed('test-body 3', 'test-title 3');
     const embed4 = EmbedUtils.infoEmbed('test-body 4', 'test-title 4');
     const embed5 = EmbedUtils.infoEmbed('test-body 5', 'test-title 5');
-    const btn1 = new MessageButton()
+    const btn1 = new ButtonBuilder()
       .setCustomId('test-btn-1')
       .setLabel('◀')
-      .setStyle('PRIMARY');
-    const btn2 = new MessageButton()
+      .setStyle(ButtonStyle.Primary);
+    const btn2 = new ButtonBuilder()
       .setCustomId('test-btn-2')
       .setLabel('▶')
-      .setStyle('PRIMARY');
+      .setStyle(ButtonStyle.Primary);
 
     const pages = [embed1, embed2, embed3, embed4, embed5];
 

@@ -1,5 +1,5 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -18,10 +18,10 @@ export class PingCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
-  public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
+  public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: CommandInteraction,
+    interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
     await InteractionUtils.send(

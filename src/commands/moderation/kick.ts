@@ -2,7 +2,7 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, GuildMember, PermissionString } from 'discord.js';
+import { CommandInteraction, GuildMember, PermissionsString } from 'discord.js';
 
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../../config/config.json';
@@ -37,14 +37,14 @@ export class KickCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
-  public requireClientPerms: PermissionString[] = ['KICK_MEMBERS'];
+  public requireClientPerms: PermissionsString[] = ['KickMembers'];
 
   public async execute(
     interaction: CommandInteraction,
     data: EventData
   ): Promise<void> {
     const member = interaction.options.get('user').member as GuildMember;
-    const reason = interaction.options.getString('reason');
+    const reason = interaction.options.get('reason').value as string;
 
     if (
       Config.developers.includes(member.user.id) ||

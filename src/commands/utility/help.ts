@@ -4,7 +4,11 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { CommandInteraction, PermissionString } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  CommandInteraction,
+  PermissionsString,
+} from 'discord.js';
 import { capitalize, groupBy } from 'lodash';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
@@ -43,10 +47,10 @@ export class HelpCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
-  public requireClientPerms: PermissionString[] = ['SEND_MESSAGES'];
+  public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: CommandInteraction,
+    interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
     const cmd = interaction.options.getString('command');

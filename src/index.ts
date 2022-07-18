@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import { Client, IntentsString, PartialTypes } from 'discord.js';
+import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
   Command,
   HelpCommand,
@@ -35,8 +35,9 @@ export let bot: Bot;
 
 async function start(): Promise<void> {
   const client = new Client({
-    intents: Config.client.intents as IntentsString[],
-    partials: Config.client.partials as PartialTypes[],
+    intents: Config.client.intents as GatewayIntentsString[],
+    //TODO: find out what type to use for partials out of a config
+    partials: Config.client.partials as Partials[],
   });
 
   //Commands

@@ -1,10 +1,11 @@
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v10';
+import { InteractionType, Routes } from 'discord-api-types/v10';
 import {
+  ChatInputCommandInteraction,
   Client,
-  Constants,
   Interaction,
   Message,
+  Events,
   MessageReaction,
   PartialMessageReaction,
   PartialUser,
@@ -43,19 +44,16 @@ export class Bot {
   }
 
   private registerListeners(): void {
-    this.client.on(Constants.Events.CLIENT_READY, () => {
+    this.client.on(Events.ClientReady, () => {
       this.onReady();
     });
-    this.client.on(Constants.Events.MESSAGE_CREATE, (msg: Message) =>
-      this.onMessage(msg)
-    );
-    this.client.on(
-      Constants.Events.INTERACTION_CREATE,
-      (interaction: Interaction) => this.onInteraction(interaction)
+    this.client.on(Events.MessageCreate, (msg: Message) => this.onMessage(msg));
+    this.client.on(Events.InteractionCreate, (interaction: Interaction) =>
+      this.onInteraction(interaction)
     );
     //TODO: join and leave handlers
     this.client.on(
-      Constants.Events.MESSAGE_REACTION_ADD,
+      Events.MessageReactionAdd,
       (
         msgReaction: MessageReaction | PartialMessageReaction,
         user: User | PartialUser
@@ -104,9 +102,11 @@ export class Bot {
       return;
     }
 
-    if (interaction.isCommand()) {
+    if (interaction.type === InteractionType.ApplicationCommand) {
       try {
-        await this.commandHandler.process(interaction);
+        await this.commandHandler.process(
+          interaction as ChatInputCommandInteraction
+        );
       } catch (error) {
         Logger.error(LogMessages.error.command, error);
       }

@@ -5,6 +5,7 @@ import {
 } from 'discord-api-types/v10';
 import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
+  BanCommand,
   Command,
   HelpCommand,
   KickCommand,
@@ -50,6 +51,7 @@ async function start(): Promise<void> {
     new RemindCommand(),
     new HelpCommand(),
     new KickCommand(),
+    new BanCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

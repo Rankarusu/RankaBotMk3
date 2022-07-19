@@ -205,7 +205,6 @@ export class PaginationEmbed {
         this.paginationButtons,
       ]);
     }
-    console.log(this.pages, this.paginationButtons, this.additionalRows);
     return message;
   }
 

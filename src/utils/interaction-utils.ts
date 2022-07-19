@@ -1,6 +1,5 @@
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
-  ActionRowBuilder,
   CommandInteraction,
   DiscordAPIError,
   EmbedBuilder,
@@ -49,7 +48,7 @@ export class InteractionUtils {
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | InteractionReplyOptions,
-    components?: ActionRowBuilder[],
+    components?: any[], //ActionRowBuilder[]
     hidden = false
   ): Promise<Message> {
     try {
@@ -98,7 +97,7 @@ export class InteractionUtils {
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder,
-    components?: ActionRowBuilder[]
+    components?: any[] //ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
@@ -123,7 +122,7 @@ export class InteractionUtils {
   public static async update(
     intr: MessageComponentInteraction,
     content?: string | EmbedBuilder | InteractionUpdateOptions,
-    components?: ActionRowBuilder[]
+    components?: any[] //ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: InteractionUpdateOptions =

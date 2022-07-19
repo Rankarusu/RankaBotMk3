@@ -55,7 +55,7 @@ export class MessageUtils {
   public static async edit(
     msg: Message,
     content?: string | EmbedBuilder | MessageEditOptions,
-    components?: ActionRowBuilder[]
+    components?: any[] //ActionRowBuilder[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =

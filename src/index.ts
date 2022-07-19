@@ -28,19 +28,22 @@ import { Trigger } from './triggers';
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
+
 const rest = new REST().setToken(Config.client.token);
 
-//for help command
+// for help command
 export let bot: Bot;
 
 async function start(): Promise<void> {
   const client = new Client({
     intents: Config.client.intents as GatewayIntentsString[],
-    //TODO: find out what type to use for partials out of a config
-    partials: Config.client.partials as Partials[],
+
+    partials: Config.client.partials.map(
+      (partial) => Partials[partial]
+    ) as Partials[],
   });
 
-  //Commands
+  // Commands
   const commands: Command[] = [
     new PingCommand(),
     new TestCommand(),
@@ -49,23 +52,23 @@ async function start(): Promise<void> {
     new KickCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
-  //Reactions
+  // Reactions
   const reactions: Reaction[] = [];
 
-  //Triggers
+  // Triggers
   const triggers: Trigger[] = [];
 
-  //Select Menus
+  // Select Menus
   const menus: SelectMenu[] = [];
 
-  //Event Handlers
+  // Event Handlers
   const commandHandler = new CommandHandler(commands);
   const triggerHandler = new TriggerHandler(triggers);
   const messageHandler = new MessageHandler(triggerHandler);
   const reactionHandler = new ReactionHandler(reactions);
   const selectMenuHandler = new SelectMenuHandler(menus);
 
-  //Bot
+  // Bot
   bot = new Bot(
     Config.client.token,
     client,
@@ -75,11 +78,11 @@ async function start(): Promise<void> {
     selectMenuHandler
   );
 
-  //register help command so it can get all other commands from the handler
-  //Idea is postponed until we can have dynamic choices or more than 25 at a time.
+  // register help command so it can get all other commands from the handler
+  // Idea is postponed until we can have dynamic choices or more than 25 at a time.
   // bot.registerHelpCommand();
 
-  //Register Commands
+  // Register Commands
   let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[];
   try {
     commandsJson = commands.map((command) => command.metadata);
@@ -91,7 +94,7 @@ async function start(): Promise<void> {
       )
     );
 
-    //globally
+    // globally
     await rest.put(Routes.applicationCommands(Config.client.id), {
       body: commandsJson,
     });
@@ -99,21 +102,21 @@ async function start(): Promise<void> {
     Logger.error(LogMessages.error.commandActionCreating, error);
   }
 
-  //Connect to Database
+  // Connect to Database
   try {
-    await Db.$connect(); //technically not necessary, but will retrieve first call immediately
+    await Db.$connect(); // technically not necessary, but will retrieve first call immediately
     Logger.info(LogMessages.info.databaseConnect);
   } catch (error) {
     Logger.error(LogMessages.error.databaseConnect, error);
   }
 
-  //start schedulers
+  // start schedulers
   const reminderScheduler = new ReminderScheduler(client);
   reminderScheduler.start();
   const activityScheduler = new ActivityScheduler(client);
   activityScheduler.start();
 
-  //Finally start the bot
+  // Finally start the bot
   await bot.start();
 }
 

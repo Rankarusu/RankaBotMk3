@@ -10,6 +10,7 @@ import {
   HelpCommand,
   KickCommand,
   PingCommand,
+  PurgeCommand,
   RemindCommand,
   TestCommand,
   UnbanCommand,
@@ -54,6 +55,7 @@ async function start(): Promise<void> {
     new KickCommand(),
     new BanCommand(),
     new UnbanCommand(),
+    new PurgeCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

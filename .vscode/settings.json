@@ -14,6 +14,7 @@
     "cmdhelp",
     "cooldowns",
     "datasources",
+    "deletable",
     "discordjs",
     "kickable",
     "lewds",

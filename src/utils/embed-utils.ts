@@ -138,7 +138,9 @@ export class EmbedUtils {
       embed.addFields([{ name: 'Options', value: options.join('\n') }]);
     }
     if (subcommands && subcommands.length > 0) {
-      embed.addFields([{ name: 'Subcommands', value: subcommands.join('\n') }]);
+      embed.addFields([
+        { name: 'Subcommands & Options', value: subcommands.join('\n') },
+      ]);
     }
     return embed;
   }

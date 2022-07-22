@@ -3,6 +3,7 @@ import {
   GuildMember,
   EmbedBuilder,
   EmbedField,
+  User,
 } from 'discord.js';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
@@ -55,19 +56,23 @@ export class EmbedUtils {
   }
 
   public static memberEmbed(
-    member: GuildMember,
+    member: GuildMember | User,
     message: string,
     reason?: string,
     title?: string
   ) {
-    const embed = new EmbedBuilder()
-      .setColor(member.displayHexColor as ColorResolvable)
-      .setDescription(message)
-      .setTimestamp()
-      .setAuthor({
+    const embed = new EmbedBuilder().setDescription(message).setTimestamp();
+    if (member instanceof GuildMember) {
+      embed.setColor(member.displayHexColor as ColorResolvable).setAuthor({
         name: member.user.tag,
         iconURL: member.displayAvatarURL(),
       });
+    } else {
+      embed.setAuthor({
+        name: member.tag,
+        iconURL: member.displayAvatarURL(),
+      });
+    }
     if (title) {
       embed.setTitle(title);
     }

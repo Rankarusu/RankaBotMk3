@@ -21,7 +21,9 @@
     "Ranka",
     "rankabotmk",
     "RESTJSON",
-    "Termi"
+    "Termi",
+    "unban",
+    "Unbans"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

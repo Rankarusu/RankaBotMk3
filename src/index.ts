@@ -12,6 +12,7 @@ import {
   PingCommand,
   RemindCommand,
   TestCommand,
+  UnbanCommand,
 } from './commands';
 import {
   CommandHandler,
@@ -52,6 +53,7 @@ async function start(): Promise<void> {
     new HelpCommand(),
     new KickCommand(),
     new BanCommand(),
+    new UnbanCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

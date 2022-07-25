@@ -24,7 +24,9 @@
     "RESTJSON",
     "Termi",
     "unban",
-    "Unbans"
+    "Unbans",
+    "untimeout",
+    "waifu"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

@@ -50,7 +50,7 @@ export class TimeoutCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
-  public requireClientPerms: PermissionsString[] = [];
+  public requireClientPerms: PermissionsString[] = ['ModerateMembers'];
 
   public async execute(
     interaction: ChatInputCommandInteraction,

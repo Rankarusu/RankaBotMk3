@@ -15,6 +15,7 @@ import {
   RemindCommand,
   TestCommand,
   UnbanCommand,
+  UntimeoutCommand,
 } from './commands';
 import {
   CommandHandler,
@@ -58,6 +59,7 @@ async function start(): Promise<void> {
     new UnbanCommand(),
     new PurgeCommand(),
     new TimeoutCommand(),
+    new UntimeoutCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

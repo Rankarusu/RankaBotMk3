@@ -8,3 +8,4 @@ export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
 export { PurgeCommand } from './moderation/purge';
 export { TimeoutCommand } from './moderation/timeout';
+export { UntimeoutCommand } from './moderation/untimeout';

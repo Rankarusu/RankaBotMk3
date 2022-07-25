@@ -17,7 +17,9 @@ export class EmbedUtils {
       .setDescription(data.description)
       .setTimestamp();
 
-    embed.addFields(data.fields);
+    if (data.fields) {
+      embed.addFields(data.fields);
+    }
     return embed;
   }
 
@@ -28,8 +30,9 @@ export class EmbedUtils {
       .setDescription(data.description)
       .setTimestamp();
 
-    embed.addFields(data.fields);
-
+    if (data.fields) {
+      embed.addFields(data.fields);
+    }
     return embed;
   }
 

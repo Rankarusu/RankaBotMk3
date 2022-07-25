@@ -7,3 +7,4 @@ export { HelpCommand } from './utility/help';
 export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
 export { PurgeCommand } from './moderation/purge';
+export { TimeoutCommand } from './moderation/timeout';

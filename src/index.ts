@@ -6,6 +6,7 @@ import {
 import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
   BanCommand,
+  ChooseCommand,
   CoinflipCommand,
   Command,
   EightballCommand,
@@ -66,6 +67,7 @@ async function start(): Promise<void> {
     new InfoCommand(),
     new CoinflipCommand(),
     new EightballCommand(),
+    new ChooseCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

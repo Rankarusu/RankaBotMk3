@@ -1,4 +1,8 @@
-import { RESTJSONErrorCodes } from 'discord-api-types/v10';
+import {
+  APIActionRowComponent,
+  APIMessageActionRowComponent,
+  RESTJSONErrorCodes,
+} from 'discord-api-types/v10';
 import {
   CommandInteraction,
   DiscordAPIError,
@@ -23,7 +27,7 @@ const IGNORED_ERRORS = [
   RESTJSONErrorCodes.UnknownInteraction,
   RESTJSONErrorCodes.InteractionHasAlreadyBeenAcknowledged,
 ];
-//TODO: find out how to handle components without typescript complaining
+
 export class InteractionUtils {
   public static async deferReply(
     interaction: CommandInteraction | MessageComponentInteraction,
@@ -48,7 +52,7 @@ export class InteractionUtils {
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | InteractionReplyOptions,
-    components?: any[], //ActionRowBuilder[]
+    components?: APIActionRowComponent<APIMessageActionRowComponent>[],
     hidden = false
   ): Promise<Message> {
     try {
@@ -97,7 +101,7 @@ export class InteractionUtils {
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder,
-    components?: any[] //ActionRowBuilder[]
+    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
@@ -122,7 +126,7 @@ export class InteractionUtils {
   public static async update(
     intr: MessageComponentInteraction,
     content?: string | EmbedBuilder | InteractionUpdateOptions,
-    components?: any[] //ActionRowBuilder[]
+    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
   ): Promise<Message> {
     try {
       const options: InteractionUpdateOptions =

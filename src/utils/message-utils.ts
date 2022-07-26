@@ -1,6 +1,9 @@
-import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
-  ActionRowBuilder,
+  APIActionRowComponent,
+  APIMessageActionRowComponent,
+  RESTJSONErrorCodes,
+} from 'discord-api-types/v10';
+import {
   DiscordAPIError,
   EmbedBuilder,
   EmojiResolvable,
@@ -15,7 +18,6 @@ import {
 } from 'discord.js';
 
 const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
-//TODO: find out how to handle components without typescript complaining
 
 export class MessageUtils {
   public static async send(
@@ -55,7 +57,7 @@ export class MessageUtils {
   public static async edit(
     msg: Message,
     content?: string | EmbedBuilder | MessageEditOptions,
-    components?: any[] //ActionRowBuilder[]
+    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =

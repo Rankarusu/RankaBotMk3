@@ -17,6 +17,7 @@ import {
   UnbanCommand,
   UntimeoutCommand,
   InfoCommand,
+  CoinflipCommand,
 } from './commands';
 import {
   CommandHandler,
@@ -62,6 +63,7 @@ async function start(): Promise<void> {
     new TimeoutCommand(),
     new UntimeoutCommand(),
     new InfoCommand(),
+    new CoinflipCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

@@ -12,6 +12,7 @@
     "CEST",
     "chrono",
     "cmdhelp",
+    "coinflip",
     "cooldowns",
     "datasources",
     "deletable",

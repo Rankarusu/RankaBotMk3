@@ -27,7 +27,7 @@ export class CoinflipCommand implements Command {
     data: EventData
   ): Promise<void> {
     const result = Math.random() >= 0.5 ? 'Heads' : 'Tails';
-    const embed = EmbedUtils.infoEmbed(`🪙 **${result}**`, 'Coin flip');
+    const embed = EmbedUtils.infoEmbed(`🪙 ${result}`, 'Coin flip');
     InteractionUtils.send(interaction, embed);
   }
 }

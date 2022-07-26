@@ -11,3 +11,4 @@ export { TimeoutCommand } from './moderation/timeout';
 export { UntimeoutCommand } from './moderation/untimeout';
 export { InfoCommand } from './utility/info';
 export { CoinflipCommand } from './misc/coinflip';
+export { EightballCommand } from './misc/eightball';

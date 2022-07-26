@@ -6,18 +6,19 @@ import {
 import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
   BanCommand,
+  CoinflipCommand,
   Command,
+  EightballCommand,
   HelpCommand,
+  InfoCommand,
   KickCommand,
-  TimeoutCommand,
   PingCommand,
   PurgeCommand,
   RemindCommand,
   TestCommand,
+  TimeoutCommand,
   UnbanCommand,
   UntimeoutCommand,
-  InfoCommand,
-  CoinflipCommand,
 } from './commands';
 import {
   CommandHandler,
@@ -64,6 +65,7 @@ async function start(): Promise<void> {
     new UntimeoutCommand(),
     new InfoCommand(),
     new CoinflipCommand(),
+    new EightballCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

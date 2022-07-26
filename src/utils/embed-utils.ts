@@ -47,13 +47,20 @@ export class EmbedUtils {
     return embed;
   }
 
-  public static infoEmbed(message: string, title?: string) {
+  public static infoEmbed(
+    message: string,
+    title?: string,
+    fields?: EmbedField[]
+  ) {
     const embed = new EmbedBuilder()
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message)
       .setTimestamp();
     if (title) {
       embed.setTitle(title);
+    }
+    if (fields) {
+      embed.addFields(fields);
     }
     return embed;
   }

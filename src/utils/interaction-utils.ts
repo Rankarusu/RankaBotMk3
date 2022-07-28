@@ -4,6 +4,7 @@ import {
   RESTJSONErrorCodes,
 } from 'discord-api-types/v10';
 import {
+  AttachmentBuilder,
   CommandInteraction,
   DiscordAPIError,
   EmbedBuilder,
@@ -53,6 +54,7 @@ export class InteractionUtils {
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | InteractionReplyOptions,
     components?: APIActionRowComponent<APIMessageActionRowComponent>[],
+    files?: AttachmentBuilder[],
     hidden = false
   ): Promise<Message> {
     try {
@@ -67,6 +69,7 @@ export class InteractionUtils {
           ...options,
           ephemeral: hidden,
           components,
+          files,
         })) as Message;
       } else {
         return (await interaction.reply({
@@ -74,6 +77,7 @@ export class InteractionUtils {
           ephemeral: hidden,
           fetchReply: true,
           components,
+          files,
         })) as Message;
       }
     } catch (error) {

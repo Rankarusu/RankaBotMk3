@@ -16,6 +16,7 @@ import {
   PingCommand,
   PurgeCommand,
   RemindCommand,
+  TarotCommand,
   TestCommand,
   TimeoutCommand,
   UnbanCommand,
@@ -68,6 +69,7 @@ async function start(): Promise<void> {
     new CoinflipCommand(),
     new EightballCommand(),
     new ChooseCommand(),
+    new TarotCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

@@ -13,3 +13,4 @@ export { InfoCommand } from './utility/info';
 export { CoinflipCommand } from './misc/coinflip';
 export { EightballCommand } from './misc/eightball';
 export { ChooseCommand } from './misc/choose';
+export { TarotCommand } from './misc/tarot';

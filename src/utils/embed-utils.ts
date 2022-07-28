@@ -48,14 +48,16 @@ export class EmbedUtils {
   }
 
   public static infoEmbed(
-    message: string,
+    message?: string,
     title?: string,
     fields?: EmbedField[]
   ) {
     const embed = new EmbedBuilder()
       .setColor(Config.colors.default as ColorResolvable)
-      .setDescription(message)
       .setTimestamp();
+    if (message) {
+      embed.setDescription(message);
+    }
     if (title) {
       embed.setTitle(title);
     }

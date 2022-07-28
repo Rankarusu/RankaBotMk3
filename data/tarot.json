@@ -2280,9 +2280,9 @@
           "Taking what you want without concern for the needs of others"
         ]
       },
-      "name": "ace of coins",
+      "name": "ace of pentacles",
       "rank": 1,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p01.jpg",
       "imgReverse": "p01-r.jpg"
     },
@@ -2315,9 +2315,9 @@
           "Engaging in behavior with no regard for how your body or bankbook will be impacted"
         ]
       },
-      "name": "two of coins",
+      "name": "two of pentacles",
       "rank": 2,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p02.jpg",
       "imgReverse": "p02-r.jpg"
     },
@@ -2351,9 +2351,9 @@
           "Failing to abide by a clearly-outlined agreement with yourself or others"
         ]
       },
-      "name": "three of coins",
+      "name": "three of pentacles",
       "rank": 3,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p03.jpg",
       "imgReverse": "p03-r.jpg"
     },
@@ -2386,9 +2386,9 @@
           "Failing to be a good manager of the blessings you've been given"
         ]
       },
-      "name": "four of coins",
+      "name": "four of pentacles",
       "rank": 4,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p04.jpg",
       "imgReverse": "p04-r.jpg"
     },
@@ -2422,9 +2422,9 @@
           "Wallowing in misery"
         ]
       },
-      "name": "five of coins",
+      "name": "five of pentacles",
       "rank": 5,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p05.jpg",
       "imgReverse": "p05-r.jpg"
     },
@@ -2458,9 +2458,9 @@
           "Ignoring obligations and commitments"
         ]
       },
-      "name": "six of coins",
+      "name": "six of pentacles",
       "rank": 6,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p06.jpg",
       "imgReverse": "p06-r.jpg"
     },
@@ -2493,9 +2493,9 @@
           "Refusing to take part in a project, then whining about the quality of the outcome"
         ]
       },
-      "name": "seven of coins",
+      "name": "seven of pentacles",
       "rank": 7,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p07.jpg",
       "imgReverse": "p07-r.jpg"
     },
@@ -2530,9 +2530,9 @@
           "Rejecting opportunities to learn more about your craft"
         ]
       },
-      "name": "eight of coins",
+      "name": "eight of pentacles",
       "rank": 8,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p08.jpg",
       "imgReverse": "p08-r.jpg"
     },
@@ -2563,9 +2563,9 @@
           "Always craving more"
         ]
       },
-      "name": "nine of coins",
+      "name": "nine of pentacles",
       "rank": 9,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p09.jpg",
       "imgReverse": "p09-r.jpg"
     },
@@ -2597,9 +2597,9 @@
           "Always asking, \"What's in it for me?\""
         ]
       },
-      "name": "ten of coins",
+      "name": "ten of pentacles",
       "rank": 10,
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p10.jpg",
       "imgReverse": "p10-r.jpg"
     },
@@ -2632,9 +2632,9 @@
           "Using wealth or beauty as an excuse for not having to learn and grow"
         ]
       },
-      "name": "page of coins",
+      "name": "page of pentacles",
       "rank": "page",
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p11.jpg",
       "imgReverse": "p11-r.jpg"
     },
@@ -2670,9 +2670,9 @@
           "Copying another's work and claiming it as your own"
         ]
       },
-      "name": "knight of coins",
+      "name": "knight of pentacles",
       "rank": "knight",
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p12.jpg",
       "imgReverse": "p12-r.jpg"
     },
@@ -2704,9 +2704,9 @@
           "Allowing a feeling of entitlement to distort your gratitude for what you're given"
         ]
       },
-      "name": "queen of coins",
+      "name": "queen of pentacles",
       "rank": "queen",
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p13.jpg",
       "imgReverse": "p13-r.jpg"
     },
@@ -2739,9 +2739,9 @@
           "Bossing others around, especially when you're not empowered to do so"
         ]
       },
-      "name": "king of coins",
+      "name": "king of pentacles",
       "rank": "king",
-      "suit": "coins",
+      "suit": "pentacles",
       "img": "p14.jpg",
       "imgReverse": "p14-r.jpg"
     }

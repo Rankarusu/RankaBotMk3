@@ -26,6 +26,14 @@ export class TarotCommand implements Command {
         name: 'draw',
         type: ApplicationCommandOptionType.Subcommand,
         description: 'draw a random tarot card',
+        options: [
+          {
+            name: 'no-reverse',
+            type: ApplicationCommandOptionType.Boolean,
+            description: 'do not pull reverse cards',
+            required: false,
+          },
+        ],
       },
       {
         name: 'search',
@@ -148,7 +156,9 @@ export class TarotCommand implements Command {
 
     switch (subCommand) {
       case 'draw': {
-        const card: TarotCardDraw = this.deck.drawCard();
+        const noReverse = interaction.options.getBoolean('no-reverse') || false;
+        const reverseChance = noReverse ? 0 : 0.5;
+        const card: TarotCardDraw = this.deck.drawCard(reverseChance);
         const { embed, file } = this.createCardEmbed(card.card, card.reverse);
         InteractionUtils.send(interaction, embed, undefined, [file]);
         break;

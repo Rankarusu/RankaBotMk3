@@ -11,6 +11,7 @@ import {
 
 // eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
+import { TarotCard, TarotCardDraw } from '../../models/tarot-card';
 import { Tarot } from '../../services/tarot';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -143,36 +144,61 @@ export class TarotCommand implements Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const card = this.deck.drawCard();
+    const subCommand = interaction.options.getSubcommand();
+
+    switch (subCommand) {
+      case 'draw': {
+        const card: TarotCardDraw = this.deck.drawCard();
+        const { embed, file } = this.createCardEmbed(card.card, card.reverse);
+        InteractionUtils.send(interaction, embed, undefined, [file]);
+        break;
+      }
+      case 'major-arcana': {
+        const num = interaction.options.getNumber('card');
+        const reverse = interaction.options.getBoolean('reverse');
+        const card = this.deck.getMajorArcana(num);
+        const { embed, file } = this.createCardEmbed(card, reverse);
+        InteractionUtils.send(interaction, embed, undefined, [file]);
+        break;
+      }
+      case 'minor-arcana': {
+        const suit = interaction.options.getString('suit');
+        const rank = interaction.options.getString('rank');
+        const maybeIntRank = parseInt(rank, 10) || rank;
+        const reverse = interaction.options.getBoolean('reverse');
+        const card = this.deck.getMinorArcana(suit, maybeIntRank);
+        const { embed, file } = this.createCardEmbed(card, reverse);
+        InteractionUtils.send(interaction, embed, undefined, [file]);
+      }
+    }
+  }
+
+  private createCardEmbed(card: TarotCard, reverse: boolean) {
     const fields: EmbedField[] = [
       {
         name: 'Keywords',
-        value: card.card.keywords.join('\n'),
+        value: card.keywords.join('\n'),
         inline: false,
       },
       {
         name: 'Meanings',
-        value: card.reverse
-          ? card.card.meanings.shadow.join('\n')
-          : card.card.meanings.light.join('\n'),
+        value: reverse
+          ? card.meanings.shadow.join('\n')
+          : card.meanings.light.join('\n'),
         inline: false,
       },
     ];
-    const title = StringUtils.toTitleCase(card.card.name);
+    const title = StringUtils.toTitleCase(card.name);
 
     const embed = EmbedUtils.infoEmbed(
-      card.card.fortune_telling.join('\n'),
-      card.reverse ? `${title} (reversed)` : title,
+      card.fortune_telling.join('\n'),
+      reverse ? `${title} (reversed)` : title,
       fields
     );
     const file = new AttachmentBuilder(
-      `${this.deck.pathToImages}${
-        card.reverse ? card.card.imgReverse : card.card.img
-      }`
+      `${this.deck.pathToImages}${reverse ? card.imgReverse : card.img}`
     );
-    embed.setImage(
-      `attachment://${card.reverse ? card.card.imgReverse : card.card.img}`
-    );
-    InteractionUtils.send(interaction, embed, undefined, [file]);
+    embed.setImage(`attachment://${reverse ? card.imgReverse : card.img}`);
+    return { embed, file };
   }
 }

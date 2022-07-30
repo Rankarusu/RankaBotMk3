@@ -12,9 +12,9 @@ import { DateUtils } from './date-utils';
 export class RemindUtils {
   public static createDeleteReminderActionRow(
     reminders: Reminder[]
-  ): ActionRowBuilder {
+  ): ActionRowBuilder<SelectMenuBuilder> {
     const rowData = this.getRowData(reminders);
-    return new ActionRowBuilder().addComponents(
+    return new ActionRowBuilder<SelectMenuBuilder>().addComponents(
       new SelectMenuBuilder()
         .setCustomId('delete-reminder')
         .setPlaceholder('Select one or more reminders to delete')

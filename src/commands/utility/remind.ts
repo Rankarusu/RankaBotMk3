@@ -11,6 +11,7 @@ import {
   CommandInteraction,
   EmbedBuilder,
   PermissionsString,
+  SelectMenuBuilder,
   User,
 } from 'discord.js';
 import { EventData } from '../../models/event-data';
@@ -200,7 +201,7 @@ export class RemindCommand implements Command {
   ) {
     const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
     let embed: EmbedBuilder | EmbedBuilder[];
-    const rows: ActionRowBuilder[] = [];
+    const rows: ActionRowBuilder<SelectMenuBuilder>[] = [];
     if (reminders.length === 0) {
       const message =
         'You have no reminders set at the moment. Use `/remind set` to set one.';

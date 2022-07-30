@@ -1,9 +1,7 @@
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
-  APIActionRowComponent,
-  APIMessageActionRowComponent,
-  RESTJSONErrorCodes,
-} from 'discord-api-types/v10';
-import {
+  ActionRowBuilder,
+  ButtonBuilder,
   DiscordAPIError,
   EmbedBuilder,
   EmojiResolvable,
@@ -11,6 +9,7 @@ import {
   MessageEditOptions,
   MessageOptions,
   MessageReaction,
+  SelectMenuBuilder,
   StartThreadOptions,
   TextBasedChannel,
   ThreadChannel,
@@ -57,7 +56,10 @@ export class MessageUtils {
   public static async edit(
     msg: Message,
     content?: string | EmbedBuilder | MessageEditOptions,
-    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    components?:
+      | ActionRowBuilder<ButtonBuilder>[]
+      | ActionRowBuilder<SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =

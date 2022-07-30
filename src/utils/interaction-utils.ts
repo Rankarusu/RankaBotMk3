@@ -1,10 +1,8 @@
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
-  APIActionRowComponent,
-  APIMessageActionRowComponent,
-  RESTJSONErrorCodes,
-} from 'discord-api-types/v10';
-import {
+  ActionRowBuilder,
   AttachmentBuilder,
+  ButtonBuilder,
   CommandInteraction,
   DiscordAPIError,
   EmbedBuilder,
@@ -15,6 +13,7 @@ import {
   Message,
   MessageComponentInteraction,
   MessageEditOptions,
+  SelectMenuBuilder,
   ThreadChannel,
   User,
 } from 'discord.js';
@@ -53,7 +52,11 @@ export class InteractionUtils {
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | InteractionReplyOptions,
-    components?: APIActionRowComponent<APIMessageActionRowComponent>[],
+    // components?: APIActionRowComponent<APIMessageActionRowComponent>[],
+    components?: (
+      | ActionRowBuilder<ButtonBuilder>
+      | ActionRowBuilder<SelectMenuBuilder>
+    )[],
     files?: AttachmentBuilder[],
     hidden = false
   ): Promise<Message> {
@@ -105,7 +108,11 @@ export class InteractionUtils {
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder,
-    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    components?: (
+      | ActionRowBuilder<ButtonBuilder>
+      | ActionRowBuilder<SelectMenuBuilder>
+    )[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =
@@ -130,7 +137,10 @@ export class InteractionUtils {
   public static async update(
     intr: MessageComponentInteraction,
     content?: string | EmbedBuilder | InteractionUpdateOptions,
-    components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
+    components?:
+      | ActionRowBuilder<ButtonBuilder>[]
+      | ActionRowBuilder<SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: InteractionUpdateOptions =

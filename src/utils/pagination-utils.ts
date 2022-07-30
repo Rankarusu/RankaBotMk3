@@ -1,15 +1,16 @@
 import {
-  CommandInteraction,
-  Message,
   ActionRowBuilder,
-  MessageComponentInteraction,
+  APIEmbedField,
+  ButtonBuilder,
+  ButtonStyle,
+  CommandInteraction,
+  ComponentType,
   EmbedBuilder,
+  Message,
+  MessageComponentInteraction,
+  SelectMenuBuilder,
   User,
   UserResolvable,
-  ComponentType,
-  ButtonStyle,
-  ButtonBuilder,
-  APIEmbedField,
 } from 'discord.js';
 import { InteractionUtils } from './interaction-utils';
 import { MessageUtils } from './message-utils';
@@ -27,9 +28,12 @@ export class PaginationEmbed {
 
   limit?: number;
 
-  paginationButtons?: ActionRowBuilder;
+  paginationButtons?: ActionRowBuilder<ButtonBuilder>;
 
-  additionalRows?: ActionRowBuilder[];
+  additionalRows?: (
+    | ActionRowBuilder<ButtonBuilder>
+    | ActionRowBuilder<SelectMenuBuilder>
+  )[];
 
   private index = 0;
 
@@ -40,7 +44,10 @@ export class PaginationEmbed {
     pages: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
     timeout?: number,
-    additionalRows?: ActionRowBuilder[]
+    additionalRows?: (
+      | ActionRowBuilder<ButtonBuilder>
+      | ActionRowBuilder<SelectMenuBuilder>
+    )[]
   ) {
     this.interaction = interaction;
     this.limit = limit ? limit : 50;
@@ -63,32 +70,33 @@ export class PaginationEmbed {
         text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
       });
     });
-    this.paginationButtons = new ActionRowBuilder().addComponents([
-      new ButtonBuilder()
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId('first')
-        .setEmoji('⏮'),
+    this.paginationButtons =
+      new ActionRowBuilder<ButtonBuilder>().addComponents([
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Primary)
+          .setCustomId('first')
+          .setEmoji('⏮'),
 
-      new ButtonBuilder()
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId('previous')
-        .setEmoji('◀'),
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Primary)
+          .setCustomId('previous')
+          .setEmoji('◀'),
 
-      new ButtonBuilder()
-        .setStyle(ButtonStyle.Danger)
-        .setCustomId('stop')
-        .setEmoji('⏹'),
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Danger)
+          .setCustomId('stop')
+          .setEmoji('⏹'),
 
-      new ButtonBuilder()
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId('next')
-        .setEmoji('▶'),
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Primary)
+          .setCustomId('next')
+          .setEmoji('▶'),
 
-      new ButtonBuilder()
-        .setStyle(ButtonStyle.Primary)
-        .setCustomId('last')
-        .setEmoji('⏭'),
-    ]);
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Primary)
+          .setCustomId('last')
+          .setEmoji('⏭'),
+      ]);
   }
 
   async start(): Promise<void> {
@@ -228,7 +236,9 @@ export class PaginationEmbed {
 
   public async changePages(
     pages: EmbedBuilder | EmbedBuilder[],
-    additionalRows?: ActionRowBuilder[]
+    additionalRows?:
+      | ActionRowBuilder<ButtonBuilder>[]
+      | ActionRowBuilder<SelectMenuBuilder>[]
   ) {
     if (pages instanceof EmbedBuilder) {
       this.pages = this.paginateEmbed(pages, this.limit);

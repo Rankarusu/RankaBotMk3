@@ -16,3 +16,4 @@ export { HelpCommand } from './utility/help';
 export { InfoCommand } from './utility/info';
 export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
+export { DadJokeCommand } from './misc/dadjoke';

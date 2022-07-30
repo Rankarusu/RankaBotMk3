@@ -27,6 +27,7 @@
     "@discordjs/rest": "^1.0.0",
     "@prisma/client": "^4.0.0",
     "@types/lodash": "^4.14.182",
+    "axios": "^0.27.2",
     "chrono-node": "^2.3.9",
     "discord-api-types": "^0.36.2",
     "discord.js": "^14.0.3",

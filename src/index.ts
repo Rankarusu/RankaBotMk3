@@ -10,6 +10,7 @@ import {
   ChooseCommand,
   CoinflipCommand,
   Command,
+  DadJokeCommand,
   EightballCommand,
   HelpCommand,
   HugCommand,
@@ -74,6 +75,7 @@ async function start(): Promise<void> {
     new TarotCommand(),
     new BofhCommand(),
     new HugCommand(),
+    new DadJokeCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

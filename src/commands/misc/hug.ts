@@ -9,11 +9,10 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-// eslint-disable-next-line node/no-unpublished-import
+import fs from 'fs';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
-import fs from 'fs';
 
 export class HugCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

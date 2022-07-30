@@ -9,7 +9,6 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { TarotCard, TarotCardDraw } from '../../models/tarot-card';
 import { Tarot } from '../../services/tarot';

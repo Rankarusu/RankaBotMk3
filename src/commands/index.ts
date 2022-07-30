@@ -4,6 +4,7 @@ export { BofhCommand } from './misc/bofh';
 export { ChooseCommand } from './misc/choose';
 export { CoinflipCommand } from './misc/coinflip';
 export { EightballCommand } from './misc/eightball';
+export { HugCommand } from './misc/hug';
 export { TarotCommand } from './misc/tarot';
 export { BanCommand } from './moderation/ban';
 export { KickCommand } from './moderation/kick';

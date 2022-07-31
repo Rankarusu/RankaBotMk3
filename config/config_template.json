@@ -1,5 +1,7 @@
 {
-  "developers": [""],
+  "developers": [
+    ""
+  ],
   "client": {
     "id": "",
     "token": "",
@@ -11,7 +13,11 @@
       "DIRECT_MESSAGES",
       "DIRECT_MESSAGE_REACTIONS"
     ],
-    "partials": ["MESSAGE", "CHANNEL", "REACTION"]
+    "partials": [
+      "MESSAGE",
+      "CHANNEL",
+      "REACTION"
+    ]
   },
   "db": {
     "engine": "postgresql",
@@ -28,5 +34,6 @@
     "warning": "#ffcc66",
     "error": "#ff4a4a"
   },
-  "env": ""
+  "env": "",
+  "devServers": []
 }

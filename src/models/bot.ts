@@ -178,7 +178,7 @@ export class Bot {
     Logger.info(
       LogMessages.info.commandActionCreating.replaceAll(
         '{COMMAND_LIST}',
-        commands.map((command) => command.metadata.name).join('\n')
+        commands.map((command) => command.metadata.name).join(', ')
       )
     );
   }

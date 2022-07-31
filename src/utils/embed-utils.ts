@@ -136,7 +136,7 @@ export class EmbedUtils {
     iconUrl: string,
     desc: string,
     usage: string,
-    options: string[],
+    // options: string[],
     subcommands: string[]
   ) {
     const embed = new EmbedBuilder()
@@ -146,9 +146,9 @@ export class EmbedUtils {
       .addFields([{ name: 'Usage', value: usage }])
       .setThumbnail(iconUrl)
       .setTimestamp();
-    if (options && options.length > 0) {
-      embed.addFields([{ name: 'Options', value: options.join('\n') }]);
-    }
+    // if (options && options.length > 0) {
+    //   embed.addFields([{ name: 'Options', value: options.join('\n') }]);
+    // }
     if (subcommands && subcommands.length > 0) {
       embed.addFields([
         { name: 'Subcommands & Options', value: subcommands.join('\n') },

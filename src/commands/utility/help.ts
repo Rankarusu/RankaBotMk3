@@ -63,8 +63,6 @@ export class HelpCommand implements Command {
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
       await new PaginationEmbed(interaction, embed).start();
-
-      // InteractionUtils.send(interaction, embed);
     } else {
       //specific command
       const cmdhelp = bot
@@ -85,10 +83,10 @@ export class HelpCommand implements Command {
       } else {
         const desc = cmdhelp.metadata.description;
         const usage = cmdhelp.helpText;
-        let prettyOptions: string[];
+        // let prettyOptions: string[];
         let prettySubCommands: string[];
         if (cmdhelp.metadata.options) {
-          prettyOptions = this.getPrettyOptions(cmdhelp);
+          // prettyOptions = this.getPrettyOptions(cmdhelp);
           prettySubCommands = [this.getTree(cmdhelp)];
         }
 
@@ -97,7 +95,7 @@ export class HelpCommand implements Command {
           iconUrl,
           desc,
           usage,
-          prettyOptions,
+          // prettyOptions,
           prettySubCommands
         );
 
@@ -138,28 +136,6 @@ export class HelpCommand implements Command {
     });
     return prettyOptions;
   }
-
-  // private getPrettySubCommands(cmdhelp: Command) {
-  //   const subCommands = cmdhelp.metadata.options.filter(
-  //     (option) =>
-  //       option.type === ApplicationCommandOptionType.Subcommand ||
-  //       option.type === ApplicationCommandOptionType.SubcommandGroup
-  //   );
-  //   const prettySubCommands = subCommands.map(
-  //     (subCommand: APIApplicationCommandSubcommandOption) => {
-  //       let str = `\`${subCommand.name}\` - ${subCommand.description}`;
-  //       //TODO: recurse to also handle subcommand group structures
-  //       if (subCommand.options) {
-  //         subCommand.options.forEach((option, idx) => {
-  //           const char = idx === subCommand.options.length - 1 ? '└' : '├';
-  //           str += `\n\u2005\u2005${char}─\`${option.name}\` - ${option.description}`;
-  //         });
-  //       }
-  //       return str;
-  //     }
-  //   );
-  //   return prettySubCommands;
-  // }
 
   private getTree(cmdhelp: Command) {
     const tree = new AsciiTree(`\`${cmdhelp.metadata.name}\``);

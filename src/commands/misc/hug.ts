@@ -9,6 +9,9 @@ import {
   PermissionsString,
 } from 'discord.js';
 
+// eslint-disable-next-line node/no-unpublished-import
+import Config from '../../../config/config.json';
+
 import fs from 'fs';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
@@ -62,10 +65,19 @@ export class HugCommand implements Command {
     const filename = this.getRandomHug();
     const file = new AttachmentBuilder(`${this.pathToImages}${filename}`);
 
-    const embed = EmbedUtils.memberEmbed(
-      hugger,
-      `${hugged.user}, you have been hugged by ${hugger.displayName}!`
-    );
+    let message: string;
+
+    if (hugger.id === hugged.id) {
+      message = `${hugger.displayName} hugged themselves! No shame in that!`;
+    } else if (hugged.id === Config.client.id) {
+      message = `${hugger.displayName} hugged me! I'm so happy!`;
+    } else if (hugged.user.bot) {
+      message = `${hugger.displayName} hugged ${hugged.displayName}! Bots need love too!`;
+    } else {
+      message = `${hugged.user}, you have been hugged by ${hugger.displayName}!`;
+    }
+
+    const embed = EmbedUtils.memberEmbed(hugger, message);
     embed.setImage(`attachment://${filename}`);
 
     return { embed, file };

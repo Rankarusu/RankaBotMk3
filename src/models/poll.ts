@@ -87,11 +87,13 @@ export class Poll {
   }
 
   private updatePollOptions() {
+    const votesSum = this.options.reduce((acc, cur) => acc + cur.votes, 0);
     this.options.sort((a, b) => b.votes - a.votes);
     this.options.forEach((option) => {
+      const percentage = (option.votes / votesSum) * 100;
       option.embedField.value = `${option.votes} ${
         option.votes === 1 ? 'vote' : 'votes'
-      }`;
+      } (${percentage.toFixed(0)}%)`;
     });
   }
 

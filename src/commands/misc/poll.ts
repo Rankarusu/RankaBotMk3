@@ -5,7 +5,7 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import { EventData } from '../../models/event-data';
-import { Poll } from '../../models/poll-option';
+import { Poll } from '../../models/poll';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class PollCommand implements Command {
@@ -31,6 +31,8 @@ export class PollCommand implements Command {
         type: ApplicationCommandOptionType.Number,
         description: 'the time limit for the poll in minutes',
         required: true,
+        min_value: 1,
+        max_value: 60 * 24,
       },
       {
         name: 'option-01',

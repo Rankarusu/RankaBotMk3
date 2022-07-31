@@ -29,3 +29,14 @@ model Reminder {
 
   @@map("reminder")
 }
+
+model Sticker {
+  interactionId String   @id @map("interaction_id")
+  userId        String   @map("user_id")
+  guildId       String?  @map("guild_id")
+  stickerName   String?  @map("sticker_name")
+  stickerUrl    String?  @map("sticker_url")
+  invokeTime    DateTime @map("invoke_time") @db.Timestamp(6)
+
+  @@map("sticker")
+}

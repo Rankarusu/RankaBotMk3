@@ -18,6 +18,7 @@ import {
   InfoCommand,
   KickCommand,
   PingCommand,
+  PollCommand,
   PurgeCommand,
   RemindCommand,
   TarotCommand,
@@ -78,6 +79,7 @@ async function start(): Promise<void> {
     new HugCommand(),
     new DadJokeCommand(),
     new FactCommand(),
+    new PollCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions
@@ -118,7 +120,7 @@ async function start(): Promise<void> {
     Logger.info(
       LogMessages.info.commandActionCreating.replaceAll(
         '{COMMAND_LIST}',
-        commands.map((command) => command.metadata.name).join('\n')
+        commands.map((command) => command.metadata.name).join(', ')
       )
     );
 

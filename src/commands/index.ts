@@ -19,3 +19,4 @@ export { RemindCommand } from './utility/remind';
 export { DadJokeCommand } from './misc/dadjoke';
 export { FactCommand } from './misc/fact';
 export { PollCommand } from './misc/poll';
+export { StickerCommand } from './misc/sticker';

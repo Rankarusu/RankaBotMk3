@@ -62,6 +62,19 @@ export class DbUtils {
     return stickers;
   }
 
+  public static async getStickerByName(
+    stickerName: string,
+    guildId: Snowflake
+  ): Promise<Sticker> {
+    const sticker = await Db.sticker.findFirst({
+      where: {
+        stickerName,
+        guildId,
+      },
+    });
+    return sticker;
+  }
+
   public static async createSticker(data: Sticker): Promise<void> {
     await Db.sticker.create({ data });
   }

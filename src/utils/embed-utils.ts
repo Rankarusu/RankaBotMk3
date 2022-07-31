@@ -1,8 +1,9 @@
+import { Sticker } from '@prisma/client';
 import {
   ColorResolvable,
-  GuildMember,
   EmbedBuilder,
   EmbedField,
+  GuildMember,
   User,
 } from 'discord.js';
 // eslint-disable-next-line node/no-unpublished-import
@@ -154,6 +155,20 @@ export class EmbedUtils {
         { name: 'Subcommands & Options', value: subcommands.join('\n') },
       ]);
     }
+    return embed;
+  }
+
+  public static async stickerEmbed(member: GuildMember, sticker: Sticker) {
+    const time = sticker.invokeTime.toLocaleDateString();
+    const embed = new EmbedBuilder()
+      .setTitle(sticker.stickerName)
+      .setColor(Config.colors.default as ColorResolvable)
+      .setImage(sticker.stickerUrl)
+      .setFooter({
+        text: `added at ${time} ${member ? `by ${member.displayName}` : ''}`,
+        iconURL: member ? member.displayAvatarURL() : '',
+      })
+      .setTimestamp();
     return embed;
   }
 }

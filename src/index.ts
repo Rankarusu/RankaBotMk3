@@ -21,6 +21,7 @@ import {
   PollCommand,
   PurgeCommand,
   RemindCommand,
+  StickerCommand,
   TarotCommand,
   TestCommand,
   TimeoutCommand,
@@ -80,6 +81,7 @@ async function start(): Promise<void> {
     new DadJokeCommand(),
     new FactCommand(),
     new PollCommand(),
+    new StickerCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

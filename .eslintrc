@@ -45,6 +45,7 @@
         "allowTernary": true
       }
     ],
+    "require-await": "warn",
     // "import/no-cycle": "off",
     // "no-console": "off",
     // "func-names": "off",

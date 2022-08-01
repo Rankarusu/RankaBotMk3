@@ -79,7 +79,7 @@ export class DbUtils {
     await Db.sticker.create({ data });
   }
 
-  public async deleteStickerById(interactionId: Snowflake) {
+  public static async deleteStickerById(interactionId: Snowflake) {
     await Db.sticker.delete({
       where: {
         interactionId,
@@ -87,7 +87,7 @@ export class DbUtils {
     });
   }
 
-  public async deleteStickersById(interactionIds: Snowflake[]) {
+  public static async deleteStickersById(interactionIds: Snowflake[]) {
     await Db.sticker.deleteMany({
       where: {
         interactionId: {

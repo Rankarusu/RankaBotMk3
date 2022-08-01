@@ -15,8 +15,13 @@ import {
   User,
   UserResolvable,
 } from 'discord.js';
-import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../utils';
-import { EventData } from './event-data';
+import {
+  DateUtils,
+  DbUtils,
+  EmbedUtils,
+  InteractionUtils,
+  MessageUtils,
+} from '../utils';
 
 export class PaginationEmbed {
   interaction: CommandInteraction | MessageComponentInteraction;
@@ -27,9 +32,9 @@ export class PaginationEmbed {
 
   pages: EmbedBuilder[];
 
-  timeout?: number;
+  protected timeout?: number;
 
-  limit?: number;
+  protected limit?: number;
 
   protected index = 0;
 
@@ -64,12 +69,12 @@ export class PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
-    pages: EmbedBuilder[] | EmbedBuilder,
+    pages?: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
     timeout?: number
   ) {
     this.interaction = interaction;
-    this.limit = limit ? limit : 50;
+    this.limit = limit ? limit : 5;
     if (pages instanceof EmbedBuilder) {
       this.pages = this.paginateEmbed(pages, this.limit);
     } else {
@@ -229,7 +234,7 @@ abstract class PaginatedSelectEmbed extends PaginationEmbed {
   additionalRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[] = [];
 
   public abstract start(): Promise<void>;
-  public abstract update(): Promise<void>;
+  protected abstract update(): Promise<void>;
 
   protected override async send(): Promise<Message> {
     //override so we can add additional Rows
@@ -270,10 +275,12 @@ abstract class PaginatedSelectEmbed extends PaginationEmbed {
   }
 }
 
-class ReminderListSelectEmbed extends PaginatedSelectEmbed {
+export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
   private warnEmbed = EmbedUtils.warnEmbedNoFields(
     'You have no reminders set at the moment. Use `/remind set` to set one.'
   );
+
+  protected limit = 10;
 
   public async start(): Promise<void> {
     const reminders = await DbUtils.getRemindersByUserId(
@@ -296,18 +303,33 @@ class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     await this.initializeSelectMenuCollector();
   }
 
+  protected async update(): Promise<void> {
+    const reminders = await DbUtils.getRemindersByUserId(
+      this.interaction.user.id
+    );
+
+    if (reminders.length === 0) {
+      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      return;
+    }
+    this.createSelectMenuRow(reminders);
+    this.createEmbedPages(reminders);
+
+    this.editReply();
+  }
+
   private async createSelectMenuRow(reminders: Reminder[]) {
     const rowData = this.getRowData(reminders);
     const selectMenuRow =
       new ActionRowBuilder<SelectMenuBuilder>().addComponents(
         new SelectMenuBuilder()
-          .setCustomId('delete.reminder')
+          .setCustomId('delete-reminder')
           .setPlaceholder('Select one or more reminders to delete')
           .addOptions(rowData)
           .setMinValues(1)
           .setMaxValues(rowData.length)
       );
-    this.additionalRows.push(selectMenuRow);
+    this.additionalRows = [selectMenuRow];
   }
 
   private getRowData(reminders: Reminder[]): SelectMenuOptionBuilder[] {
@@ -324,7 +346,7 @@ class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     return rowData;
   }
 
-  public async initializeSelectMenuCollector() {
+  private async initializeSelectMenuCollector() {
     const interactionCollector = this.message.createMessageComponentCollector({
       componentType: ComponentType.SelectMenu,
       max: 5,
@@ -340,15 +362,15 @@ class ReminderListSelectEmbed extends PaginatedSelectEmbed {
       intr.deferUpdate();
       const { values } = intr;
       await DbUtils.deleteRemindersById(values);
-      await this.updatePaginationEmbed(interaction, data, paginationEmbed);
+      await this.update();
     });
     interactionCollector.on('end', async () => {
       //empty out action rows after timeout
-      await MessageUtils.edit(msg, undefined, []);
+      await MessageUtils.edit(this.message, undefined, []);
     });
   }
 
-  public createEmbedPages(reminders: Reminder[]): EmbedBuilder[] {
+  private createEmbedPages(reminders: Reminder[]): EmbedBuilder[] {
     const fields = reminders.map((reminder, index) => {
       const name = `ID: ${(index + 1).toString().padStart(3, '0')}`;
       const value = `<t:${DateUtils.getUnixTime(reminder.parsedTime)}:f> | ${
@@ -377,20 +399,5 @@ class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     }
     this.pages = pages;
     return pages;
-  }
-
-  public async update(): Promise<void> {
-    const reminders = await DbUtils.getRemindersByUserId(
-      this.interaction.user.id
-    );
-
-    if (reminders.length === 0) {
-      await InteractionUtils.send(this.interaction, this.warnEmbed);
-      return;
-    }
-    this.createSelectMenuRow(reminders);
-    this.createEmbedPages(reminders);
-
-    this.editReply();
   }
 }

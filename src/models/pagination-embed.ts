@@ -29,11 +29,6 @@ export class PaginationEmbed {
 
   paginationButtons?: ActionRowBuilder<ButtonBuilder>;
 
-  additionalRows?: (
-    | ActionRowBuilder<ButtonBuilder>
-    | ActionRowBuilder<SelectMenuBuilder>
-  )[];
-
   private index = 0;
 
   private footerText = 'Page';
@@ -42,11 +37,7 @@ export class PaginationEmbed {
     interaction: CommandInteraction | MessageComponentInteraction,
     pages: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
-    timeout?: number,
-    additionalRows?: (
-      | ActionRowBuilder<ButtonBuilder>
-      | ActionRowBuilder<SelectMenuBuilder>
-    )[]
+    timeout?: number
   ) {
     this.interaction = interaction;
     this.limit = limit ? limit : 50;
@@ -56,7 +47,6 @@ export class PaginationEmbed {
       this.pages = pages;
     }
     this.author = interaction.user;
-    this.additionalRows = additionalRows;
     this.timeout = timeout ? timeout : 60000;
 
     this.pages.map((page, pageIndex) => {
@@ -157,7 +147,7 @@ export class PaginationEmbed {
     });
   }
 
-  private paginateEmbed(embed: EmbedBuilder, limit: number) {
+  protected paginateEmbed(embed: EmbedBuilder, limit: number) {
     //splits embed fields into multiple pages with same header, footer, etc.
 
     const fields = embed.data.fields;
@@ -195,47 +185,76 @@ export class PaginationEmbed {
     return pages;
   }
 
-  private async send(): Promise<Message> {
-    let message: Message;
-    if (this.pages.length < 2) {
-      //no need for pagination
-      message = await InteractionUtils.send(
-        this.interaction,
-        this.pages[0],
-        this.additionalRows
-      );
-    } else {
-      message = await InteractionUtils.send(this.interaction, this.pages[0], [
-        ...this.additionalRows,
-        this.paginationButtons,
-      ]);
-    }
+  protected async send(): Promise<Message> {
+    const message = await InteractionUtils.send(
+      this.interaction,
+      this.pages[0],
+      //we don't need pagination on a single page.
+      this.pages.length < 2 ? undefined : [this.paginationButtons]
+    );
+
     return message;
   }
 
   public async editReply() {
-    let message: Message;
-    if (this.pages.length < 2) {
-      message = await InteractionUtils.editReply(
-        this.interaction,
-        this.pages[0],
-        this.additionalRows
-      );
-    } else {
-      message = await InteractionUtils.editReply(
-        this.interaction,
-        this.pages[0],
-        [...this.additionalRows, this.paginationButtons]
-      );
-    }
+    //remove buttons if necessary
+    const message = await InteractionUtils.editReply(
+      this.interaction,
+      this.pages[0],
+      this.pages.length < 2 ? undefined : [this.paginationButtons]
+    );
+
     return message;
   }
 
-  public async changePages(
+  public async changePages(pages: EmbedBuilder | EmbedBuilder[]) {
+    if (pages instanceof EmbedBuilder) {
+      this.pages = this.paginateEmbed(pages, this.limit);
+    } else {
+      this.pages = pages;
+    }
+  }
+}
+
+abstract class PaginatedSelectEmbed extends PaginationEmbed {
+  additionalRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[] = [];
+
+  public abstract createSelectMenu();
+  abstract getRowData();
+  abstract initializeCollector();
+  public abstract start(): Promise<void>;
+  public abstract update();
+
+  protected override async send(): Promise<Message> {
+    //override so we can add additional Rows
+    const message = await InteractionUtils.send(
+      this.interaction,
+      this.pages[0],
+      this.pages.length < 2
+        ? this.additionalRows
+        : [...this.additionalRows, this.paginationButtons]
+    );
+
+    return message;
+  }
+
+  public override async editReply() {
+    //remove buttons if necessary
+
+    const message = await InteractionUtils.editReply(
+      this.interaction,
+      this.pages[0],
+      this.pages.length < 2
+        ? this.additionalRows
+        : [...this.additionalRows, this.paginationButtons]
+    );
+
+    return message;
+  }
+
+  public override async changePages(
     pages: EmbedBuilder | EmbedBuilder[],
-    additionalRows?:
-      | ActionRowBuilder<ButtonBuilder>[]
-      | ActionRowBuilder<SelectMenuBuilder>[]
+    additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ) {
     if (pages instanceof EmbedBuilder) {
       this.pages = this.paginateEmbed(pages, this.limit);

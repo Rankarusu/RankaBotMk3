@@ -57,9 +57,7 @@ export class MessageUtils {
     msg: Message,
     content?: string | EmbedBuilder | MessageEditOptions,
     // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
-    components?:
-      | ActionRowBuilder<ButtonBuilder>[]
-      | ActionRowBuilder<SelectMenuBuilder>[]
+    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions =

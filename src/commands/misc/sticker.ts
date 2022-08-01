@@ -8,6 +8,7 @@ import { Sticker } from '@prisma/client';
 import { EventData } from '../../models/event-data';
 import { DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
+import { StickerListSelectEmbed } from '../../models/pagination-embed';
 
 const allowedTypes = [
   'image/png',
@@ -21,7 +22,7 @@ const allowedTypes = [
 export class StickerCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'sticker',
-    description: 'Save and post custom stickers for your server',
+    description: 'Save and post custom stickers on your server',
     dm_permission: false,
     options: [
       {
@@ -57,22 +58,9 @@ export class StickerCommand implements Command {
         ],
       },
       {
-        name: 'remove',
-        type: ApplicationCommandOptionType.Subcommand,
-        description: 'remove a sticker',
-        options: [
-          {
-            name: 'name',
-            type: ApplicationCommandOptionType.String,
-            description: 'the name of the sticker',
-            required: true,
-          },
-        ],
-      },
-      {
         name: 'list',
         type: ApplicationCommandOptionType.Subcommand,
-        description: 'list all stickers on the server',
+        description: 'list all stickers on the server and remove unwanted ones',
       },
     ],
   };
@@ -157,12 +145,12 @@ export class StickerCommand implements Command {
           InteractionUtils.send(interaction, embed);
         }
         break;
-      case 'remove':
-        {
-        }
-        break;
       case 'list':
         {
+          const paginatedEmbed = new StickerListSelectEmbed(interaction);
+          await paginatedEmbed.start();
+          //merge list and remove into one as we did with remind.
+          //rewrite remind pagination embed to fit poll style. waaaaay cleaner
         }
         break;
     }

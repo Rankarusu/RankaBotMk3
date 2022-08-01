@@ -2,28 +2,12 @@ import { Reminder } from '@prisma/client';
 import * as chrono from 'chrono-node';
 import {
   ApplicationCommandOptionType,
-  ComponentType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import {
-  ActionRowBuilder,
-  ChatInputCommandInteraction,
-  CommandInteraction,
-  EmbedBuilder,
-  PermissionsString,
-  SelectMenuBuilder,
-  User,
-} from 'discord.js';
+import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
-import { PaginationEmbed } from '../../models/pagination-embed';
-import {
-  DateUtils,
-  DbUtils,
-  EmbedUtils,
-  InteractionUtils,
-  MessageUtils,
-  RemindUtils,
-} from '../../utils';
+import { ReminderListSelectEmbed } from '../../models/pagination-embed';
+import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
 
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -86,33 +70,8 @@ export class RemindCommand implements Command {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'list': {
-        const paginationEmbed = await this.createPaginationEmbed(
-          interaction,
-          data
-        );
-        await paginationEmbed.start();
-
-        const msg = paginationEmbed.message;
-        const interactionCollector = msg.createMessageComponentCollector({
-          componentType: ComponentType.SelectMenu,
-          max: 5,
-          filter: (x) => {
-            return (
-              interaction.user && x.user.id === (interaction.user as User).id
-            );
-          },
-        });
-
-        interactionCollector.on('collect', async (intr) => {
-          intr.deferUpdate();
-          const { values } = intr;
-          await DbUtils.deleteRemindersById(values);
-          await this.updatePaginationEmbed(interaction, data, paginationEmbed);
-        });
-        interactionCollector.on('end', async () => {
-          //empty out action rows after timeout
-          await MessageUtils.edit(msg, undefined, []);
-        });
+        const paginatedEmbed = new ReminderListSelectEmbed(interaction);
+        await paginatedEmbed.start();
         break;
       }
       case 'set': {
@@ -192,56 +151,6 @@ export class RemindCommand implements Command {
         InteractionUtils.editReply(interaction, successEmbed);
         break;
       }
-    }
-  }
-
-  private async createPaginationEmbed(
-    interaction: CommandInteraction,
-    data: EventData
-  ) {
-    const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
-    let embed: EmbedBuilder | EmbedBuilder[];
-    const rows: ActionRowBuilder<SelectMenuBuilder>[] = [];
-    if (reminders.length === 0) {
-      const message =
-        'You have no reminders set at the moment. Use `/remind set` to set one.';
-      data.description = message;
-      embed = EmbedUtils.warnEmbed(data);
-      InteractionUtils.send(interaction, embed, []);
-    } else {
-      embed = RemindUtils.createReminderListEmbed(reminders);
-      rows.push(RemindUtils.createDeleteReminderActionRow(reminders));
-    }
-    const paginationEmbed = new PaginationEmbed(
-      interaction,
-      embed,
-      5,
-      undefined,
-      rows
-    );
-
-    return paginationEmbed;
-  }
-
-  private async updatePaginationEmbed(
-    interaction: CommandInteraction,
-    data: EventData,
-    paginationEmbed: PaginationEmbed
-  ) {
-    const reminders = await DbUtils.getRemindersByUserId(interaction.user.id);
-    if (reminders.length === 0) {
-      const message =
-        'You have no reminders set at the moment. Use `/remind set` to set one.';
-      data.description = message;
-      const embed = EmbedUtils.warnEmbed(data);
-      InteractionUtils.editReply(interaction, embed, []);
-    } else {
-      const selectMenu = RemindUtils.createDeleteReminderActionRow(reminders);
-      paginationEmbed.changePages(
-        RemindUtils.createReminderListEmbed(reminders),
-        [selectMenu]
-      );
-      paginationEmbed.editReply();
     }
   }
 }

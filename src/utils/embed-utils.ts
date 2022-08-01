@@ -24,6 +24,16 @@ export class EmbedUtils {
     return embed;
   }
 
+  public static warnEmbedNoFields(message: string) {
+    const embed = new EmbedBuilder()
+      .setTitle('Warning')
+      .setColor(Config.colors.warning as ColorResolvable)
+      .setDescription(message)
+      .setTimestamp();
+
+    return embed;
+  }
+
   public static warnEmbed(data: EventData) {
     const embed = new EmbedBuilder()
       .setTitle('Warning')

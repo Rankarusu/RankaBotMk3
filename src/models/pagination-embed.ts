@@ -1,3 +1,4 @@
+import { Reminder } from '@prisma/client';
 import {
   ActionRowBuilder,
   APIEmbedField,
@@ -6,13 +7,16 @@ import {
   CommandInteraction,
   ComponentType,
   EmbedBuilder,
+  EmbedField,
   Message,
   MessageComponentInteraction,
   SelectMenuBuilder,
+  SelectMenuOptionBuilder,
   User,
   UserResolvable,
 } from 'discord.js';
-import { InteractionUtils } from '../utils';
+import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../utils';
+import { EventData } from './event-data';
 
 export class PaginationEmbed {
   interaction: CommandInteraction | MessageComponentInteraction;
@@ -27,11 +31,36 @@ export class PaginationEmbed {
 
   limit?: number;
 
-  paginationButtons?: ActionRowBuilder<ButtonBuilder>;
+  protected index = 0;
 
-  private index = 0;
+  protected footerText = 'Page';
 
-  private footerText = 'Page';
+  paginationButtons? = new ActionRowBuilder<ButtonBuilder>().addComponents([
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Primary)
+      .setCustomId('first')
+      .setEmoji('⏮'),
+
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Primary)
+      .setCustomId('previous')
+      .setEmoji('◀'),
+
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Danger)
+      .setCustomId('stop')
+      .setEmoji('⏹'),
+
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Primary)
+      .setCustomId('next')
+      .setEmoji('▶'),
+
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Primary)
+      .setCustomId('last')
+      .setEmoji('⏭'),
+  ]);
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
@@ -48,7 +77,18 @@ export class PaginationEmbed {
     }
     this.author = interaction.user;
     this.timeout = timeout ? timeout : 60000;
+  }
 
+  public async start(): Promise<void> {
+    this.addPageNumbers();
+    this.message = await this.send();
+    if (this.pages.length > 0) {
+      //no need to initialize collector if there is only one page
+      await this.initializePaginationButtonCollector();
+    }
+  }
+
+  protected addPageNumbers() {
     this.pages.map((page, pageIndex) => {
       if (
         page.data.footer &&
@@ -59,40 +99,9 @@ export class PaginationEmbed {
         text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
       });
     });
-    this.paginationButtons =
-      new ActionRowBuilder<ButtonBuilder>().addComponents([
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Primary)
-          .setCustomId('first')
-          .setEmoji('⏮'),
-
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Primary)
-          .setCustomId('previous')
-          .setEmoji('◀'),
-
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Danger)
-          .setCustomId('stop')
-          .setEmoji('⏹'),
-
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Primary)
-          .setCustomId('next')
-          .setEmoji('▶'),
-
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Primary)
-          .setCustomId('last')
-          .setEmoji('⏭'),
-      ]);
   }
 
-  public async start(): Promise<void> {
-    //we use the initial flag to determine if we create the first time or edit it.
-    // we need to create a new object either time, so we have only one function as we only change editReply and send
-    this.message = await this.send();
-
+  protected async initializePaginationButtonCollector() {
     const interactionCollector = this.message.createMessageComponentCollector({
       componentType: ComponentType.Button,
       max: this.pages.length * 5,
@@ -219,11 +228,8 @@ export class PaginationEmbed {
 abstract class PaginatedSelectEmbed extends PaginationEmbed {
   additionalRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[] = [];
 
-  public abstract createSelectMenu();
-  abstract getRowData();
-  abstract initializeCollector();
   public abstract start(): Promise<void>;
-  public abstract update();
+  public abstract update(): Promise<void>;
 
   protected override async send(): Promise<Message> {
     //override so we can add additional Rows
@@ -239,8 +245,7 @@ abstract class PaginatedSelectEmbed extends PaginationEmbed {
   }
 
   public override async editReply() {
-    //remove buttons if necessary
-
+    //override so we can add additional Rows
     const message = await InteractionUtils.editReply(
       this.interaction,
       this.pages[0],
@@ -262,5 +267,130 @@ abstract class PaginatedSelectEmbed extends PaginationEmbed {
       this.pages = pages;
     }
     this.additionalRows = additionalRows;
+  }
+}
+
+class ReminderListSelectEmbed extends PaginatedSelectEmbed {
+  private warnEmbed = EmbedUtils.warnEmbedNoFields(
+    'You have no reminders set at the moment. Use `/remind set` to set one.'
+  );
+
+  public async start(): Promise<void> {
+    const reminders = await DbUtils.getRemindersByUserId(
+      this.interaction.user.id
+    );
+
+    if (reminders.length === 0) {
+      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      return;
+    }
+
+    this.createSelectMenuRow(reminders);
+    this.createEmbedPages(reminders);
+    this.message = await this.send();
+
+    if (this.pages.length > 0) {
+      //no need to initialize collectors if there is only one page
+      await super.initializePaginationButtonCollector();
+    }
+    await this.initializeSelectMenuCollector();
+  }
+
+  private async createSelectMenuRow(reminders: Reminder[]) {
+    const rowData = this.getRowData(reminders);
+    const selectMenuRow =
+      new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+        new SelectMenuBuilder()
+          .setCustomId('delete.reminder')
+          .setPlaceholder('Select one or more reminders to delete')
+          .addOptions(rowData)
+          .setMinValues(1)
+          .setMaxValues(rowData.length)
+      );
+    this.additionalRows.push(selectMenuRow);
+  }
+
+  private getRowData(reminders: Reminder[]): SelectMenuOptionBuilder[] {
+    const rowData: SelectMenuOptionBuilder[] = reminders.map(
+      (reminder, index) => {
+        return new SelectMenuOptionBuilder()
+          .setLabel(`ID: ${(index + 1).toString().padStart(3, '0')}`)
+          .setDescription(
+            `${reminder.parsedTime.toLocaleString()} | ${reminder.message}`
+          )
+          .setValue(reminder.interactionId);
+      }
+    );
+    return rowData;
+  }
+
+  public async initializeSelectMenuCollector() {
+    const interactionCollector = this.message.createMessageComponentCollector({
+      componentType: ComponentType.SelectMenu,
+      max: 5,
+      filter: (x) => {
+        return (
+          this.interaction.user &&
+          x.user.id === (this.interaction.user as User).id
+        );
+      },
+    });
+
+    interactionCollector.on('collect', async (intr) => {
+      intr.deferUpdate();
+      const { values } = intr;
+      await DbUtils.deleteRemindersById(values);
+      await this.updatePaginationEmbed(interaction, data, paginationEmbed);
+    });
+    interactionCollector.on('end', async () => {
+      //empty out action rows after timeout
+      await MessageUtils.edit(msg, undefined, []);
+    });
+  }
+
+  public createEmbedPages(reminders: Reminder[]): EmbedBuilder[] {
+    const fields = reminders.map((reminder, index) => {
+      const name = `ID: ${(index + 1).toString().padStart(3, '0')}`;
+      const value = `<t:${DateUtils.getUnixTime(reminder.parsedTime)}:f> | ${
+        reminder.message
+      }`;
+      return {
+        name,
+        value,
+        inline: false,
+      } as EmbedField;
+    });
+
+    const pages: EmbedBuilder[] = [];
+    const pagesAmount = Math.ceil(fields.length / this.limit);
+    let currentPage = 1;
+    for (let i = 0; i < fields.length; i += this.limit) {
+      const chunk = fields.slice(i, i + this.limit);
+      const embed = EmbedUtils.reminderListEmbed(
+        'Here is a list of all your set reminders.',
+        chunk
+      ).setFooter({
+        text: `${this.footerText} ${currentPage}/${pagesAmount}`,
+      });
+      pages.push(embed);
+      currentPage++;
+    }
+    this.pages = pages;
+    return pages;
+  }
+
+  public async update(): Promise<void> {
+    const reminders = await DbUtils.getRemindersByUserId(
+      this.interaction.user.id
+    );
+
+    if (reminders.length === 0) {
+      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      return;
+    }
+    this.createSelectMenuRow(reminders);
+    this.createEmbedPages(reminders);
+
+    this.editReply();
   }
 }

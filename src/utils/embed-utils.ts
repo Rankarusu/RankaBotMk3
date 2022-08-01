@@ -165,7 +165,7 @@ export class EmbedUtils {
       .setColor(Config.colors.default as ColorResolvable)
       .setImage(sticker.stickerUrl)
       .setFooter({
-        text: `added at ${time} ${member ? `by ${member.displayName}` : ''}`,
+        text: `added ${member ? `by ${member.displayName}` : ''} at ${time}`,
         iconURL: member ? member.displayAvatarURL() : '',
       })
       .setTimestamp();

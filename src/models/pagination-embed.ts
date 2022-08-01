@@ -12,8 +12,7 @@ import {
   User,
   UserResolvable,
 } from 'discord.js';
-import { InteractionUtils } from './interaction-utils';
-import { MessageUtils } from './message-utils';
+import { InteractionUtils } from '../utils';
 
 export class PaginationEmbed {
   interaction: CommandInteraction | MessageComponentInteraction;
@@ -99,7 +98,7 @@ export class PaginationEmbed {
       ]);
   }
 
-  async start(): Promise<void> {
+  public async start(): Promise<void> {
     //we use the initial flag to determine if we create the first time or edit it.
     // we need to create a new object either time, so we have only one function as we only change editReply and send
     this.message = await this.send();
@@ -107,14 +106,12 @@ export class PaginationEmbed {
     const interactionCollector = this.message.createMessageComponentCollector({
       componentType: ComponentType.Button,
       max: this.pages.length * 5,
+      time: this.timeout,
       filter: (x) => {
         return this.author && x.user.id === (this.author as User).id;
       },
     });
-    setTimeout(async () => {
-      interactionCollector.stop('Timeout');
-      await InteractionUtils.editReply(this.interaction, undefined, []);
-    }, this.timeout);
+
     interactionCollector.on('collect', async (interaction) => {
       const { customId } = interaction;
       let newPageIndex: number;
@@ -156,7 +153,7 @@ export class PaginationEmbed {
     });
     interactionCollector.on('end', async () => {
       //empty out action rows after timeout
-      await MessageUtils.edit(this.message, undefined, []);
+      await InteractionUtils.editReply(this.interaction, undefined, []);
     });
   }
 
@@ -198,7 +195,7 @@ export class PaginationEmbed {
     return pages;
   }
 
-  public async send(): Promise<Message> {
+  private async send(): Promise<Message> {
     let message: Message;
     if (this.pages.length < 2) {
       //no need for pagination

@@ -15,13 +15,13 @@ import {
   User,
 } from 'discord.js';
 import { EventData } from '../../models/event-data';
+import { PaginationEmbed } from '../../models/pagination-embed';
 import {
   DateUtils,
   DbUtils,
   EmbedUtils,
   InteractionUtils,
   MessageUtils,
-  PaginationEmbed,
   RemindUtils,
 } from '../../utils';
 
@@ -83,115 +83,115 @@ export class RemindCommand implements Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    if (interaction.options.getSubcommand() === 'list') {
-      // let paginationEmbed: PaginationEmbed;
-      const paginationEmbed = await this.createPaginationEmbed(
-        interaction,
-        data
-      );
-      await paginationEmbed.start();
+    const subCommand = interaction.options.getSubcommand();
+    switch (subCommand) {
+      case 'list': {
+        const paginationEmbed = await this.createPaginationEmbed(
+          interaction,
+          data
+        );
+        await paginationEmbed.start();
 
-      const msg = paginationEmbed.message;
-      const interactionCollector = msg.createMessageComponentCollector({
-        componentType: ComponentType.SelectMenu,
-        max: 5,
-        filter: (x) => {
-          return (
-            interaction.user && x.user.id === (interaction.user as User).id
+        const msg = paginationEmbed.message;
+        const interactionCollector = msg.createMessageComponentCollector({
+          componentType: ComponentType.SelectMenu,
+          max: 5,
+          filter: (x) => {
+            return (
+              interaction.user && x.user.id === (interaction.user as User).id
+            );
+          },
+        });
+
+        interactionCollector.on('collect', async (intr) => {
+          intr.deferUpdate();
+          const { values } = intr;
+          await DbUtils.deleteRemindersById(values);
+          await this.updatePaginationEmbed(interaction, data, paginationEmbed);
+        });
+        interactionCollector.on('end', async () => {
+          //empty out action rows after timeout
+          await MessageUtils.edit(msg, undefined, []);
+        });
+        break;
+      }
+      case 'set': {
+        const time = interaction.options.getString('time');
+        let parsedTime: Date;
+        try {
+          parsedTime = chrono.parseDate(
+            time,
+            { instant: new Date(), timezone: 'Europe/Berlin' },
+            { forwardDate: true }
           );
-        },
-      });
+          parsedTime.setSeconds(0);
+          parsedTime.setMilliseconds(0);
+        } catch (e) {
+          InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
+        }
 
-      setTimeout(async () => {
-        interactionCollector.stop('Timeout');
-        await InteractionUtils.editReply(interaction, undefined, []);
-      }, 600000);
+        if (!parsedTime) {
+          // parsed time is null if parse is unsuccessful
+          InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
+        }
 
-      interactionCollector.on('collect', async (intr) => {
-        intr.deferUpdate();
-        const { values } = intr;
-        await DbUtils.deleteRemindersById(values);
-        await this.updatePaginationEmbed(interaction, data, paginationEmbed);
-      });
-      interactionCollector.on('end', async () => {
-        //empty out action rows after timeout
-        await MessageUtils.edit(msg, undefined, []);
-      });
-    } else if (interaction.options.getSubcommand() === 'set') {
-      const time = interaction.options.getString('time');
-      let parsedTime: Date;
-      try {
-        parsedTime = chrono.parseDate(
-          time,
-          { instant: new Date(), timezone: 'Europe/Berlin' },
-          { forwardDate: true }
+        //check for too short of a notice
+        const minutes = new Date().getMinutes() + 2;
+        const in2minutes = new Date();
+        in2minutes.setMinutes(minutes);
+        if (parsedTime < in2minutes) {
+          InteractionUtils.sendError(
+            data,
+            'Is your attention span really that small?'
+          );
+        }
+
+        const notificationMessage =
+          interaction.options.getString('notification-text') || 'do something';
+
+        // send error if someone abuses mentions
+        if (notificationMessage.match(/<@(.*?)>/)) {
+          InteractionUtils.sendError(
+            data,
+            'Termi was banned for that. Do you want to follow him?'
+          );
+        }
+
+        const unixTime = DateUtils.getUnixTime(parsedTime);
+        const processingEmbed = EmbedUtils.infoEmbed(
+          "I'm processing your request..."
         );
-        parsedTime.setSeconds(0);
-        parsedTime.setMilliseconds(0);
-      } catch (e) {
-        InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-      }
-
-      if (!parsedTime) {
-        // parsed time is null if parse is unsuccessful
-        InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-      }
-
-      //check for too short of a notice
-      const minutes = new Date().getMinutes() + 2;
-      const in2minutes = new Date();
-      in2minutes.setMinutes(minutes);
-      if (parsedTime < in2minutes) {
-        InteractionUtils.sendError(
-          data,
-          'Is your attention span really that small?'
+        const successEmbed = EmbedUtils.successEmbed(
+          `Alright. I'm going to remind you to **${notificationMessage}** at <t:${unixTime}:f>`
         );
-      }
 
-      const notificationMessage =
-        interaction.options.getString('notification-text') || 'do something';
-
-      // send error if someone abuses mentions
-      if (notificationMessage.match(/<@(.*?)>/)) {
-        InteractionUtils.sendError(
-          data,
-          'Termi was banned for that. Do you want to follow him?'
+        const confirmation = await InteractionUtils.send(
+          interaction,
+          processingEmbed
         );
+        //we cannot reply to interactions after 15 minutes, so we need to get a reference to the confirmation message
+
+        const reminder: Reminder = {
+          interactionId: interaction.id,
+          messageId: confirmation.id,
+          userId: interaction.user.id,
+          guildId: interaction.guild ? interaction.guild.id : null,
+          channelId: interaction.channel.id,
+          message: notificationMessage,
+          invokeTime: interaction.createdAt,
+          parsedTime,
+        };
+        //TODO: handle upper limit for reminders per user
+
+        try {
+          await DbUtils.createReminder(reminder);
+        } catch {
+          confirmation.delete();
+          InteractionUtils.sendError(data, 'Could not create reminder');
+        }
+        InteractionUtils.editReply(interaction, successEmbed);
+        break;
       }
-
-      const unixTime = DateUtils.getUnixTime(parsedTime);
-      const processingEmbed = EmbedUtils.infoEmbed(
-        "I'm processing your request..."
-      );
-      const successEmbed = EmbedUtils.successEmbed(
-        `Alright. I'm going to remind you to **${notificationMessage}** at <t:${unixTime}:f>`
-      );
-
-      const confirmation = await InteractionUtils.send(
-        interaction,
-        processingEmbed
-      );
-      //we cannot reply to interactions after 15 minutes, so we need to get a reference to the confirmation message
-
-      const reminder: Reminder = {
-        interactionId: interaction.id,
-        messageId: confirmation.id,
-        userId: interaction.user.id,
-        guildId: interaction.guild ? interaction.guild.id : null,
-        channelId: interaction.channel.id,
-        message: notificationMessage,
-        invokeTime: interaction.createdAt,
-        parsedTime,
-      };
-      //TODO: handle upper limit for reminders per user
-
-      try {
-        await DbUtils.createReminder(reminder);
-      } catch {
-        confirmation.delete();
-        InteractionUtils.sendError(data, 'Could not create reminder');
-      }
-      InteractionUtils.editReply(interaction, successEmbed);
     }
   }
 

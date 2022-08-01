@@ -1,4 +1,5 @@
 import {
+  AttachmentBuilder,
   ChatInputCommandInteraction,
   CommandInteraction,
   NewsChannel,
@@ -14,6 +15,9 @@ import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
+
+const pathToImages = './data/pictures/';
+const nsfwimage = 'nsfw.png';
 
 export class CommandHandler implements EventHandler {
   private rateLimiter = new RateLimiter(
@@ -113,6 +117,16 @@ export class CommandHandler implements EventHandler {
         await InteractionUtils.send(interaction, embed);
         return;
       }
+
+      if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
+        data.description = 'lewd.';
+        const embed = EmbedUtils.warnEmbed(data);
+        const image = new AttachmentBuilder(`${pathToImages}${nsfwimage}`);
+        embed.setImage(`attachment://${nsfwimage}`);
+        await InteractionUtils.send(interaction, embed, undefined, [image]);
+        return;
+      }
+
       await command.execute(interaction, data);
     } catch (error) {
       Logger.error(

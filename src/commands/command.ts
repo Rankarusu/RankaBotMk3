@@ -8,6 +8,7 @@ export interface Command {
   helpText?: string;
   developerOnly?: boolean;
   cooldown?: RateLimiter;
+  nsfw?: boolean;
   category: CommandCategory;
   deferType: CommandDeferType;
   requireClientPerms: PermissionsString[];

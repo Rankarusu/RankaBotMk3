@@ -191,4 +191,14 @@ export class InteractionUtils {
       return limited;
     }
   }
+
+  public static isTooLewdForChannel(
+    interaction: CommandInteraction,
+    command: Command
+  ): boolean {
+    if (interaction.channel instanceof GuildChannel) {
+      return (interaction.channel.nsfw && command.nsfw) || !command.nsfw;
+    }
+    return true;
+  }
 }

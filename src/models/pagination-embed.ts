@@ -169,7 +169,7 @@ export class PaginationEmbed {
 
     const splitFields: APIEmbedField[][] = [[]];
     let idx = 0;
-    fields.forEach((field) => {
+    fields.forEach((field, fieldIndex) => {
       //get amount of full lines in current index
       const curLines = (field.value.match(/\n/g) || '').length + 1;
       let lines = 0;
@@ -182,7 +182,8 @@ export class PaginationEmbed {
               .match(/\n/g) || ''
           ).length + 1;
       }
-      if (lines + curLines <= limit) {
+      //make sure to put the first group on the first page.
+      if (lines + curLines <= limit || fieldIndex === 0) {
         splitFields[idx].push(field);
       } else {
         idx += 1;

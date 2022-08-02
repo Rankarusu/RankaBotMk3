@@ -14,7 +14,8 @@ import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils, PaginationEmbed } from '../../utils';
+import { PaginationEmbed } from '../../models/pagination-embed';
+import { EmbedUtils, InteractionUtils } from '../../utils';
 
 export class HelpCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -62,7 +63,7 @@ export class HelpCommand implements Command {
 
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
-      await new PaginationEmbed(interaction, embed).start();
+      await new PaginationEmbed(interaction, embed, 20).start();
     } else {
       //specific command
       const cmdhelp = bot

@@ -89,17 +89,18 @@ export class PaginationEmbed {
     this.message = await this.send();
     if (this.pages.length > 0) {
       //no need to initialize collector if there is only one page
-      await this.initializePaginationButtonCollector();
+      this.initializePaginationButtonCollector();
     }
   }
 
   protected addPageNumbers() {
     this.pages.map((page, pageIndex) => {
-      if (
-        page.data.footer &&
-        (page.data.footer.text || page.data.footer.icon_url)
-      )
-        return page;
+      if (page.data.footer && page.data.footer.text)
+        return page.setFooter({
+          text: `${page.data.footer.text} • ${this.footerText} ${
+            pageIndex + 1
+          }/${this.pages.length}`,
+        });
       return page.setFooter({
         text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
       });

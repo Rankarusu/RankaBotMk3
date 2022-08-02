@@ -5,6 +5,7 @@ import {
 } from 'discord-api-types/v10';
 import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
+  AnimeCommand,
   BanCommand,
   BofhCommand,
   ChooseCommand,
@@ -83,6 +84,7 @@ async function start(): Promise<void> {
     new FactCommand(),
     new PollCommand(),
     new StickerCommand(),
+    new AnimeCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

@@ -1,16 +1,14 @@
-import axios, { AxiosResponse } from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import {
   ChatInputCommandInteraction,
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-import { first } from 'lodash';
 
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import { aniList } from '../../services/anilist';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { EmbedUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class AnimeCommand implements Command {
@@ -42,18 +40,21 @@ export class AnimeCommand implements Command {
   private createPages() {
     const schedule = aniList.getSchedule();
     const pages = schedule.map((day) => {
-      const description = `**${day.day}**`;
-
-      const fields: EmbedField[] = day.airing.map((anime) => {
+      let fields: EmbedField[] = day.airing.map((anime) => {
         return {
           name: anime.media.title.romaji,
           value: `Episode ${anime.episode}: <t:${anime.airingAt}:t>`,
           inline: false,
         };
       });
+      if (fields.length > 25) {
+        fields = fields.slice(0, 25);
+        //the api limits to 25 fields per embed, so we just cut them
+      }
+      const date = new Date(day.day * 1000);
       const embed = EmbedUtils.infoEmbed(
-        description,
-        `Anime airing on ${day.day}`,
+        undefined,
+        `Anime airing on ${date.toDateString()}`,
         fields
       );
       embed.setFooter({ text: 'Powered by anilist.co' });

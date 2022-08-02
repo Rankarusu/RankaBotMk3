@@ -3,11 +3,10 @@ import * as cron from 'node-cron';
 import { Logger } from '.';
 import LogMessages from '../../logs/logs.json';
 import { AniListGQLItem, MediaFormat, MediaType } from '../models/anilist';
-import { DateUtils } from '../utils';
 
 class AniList {
   //implementing a Singleton that automatically gets new data from AniList.
-  private schedule: { day: string; airing: AniListGQLItem[] }[];
+  private schedule: { day: number; airing: AniListGQLItem[] }[];
 
   private static _instance: AniList;
 
@@ -17,7 +16,14 @@ class AniList {
 
   public start() {
     //get data once and then in intervals.
-    this.updateSchedule(this.getTimestamps());
+    try {
+      this.updateSchedule(this.getTimestamps());
+    } catch (error) {
+      //try again in 30 seconds
+      setTimeout(() => {
+        this.start();
+      }, 30000);
+    }
 
     cron.schedule('0 * * * *', async () => {
       const timestamps = this.getTimestamps();
@@ -98,6 +104,7 @@ class AniList {
       });
     return data;
   }
+  //TODO: make catch errors and retry
 
   private async updateSchedule(timestamps: { start: number; end: number }[]) {
     const entries = await Promise.all(
@@ -106,9 +113,7 @@ class AniList {
           timestamp.start,
           timestamp.end
         );
-        const weekday = DateUtils.getWeekdayFromNumber(
-          new Date(timestamp.end * 1000).getUTCDay()
-        );
+        const weekday = timestamp.end;
         return {
           day: weekday,
           airing: entry,

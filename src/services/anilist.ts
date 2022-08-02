@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as cron from 'node-cron';
 import { Logger } from '.';
 import LogMessages from '../../logs/logs.json';
-import { AniListGQLItem, MediaType } from '../models/anilist';
+import { AniListGQLItem, MediaFormat, MediaType } from '../models/anilist';
 import { DateUtils } from '../utils';
 
 class AniList {
@@ -91,7 +91,8 @@ class AniList {
         const entries = res.data.data.Page.airingSchedules.filter(
           (entry: AniListGQLItem) =>
             entry.media.countryOfOrigin !== 'CN' &&
-            entry.media.type === MediaType.ANIME
+            entry.media.type === MediaType.ANIME &&
+            entry.media.format === MediaFormat.TV
         );
         return entries;
       });

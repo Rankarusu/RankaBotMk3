@@ -12,6 +12,10 @@ class AniList {
   private static _instance: AniList;
 
   private constructor() {
+    // private constructor, so that it can only be instantiated once
+  }
+
+  public start() {
     //get data once and then in intervals.
     this.updateSchedule(this.getTimestamps());
 
@@ -117,4 +121,5 @@ class AniList {
     return this.schedule;
   }
 }
+
 export const aniList = AniList.Instance;

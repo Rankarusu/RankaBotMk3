@@ -44,6 +44,7 @@ import { Trigger } from './triggers';
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
+import { aniList } from './services/anilist';
 
 const rest = new REST().setToken(Config.client.token);
 
@@ -147,6 +148,8 @@ async function start(): Promise<void> {
   reminderScheduler.start();
   const activityScheduler = new ActivityScheduler(client);
   activityScheduler.start();
+  const aniListScheduler = aniList;
+  aniListScheduler.start();
 
   // Finally start the bot
   await bot.start();

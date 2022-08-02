@@ -2,11 +2,18 @@ import axios from 'axios';
 import * as cron from 'node-cron';
 import { Logger } from '.';
 import LogMessages from '../../logs/logs.json';
-import { AniListGQLItem, MediaFormat, MediaType } from '../models/anilist';
+import {
+  AniListAiringScheduleItem,
+  AniListSearchItem,
+  MediaFormat,
+  MediaType,
+} from '../models/anilist';
 
 class AniList {
   //implementing a Singleton that automatically gets new data from AniList.
-  private schedule: { day: number; airing: AniListGQLItem[] }[];
+  private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
+
+  private url = 'https://graphql.anilist.co';
 
   private static _instance: AniList;
 
@@ -41,7 +48,7 @@ class AniList {
     return this._instance || (this._instance = new this());
   }
 
-  private query = `
+  private scheduleQuery = `
   query ($start: Int, $end: Int) {
     Page(page: 1, perPage: 50) {
       airingSchedules(
@@ -66,6 +73,52 @@ class AniList {
   }
   `;
 
+  private searchQuery = `
+  query ($search: String, $format: MediaFormat) {
+    Page(page: 1, perPage: 1) {
+      media(search: $search, format: $format) {
+        idMal
+        title {
+          native
+          romaji
+          english
+        }
+        type
+        format
+        description
+        genres
+        season
+        seasonYear
+        averageScore
+        meanScore
+        siteUrl
+        coverImage {
+          medium
+        }
+        nextAiringEpisode {
+          airingAt
+        }
+      }
+    }
+  }
+  `;
+
+  public async searchMedia(title: string): Promise<AniListSearchItem> {
+    const data = await axios
+      .post(this.url, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'axios',
+        },
+        query: this.searchQuery,
+        variables: { search: title, format: MediaFormat.TV },
+      })
+      .then((res) => {
+        return res.data.data.Page.media[0];
+      });
+    return data;
+  }
+
   private getTimestamps() {
     const timestamps = [];
     // timestamps.push(time / 1000);
@@ -82,20 +135,22 @@ class AniList {
     return timestamps;
   }
 
-  private async getAiringPerDay(start: number, end: number) {
+  private async getAiringPerDay(
+    start: number,
+    end: number
+  ): Promise<AniListAiringScheduleItem[]> {
     const data = await axios
-      .post('https://graphql.anilist.co', {
+      .post(this.url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
         },
-        query: this.query,
+        query: this.scheduleQuery,
         variables: { start, end },
       })
       .then((res) => {
-        // console.log(res.data.data.Page.airingSchedules);
         const entries = res.data.data.Page.airingSchedules.filter(
-          (entry: AniListGQLItem) =>
+          (entry: AniListAiringScheduleItem) =>
             entry.media.countryOfOrigin !== 'CN' &&
             entry.media.type === MediaType.ANIME &&
             entry.media.format === MediaFormat.TV

@@ -16,4 +16,18 @@ export class DateUtils {
     const sDisplay = s > 0 ? s + (s == 1 ? ' second' : ' seconds') : '';
     return dDisplay + hDisplay + mDisplay + sDisplay;
   }
+
+  private static weekdays: string[] = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  public static getWeekdayFromNumber(number: number): string {
+    return this.weekdays[number];
+  }
 }

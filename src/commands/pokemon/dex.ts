@@ -29,6 +29,9 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
+import { types } from '../../../data/pokemonDamageRelations.json';
+import { PokemonDamageRelations } from '../../models/pokemon';
+
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
   fighting: '<:GO_Fighting:741995847293599846>',
@@ -237,8 +240,10 @@ export class DexCommand implements Command {
           pokemon,
           abilities
         );
+        const pdr = this.getDamageRelations(pokemon.types);
+        const pdrEmbed = this.createPDREmbed(pdr);
         const actionRow = this.createActionRow(pokemon.name);
-        InteractionUtils.send(interaction, embed, [actionRow]);
+        InteractionUtils.send(interaction, pdrEmbed, [actionRow]);
         break;
       }
       case 'ability': {
@@ -410,10 +415,10 @@ export class DexCommand implements Command {
     return abilityField;
   }
 
-  private getTypeBlock(types: PokemonType[]): EmbedField {
+  private getTypeBlock(pokemonTypes: PokemonType[]): EmbedField {
     const typeField: EmbedField = {
       name: 'Types',
-      value: types
+      value: pokemonTypes
         .map((type: PokemonType) => {
           return `${typeEmoji[type.type.name]} ${StringUtils.toTitleCase(
             type.type.name
@@ -665,5 +670,158 @@ export class DexCommand implements Command {
       .setURL(`https://bulbapedia.bulbagarden.net/wiki/${name}`);
     actionRow.addComponents(pokewikiButton, bulbapediaButton);
     return actionRow;
+  }
+
+  private getDamageRelations(
+    pokemonTypes: PokemonType[]
+  ): PokemonDamageRelations {
+    let type1: string;
+    let type2: string;
+    if (pokemonTypes.length === 1) {
+      type1 = pokemonTypes[0].type.name;
+    } else {
+      type1 = pokemonTypes[0].type.name;
+      type2 = pokemonTypes[1].type.name;
+    }
+
+    const damageRelations = {
+      x4: [],
+      x2: [],
+      x1: [],
+      x05: [],
+      x025: [],
+      x0: [],
+    };
+    if (type2) {
+      // for (let index = 0; index < types[type1]; index++) {
+      Object.keys(types[type1]).forEach((type) => {
+        const res = types[type1][type] * types[type2][type];
+        // const res = types[type1][index] * types[type2][index];
+        switch (res) {
+          case 4: {
+            damageRelations.x4.push(type);
+            break;
+          }
+          case 2: {
+            damageRelations.x2.push(type);
+            break;
+          }
+          case 1: {
+            damageRelations.x1.push(type);
+            break;
+          }
+          case 0.5: {
+            damageRelations.x05.push(type);
+            break;
+          }
+          case 0.25: {
+            damageRelations.x025.push(type);
+            break;
+          }
+          case 0: {
+            damageRelations.x0.push(type);
+            break;
+          }
+        }
+      });
+    } else {
+      Object.keys(types[type1]).forEach((type) => {
+        const res = types[type1][type];
+        // const res = types[type1][index] * types[type2][index];
+        switch (res) {
+          case 4: {
+            damageRelations.x4.push(type);
+            break;
+          }
+          case 2: {
+            damageRelations.x2.push(type);
+            break;
+          }
+          case 1: {
+            damageRelations.x1.push(type);
+            break;
+          }
+          case 0.5: {
+            damageRelations.x05.push(type);
+            break;
+          }
+          case 0.25: {
+            damageRelations.x025.push(type);
+            break;
+          }
+          case 0: {
+            damageRelations.x0.push(type);
+            break;
+          }
+        }
+      });
+    }
+
+    return damageRelations;
+  }
+
+  private createPDREmbed(pokemonDamageRelations: PokemonDamageRelations) {
+    const embed = new EmbedBuilder();
+    const fields: EmbedField[] = [
+      {
+        name: 'Super Effective (x4)',
+        value: `${pokemonDamageRelations.x4
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+      {
+        name: 'Super Effective (x2)',
+        value: `${pokemonDamageRelations.x2
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+      {
+        name: 'Neutral (x1)',
+        value: `${pokemonDamageRelations.x1
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+      {
+        name: 'Not very Effective (x0.5)',
+        value: `${pokemonDamageRelations.x05
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+      {
+        name: 'Not very Effective (x0.25)',
+        value: `${pokemonDamageRelations.x025
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+      {
+        name: 'No Effect (x0)',
+        value: `${pokemonDamageRelations.x0
+          .map((type) => {
+            return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
+          })
+          .join('\n')}`,
+        inline: false,
+      },
+    ];
+    embed.setTitle('Pokemon Damage Relations');
+    console.log(pokemonDamageRelations);
+    embed.addFields(fields.filter((field) => field.value !== ''));
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
   }
 }

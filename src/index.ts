@@ -12,6 +12,7 @@ import {
   CoinflipCommand,
   Command,
   DadJokeCommand,
+  DexCommand,
   EightballCommand,
   FactCommand,
   HelpCommand,
@@ -85,6 +86,7 @@ async function start(): Promise<void> {
     new PollCommand(),
     new StickerCommand(),
     new AnimeCommand(),
+    new DexCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

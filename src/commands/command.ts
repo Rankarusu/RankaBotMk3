@@ -28,4 +28,5 @@ export enum CommandCategory {
   MODERATION = 'Moderation',
   MISC = 'Misc',
   WEEBSHIT = 'Weebshit',
+  POKEMON = 'Pokémon',
 }

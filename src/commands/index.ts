@@ -21,3 +21,4 @@ export { InfoCommand } from './utility/info';
 export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
 export { AnimeCommand } from './weebshit/anime';
+export { DexCommand } from './pokemon/dex';

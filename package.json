@@ -39,6 +39,7 @@
     "oo-ascii-tree": "^1.62.0",
     "pino": "^8.1.0",
     "pino-pretty": "^8.1.0",
+    "pokenode-ts": "^1.16.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

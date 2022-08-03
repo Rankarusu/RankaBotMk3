@@ -102,8 +102,17 @@ export class DexCommand implements Command {
     switch (subCommand) {
       case 'pokemon': {
         const name = interaction.options.getString('name');
+        let pokemon: Pokemon;
+        try {
+          pokemon = await this.api.pokemon.getPokemonByName(name);
+        } catch (error) {
+          //pokenode throws an error when it can't find a pokemon
+          InteractionUtils.sendError(
+            data,
+            "I couldn't find any PokéMon matching that name or ID."
+          );
+        }
 
-        const pokemon = await this.api.pokemon.getPokemonByName(name);
         const embed = this.createPokemonEmbed(pokemon);
         InteractionUtils.send(interaction, embed);
       }
@@ -128,6 +137,7 @@ export class DexCommand implements Command {
     embed.addFields([typeField, abilityField, heightWeightField, statField]);
     embed.setThumbnail(pokemon.sprites.front_default);
     embed.setColor(typeColors[pokemon.types[0].type.name]);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
   }
 

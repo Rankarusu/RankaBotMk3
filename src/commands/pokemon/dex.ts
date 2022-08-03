@@ -115,13 +115,17 @@ export class DexCommand implements Command {
     const statField = this.getStatBlock(pokemon.stats);
     const abilityField = this.getAbilityBlock(pokemon.abilities);
     const typeField = this.getTypeBlock(pokemon.types);
+    const heightWeightField = this.getHeightWeightBlock(
+      pokemon.height,
+      pokemon.weight
+    );
 
     embed.setTitle(
       `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
       )}`
     );
-    embed.addFields([typeField, abilityField, statField]);
+    embed.addFields([typeField, abilityField, heightWeightField, statField]);
     embed.setThumbnail(pokemon.sprites.front_default);
     embed.setColor(typeColors[pokemon.types[0].type.name]);
     return embed;
@@ -176,5 +180,16 @@ export class DexCommand implements Command {
       inline: true,
     };
     return typeField;
+  }
+
+  private getHeightWeightBlock(height: number, weight: number): EmbedField {
+    const heightStr = `${height / 10} m`;
+    const weightStr = `${weight / 10} kg`;
+    const heightWeightField: EmbedField = {
+      name: 'Height and Weight',
+      value: `${heightStr} / ${weightStr}`,
+      inline: true,
+    };
+    return heightWeightField;
   }
 }

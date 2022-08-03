@@ -13,6 +13,7 @@ import {
   Berry,
   Item,
   MainClient,
+  Move,
   Pokemon,
   PokemonAbility,
   PokemonStat,
@@ -122,6 +123,19 @@ export class DexCommand implements Command {
           },
         ],
       },
+      {
+        name: 'move',
+        type: ApplicationCommandOptionType.Subcommand,
+        description: 'search for a move',
+        options: [
+          {
+            name: 'name',
+            type: ApplicationCommandOptionType.String,
+            description: 'the name or ID of a move to search for',
+            required: true,
+          },
+        ],
+      },
     ],
   };
 
@@ -215,6 +229,24 @@ export class DexCommand implements Command {
           );
         }
         const embed = this.createItemEmbed(item);
+        InteractionUtils.send(interaction, embed);
+      }
+      case 'move': {
+        const name = interaction.options.getString('name');
+        let move: Move;
+        try {
+          move = await this.api.move.getMoveByName(name);
+        } catch (error) {
+          InteractionUtils.sendError(
+            data,
+            `I couldn't find any moves matching that name or ID.
+            
+            **Note**: The API uses kebab-case for abilities.
+            E.G if you want to find the fishing rot, you would use 'fishing-rod'.
+            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
+          );
+        }
+        const embed = this.createMoveEmbed(move);
         InteractionUtils.send(interaction, embed);
       }
     }
@@ -406,6 +438,48 @@ export class DexCommand implements Command {
     const embed = EmbedUtils.infoEmbed(description, name, fields);
     embed.setThumbnail(sprite);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private createMoveEmbed(move: Move): EmbedBuilder {
+    const type = move.type.name;
+    const name = move.names.find((moveName) => {
+      return moveName.language.name === 'en';
+    }).name;
+    const accuracy = move.accuracy;
+    const power = move.power;
+    const pp = move.pp;
+    const damageClass = move.damage_class.name;
+    const description = move.effect_entries
+      .find((entry) => {
+        return entry.language.name === 'en';
+      })
+      .effect.replaceAll('$effect_chance', move.effect_chance.toString());
+
+    const embed = new EmbedBuilder()
+      .setTitle(name)
+      .setDescription(description)
+      .setColor(typeColors[type])
+      .addFields([
+        {
+          name: 'Type',
+          value: `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`,
+          inline: true,
+        },
+        {
+          name: 'Category',
+          value: StringUtils.toTitleCase(damageClass),
+          inline: true,
+        },
+        {
+          name: 'Stats',
+          value: `Power: ${power}
+          Accuracy: ${accuracy}
+          PP: ${pp}`,
+        },
+      ])
+      .setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+
     return embed;
   }
 }

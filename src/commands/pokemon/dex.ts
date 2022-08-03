@@ -9,6 +9,7 @@ import {
   PermissionsString,
 } from 'discord.js';
 import {
+  Ability,
   MainClient,
   Pokemon,
   PokemonAbility,
@@ -17,7 +18,7 @@ import {
 } from 'pokenode-ts';
 
 import { EventData } from '../../models/event-data';
-import { InteractionUtils, StringUtils } from '../../utils';
+import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const typeEmoji = {
@@ -80,6 +81,19 @@ export class DexCommand implements Command {
           },
         ],
       },
+      {
+        name: 'ability',
+        type: ApplicationCommandOptionType.Subcommand,
+        description: 'search for a pokemon ability',
+        options: [
+          {
+            name: 'name',
+            type: ApplicationCommandOptionType.String,
+            description: 'the name or ID of a pokemon ability to search for',
+            required: true,
+          },
+        ],
+      },
     ],
   };
 
@@ -114,6 +128,25 @@ export class DexCommand implements Command {
         }
 
         const embed = this.createPokemonEmbed(pokemon);
+        InteractionUtils.send(interaction, embed);
+      }
+      case 'ability': {
+        const name = interaction.options.getString('name');
+        let ability: Ability;
+        try {
+          ability = await this.api.pokemon.getAbilityByName(name);
+        } catch {
+          InteractionUtils.sendError(
+            data,
+            `I couldn't find any abilities matching that name or ID. 
+            
+            **Note**: The API uses kebab-case for abilities.
+            E.G if you want to find Bad Dreams, you would use 'bad-dreams'.
+            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
+          );
+        }
+
+        const embed = this.createAbilityEmbed(ability);
         InteractionUtils.send(interaction, embed);
       }
     }
@@ -201,5 +234,19 @@ export class DexCommand implements Command {
       inline: true,
     };
     return heightWeightField;
+  }
+
+  private createAbilityEmbed(ability: Ability): EmbedBuilder {
+    const name = ability.names.find((abilityName) => {
+      return abilityName.language.name === 'en';
+    }).name;
+
+    const description = ability.effect_entries.find((entry) => {
+      return entry.language.name === 'en';
+    }).effect;
+
+    const embed = EmbedUtils.infoEmbed(description, name);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
   }
 }

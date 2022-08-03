@@ -14,6 +14,7 @@ import {
   Item,
   MainClient,
   Move,
+  Nature,
   Pokemon,
   PokemonAbility,
   PokemonStat,
@@ -64,6 +65,34 @@ const typeColors = {
   dark: [112, 88, 72],
   fairy: [238, 153, 172],
 };
+
+const natures = [
+  'hardy',
+  'lonely',
+  'brave',
+  'adamant',
+  'naughty',
+  'bold',
+  'docile',
+  'relaxed',
+  'impish',
+  'lax',
+  'timid',
+  'hasty',
+  'serious',
+  'jolly',
+  'naive',
+  'modest',
+  'mild',
+  'quiet',
+  'bashful',
+  'rash',
+  'calm',
+  'gentle',
+  'sassy',
+  'careful',
+  'quirky',
+];
 
 export class DexCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -133,6 +162,25 @@ export class DexCommand implements Command {
             type: ApplicationCommandOptionType.String,
             description: 'the name or ID of a move to search for',
             required: true,
+          },
+        ],
+      },
+      {
+        name: 'nature',
+        type: ApplicationCommandOptionType.Subcommand,
+        description: 'search for a nature',
+        options: [
+          {
+            name: 'name',
+            type: ApplicationCommandOptionType.String,
+            description: 'the name of the nature to search for',
+            required: true,
+            choices: natures.map((nature) => {
+              return {
+                name: nature,
+                value: nature,
+              };
+            }),
           },
         ],
       },
@@ -224,7 +272,7 @@ export class DexCommand implements Command {
             `I couldn't find any items matching that name or ID.
             
             **Note**: The API uses kebab-case for abilities.
-            E.G if you want to find the fishing rot, you would use 'fishing-rod'.
+            E.G if you want to find the fishing rod, you would use 'fishing-rod'.
             There will be a point in the future where I will implement fuzzy search, but today is not the day.`
           );
         }
@@ -242,11 +290,25 @@ export class DexCommand implements Command {
             `I couldn't find any moves matching that name or ID.
             
             **Note**: The API uses kebab-case for abilities.
-            E.G if you want to find the fishing rot, you would use 'fishing-rod'.
+            E.G if you want to find hyper beam, you would use 'hyper-beam'.
             There will be a point in the future where I will implement fuzzy search, but today is not the day.`
           );
         }
         const embed = this.createMoveEmbed(move);
+        InteractionUtils.send(interaction, embed);
+      }
+      case 'nature': {
+        const name = interaction.options.getString('name');
+        let nature: Nature;
+        try {
+          nature = await this.api.pokemon.getNatureByName(name);
+        } catch (error) {
+          InteractionUtils.sendError(
+            data,
+            'An Error occurred while talking to the API.'
+          );
+        }
+        const embed = this.createNatureEmbed(nature);
         InteractionUtils.send(interaction, embed);
       }
     }
@@ -480,6 +542,48 @@ export class DexCommand implements Command {
       ])
       .setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
 
+    return embed;
+  }
+
+  private createNatureEmbed(nature: Nature): EmbedBuilder {
+    const name = nature.names.find((natureName) => {
+      return natureName.language.name === 'en';
+    }).name;
+
+    let statChanges: string;
+    if (nature.increased_stat && nature.decreased_stat) {
+      statChanges = `↗ ${StringUtils.toTitleCase(
+        nature.increased_stat.name.replaceAll('-', ' ')
+      )}
+      ↘ ${StringUtils.toTitleCase(
+        nature.decreased_stat.name.replaceAll('-', ' ')
+      )}`;
+    } else {
+      statChanges = 'None';
+    }
+
+    let flavorPreference: string;
+    if (nature.likes_flavor && nature.hates_flavor) {
+      flavorPreference = `likes: ${nature.likes_flavor.name}
+      dislikes: ${nature.hates_flavor.name}`;
+    } else {
+      flavorPreference = 'None';
+    }
+
+    const fields: EmbedField[] = [
+      {
+        name: 'Stat Changes',
+        value: statChanges,
+        inline: true,
+      },
+      {
+        name: 'Flavor Preferences',
+        value: flavorPreference,
+        inline: true,
+      },
+    ];
+    const embed = EmbedUtils.infoEmbed(undefined, name, fields);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
   }
 }

@@ -109,6 +109,19 @@ export class DexCommand implements Command {
           },
         ],
       },
+      {
+        name: 'item',
+        type: ApplicationCommandOptionType.Subcommand,
+        description: 'search for an item',
+        options: [
+          {
+            name: 'name',
+            type: ApplicationCommandOptionType.String,
+            description: 'the name or ID of an item to search for',
+            required: true,
+          },
+        ],
+      },
     ],
   };
 
@@ -184,6 +197,24 @@ export class DexCommand implements Command {
           );
         }
         const embed = this.createBerryEmbed(berry, berryItem);
+        InteractionUtils.send(interaction, embed);
+      }
+      case 'item': {
+        const name = interaction.options.getString('name');
+        let item: Item;
+        try {
+          item = await this.api.item.getItemByName(name);
+        } catch (error) {
+          InteractionUtils.sendError(
+            data,
+            `I couldn't find any items matching that name or ID.
+            
+            **Note**: The API uses kebab-case for abilities.
+            E.G if you want to find the fishing rot, you would use 'fishing-rod'.
+            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
+          );
+        }
+        const embed = this.createItemEmbed(item);
         InteractionUtils.send(interaction, embed);
       }
     }
@@ -339,6 +370,42 @@ export class DexCommand implements Command {
       .setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' })
       .setColor(typeColors[berry.natural_gift_type.name])
       .addFields(fields);
+    return embed;
+  }
+
+  private createItemEmbed(item: Item): EmbedBuilder {
+    const name = item.names.find((itemName) => {
+      return itemName.language.name === 'en';
+    }).name;
+
+    const description = item.effect_entries.find((entry) => {
+      return entry.language.name === 'en';
+    }).effect;
+
+    const cost = item.cost.toString();
+    const sprite = item.sprites.default;
+
+    const attributes = item.attributes
+      .map((attribute) => attribute.name)
+      .join(', ');
+
+    const fields: EmbedField[] = [
+      {
+        name: 'Cost',
+        value: cost,
+        inline: true,
+      },
+    ];
+    if (attributes) {
+      fields.push({
+        name: 'Attributes',
+        value: attributes,
+        inline: true,
+      });
+    }
+    const embed = EmbedUtils.infoEmbed(description, name, fields);
+    embed.setThumbnail(sprite);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
   }
 }

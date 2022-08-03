@@ -219,6 +219,7 @@ export class DexCommand implements Command {
 
         const embed = this.createPokemonEmbed(pokemon);
         InteractionUtils.send(interaction, embed);
+        break;
       }
       case 'ability': {
         const name = interaction.options.getString('name');
@@ -238,6 +239,7 @@ export class DexCommand implements Command {
 
         const embed = this.createAbilityEmbed(ability);
         InteractionUtils.send(interaction, embed);
+        break;
       }
       case 'berry': {
         const name = interaction.options.getString('name');
@@ -260,6 +262,7 @@ export class DexCommand implements Command {
         }
         const embed = this.createBerryEmbed(berry, berryItem);
         InteractionUtils.send(interaction, embed);
+        break;
       }
       case 'item': {
         const name = interaction.options.getString('name');
@@ -278,6 +281,7 @@ export class DexCommand implements Command {
         }
         const embed = this.createItemEmbed(item);
         InteractionUtils.send(interaction, embed);
+        break;
       }
       case 'move': {
         const name = interaction.options.getString('name');
@@ -296,6 +300,7 @@ export class DexCommand implements Command {
         }
         const embed = this.createMoveEmbed(move);
         InteractionUtils.send(interaction, embed);
+        break;
       }
       case 'nature': {
         const name = interaction.options.getString('name');
@@ -310,6 +315,7 @@ export class DexCommand implements Command {
         }
         const embed = this.createNatureEmbed(nature);
         InteractionUtils.send(interaction, embed);
+        break;
       }
     }
   }

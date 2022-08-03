@@ -212,9 +212,18 @@ export class DexCommand implements Command {
         const name = interaction.options.getString('name');
         let pokemon: Pokemon;
         let species: PokemonSpecies;
+        let abilities: Ability[];
         try {
           pokemon = await this.api.pokemon.getPokemonByName(name);
           species = await this.api.pokemon.getPokemonSpeciesByName(name);
+          abilities = await Promise.all(
+            pokemon.abilities.map(async (ability) => {
+              const abi = await this.api.pokemon.getAbilityByName(
+                ability.ability.name
+              );
+              return abi;
+            })
+          );
         } catch (error) {
           //pokenode throws an error when it can't find a pokemon
           InteractionUtils.sendError(
@@ -224,6 +233,10 @@ export class DexCommand implements Command {
         }
 
         const embed = this.createPokemonEmbed(pokemon, species);
+        const abilityEmbed = this.createPokemonAbilityPageEmbed(
+          pokemon,
+          abilities
+        );
         const actionRow = this.createActionRow(pokemon.name);
         InteractionUtils.send(interaction, embed, [actionRow]);
         break;
@@ -433,6 +446,34 @@ export class DexCommand implements Command {
     }).effect;
 
     const embed = EmbedUtils.infoEmbed(description, name);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private createPokemonAbilityPageEmbed(
+    pokemon: Pokemon,
+    abilities: Ability[]
+  ): EmbedBuilder {
+    const embed = new EmbedBuilder();
+    embed.setTitle(
+      `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+        pokemon.name
+      )}`
+    );
+    const fields: EmbedField[] = abilities.map((ability: Ability) => {
+      return {
+        name: ability.names.find((abilityName) => {
+          return abilityName.language.name === 'en';
+        }).name,
+        value: ability.effect_entries.find((entry) => {
+          return entry.language.name === 'en';
+        }).short_effect,
+        inline: false,
+      };
+    });
+    embed.setThumbnail(pokemon.sprites.front_default);
+    embed.setColor(typeColors[pokemon.types[0].type.name]);
+    embed.addFields(fields);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
   }

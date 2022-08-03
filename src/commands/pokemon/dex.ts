@@ -17,6 +17,7 @@ import {
   Nature,
   Pokemon,
   PokemonAbility,
+  PokemonSpecies,
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
@@ -207,8 +208,10 @@ export class DexCommand implements Command {
       case 'pokemon': {
         const name = interaction.options.getString('name');
         let pokemon: Pokemon;
+        let species: PokemonSpecies;
         try {
           pokemon = await this.api.pokemon.getPokemonByName(name);
+          species = await this.api.pokemon.getPokemonSpeciesByName(name);
         } catch (error) {
           //pokenode throws an error when it can't find a pokemon
           InteractionUtils.sendError(
@@ -217,7 +220,7 @@ export class DexCommand implements Command {
           );
         }
 
-        const embed = this.createPokemonEmbed(pokemon);
+        const embed = this.createPokemonEmbed(pokemon, species);
         InteractionUtils.send(interaction, embed);
         break;
       }
@@ -320,7 +323,10 @@ export class DexCommand implements Command {
     }
   }
 
-  private createPokemonEmbed(pokemon: Pokemon): EmbedBuilder {
+  private createPokemonEmbed(
+    pokemon: Pokemon,
+    species: PokemonSpecies
+  ): EmbedBuilder {
     const embed = new EmbedBuilder();
     const statField = this.getStatBlock(pokemon.stats);
     const abilityField = this.getAbilityBlock(pokemon.abilities);
@@ -330,11 +336,20 @@ export class DexCommand implements Command {
       pokemon.weight
     );
 
+    const genus = species.genera.find(
+      (entry) => entry.language.name === 'en'
+    ).genus;
+    //get the newest flavor text
+    const flavorText = species.flavor_text_entries
+      .reverse()
+      .find((entry) => entry.language.name === 'en').flavor_text;
+
     embed.setTitle(
       `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
       )}`
     );
+    embed.setDescription(`**${genus}**\n\n${flavorText}`);
     embed.addFields([typeField, abilityField, heightWeightField, statField]);
     embed.setThumbnail(pokemon.sprites.front_default);
     embed.setColor(typeColors[pokemon.types[0].type.name]);

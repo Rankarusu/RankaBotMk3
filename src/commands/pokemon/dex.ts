@@ -1,8 +1,11 @@
 import {
   ApplicationCommandOptionType,
+  ButtonStyle,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
+  ActionRowBuilder,
+  ButtonBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
   EmbedField,
@@ -221,7 +224,8 @@ export class DexCommand implements Command {
         }
 
         const embed = this.createPokemonEmbed(pokemon, species);
-        InteractionUtils.send(interaction, embed);
+        const actionRow = this.createActionRow(pokemon.name);
+        InteractionUtils.send(interaction, embed, [actionRow]);
         break;
       }
       case 'ability': {
@@ -606,5 +610,19 @@ export class DexCommand implements Command {
     const embed = EmbedUtils.infoEmbed(undefined, name, fields);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
+  }
+
+  private createActionRow(name: string) {
+    const actionRow = new ActionRowBuilder<ButtonBuilder>();
+    const pokewikiButton = new ButtonBuilder()
+      .setLabel('PokéWiki')
+      .setStyle(ButtonStyle.Link)
+      .setURL(`https://www.pokewiki.de/${name}`);
+    const bulbapediaButton = new ButtonBuilder()
+      .setLabel('Bulbapedia')
+      .setStyle(ButtonStyle.Link)
+      .setURL(`https://bulbapedia.bulbagarden.net/wiki/${name}`);
+    actionRow.addComponents(pokewikiButton, bulbapediaButton);
+    return actionRow;
   }
 }

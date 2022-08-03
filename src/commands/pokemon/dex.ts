@@ -10,6 +10,8 @@ import {
 } from 'discord.js';
 import {
   Ability,
+  Berry,
+  Item,
   MainClient,
   Pokemon,
   PokemonAbility,
@@ -94,6 +96,19 @@ export class DexCommand implements Command {
           },
         ],
       },
+      {
+        name: 'berry',
+        type: ApplicationCommandOptionType.Subcommand,
+        description: 'search for a berry',
+        options: [
+          {
+            name: 'name',
+            type: ApplicationCommandOptionType.String,
+            description: 'the name or ID of a berry to search for',
+            required: true,
+          },
+        ],
+      },
     ],
   };
 
@@ -147,6 +162,28 @@ export class DexCommand implements Command {
         }
 
         const embed = this.createAbilityEmbed(ability);
+        InteractionUtils.send(interaction, embed);
+      }
+      case 'berry': {
+        const name = interaction.options.getString('name');
+        let berry: Berry;
+        let berryItem: Item;
+        try {
+          //the api expects the name of the berry without the name. For example "cheri" instead of "cheri-berry"
+          const sanitizedBerryString = name
+            .replaceAll(/berry/gi, '')
+            .replaceAll('-', '')
+            .trim();
+          console.log(sanitizedBerryString);
+          berry = await this.api.berry.getBerryByName(sanitizedBerryString);
+          berryItem = await this.api.item.getItemByName(berry.item.name);
+        } catch {
+          InteractionUtils.sendError(
+            data,
+            `I couldn't find any berries matching that name or ID.`
+          );
+        }
+        const embed = this.createBerryEmbed(berry, berryItem);
         InteractionUtils.send(interaction, embed);
       }
     }
@@ -247,6 +284,61 @@ export class DexCommand implements Command {
 
     const embed = EmbedUtils.infoEmbed(description, name);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private createBerryEmbed(berry: Berry, item: Item): EmbedBuilder {
+    const flavors: string[] = berry.flavors.map((flavor) => {
+      return `${flavor.flavor.name}: ${flavor.potency}`;
+    });
+    const firmness = berry.firmness.name;
+    const maxHarvest = berry.max_harvest;
+    const size = berry.size;
+    const smoothness = berry.smoothness;
+    const soilDryness = berry.soil_dryness;
+
+    const naturalGift = [
+      `Type: ${
+        typeEmoji[berry.natural_gift_type.name]
+      } ${StringUtils.toTitleCase(berry.natural_gift_type.name)}`,
+      `Power: ${berry.natural_gift_power}`,
+    ];
+    const name = item.names.find((itemName) => {
+      return itemName.language.name === 'en';
+    }).name;
+
+    const effect = item.effect_entries[0].effect;
+    const thumbnail = item.sprites.default;
+
+    const fields = [
+      {
+        name: 'Natural Gift Information',
+        value: naturalGift.join('\n'),
+        inline: true,
+      },
+      {
+        name: 'Flavors',
+        value: flavors.join('\n'),
+        inline: true,
+      },
+      {
+        name: 'Other Information',
+        value: `Firmness: ${firmness}
+        Max Harvest: ${maxHarvest}
+        Size: ${size}
+        Smoothness: ${smoothness}
+        Soil Dryness: ${soilDryness}`,
+        inline: true,
+      },
+    ];
+
+    const embed = new EmbedBuilder()
+      .setDescription(effect)
+      .setTitle(name)
+      .setThumbnail(thumbnail)
+      .setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' })
+      .setColor(typeColors[berry.natural_gift_type.name])
+      .addFields(fields);
     return embed;
   }
 }

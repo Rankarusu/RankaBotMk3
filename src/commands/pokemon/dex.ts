@@ -31,6 +31,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 
 import { types } from '../../../data/pokemonDamageRelations.json';
 import { PokemonDamageRelations } from '../../models/pokemon';
+import { first } from 'lodash';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -241,7 +242,7 @@ export class DexCommand implements Command {
           abilities
         );
         const pdr = this.getDamageRelations(pokemon.types);
-        const pdrEmbed = this.createPDREmbed(pdr);
+        const pdrEmbed = this.createPDREmbedPage(pdr);
         const actionRow = this.createActionRow(pokemon.name);
         InteractionUtils.send(interaction, pdrEmbed, [actionRow]);
         break;
@@ -685,6 +686,7 @@ export class DexCommand implements Command {
     }
 
     const damageRelations = {
+      types: type2 ? [type1, type2] : [type1],
       x4: [],
       x2: [],
       x1: [],
@@ -760,10 +762,12 @@ export class DexCommand implements Command {
     return damageRelations;
   }
 
-  private createPDREmbed(pokemonDamageRelations: PokemonDamageRelations) {
+  private createPDREmbedPage(pokemonDamageRelations: PokemonDamageRelations) {
     const embed = new EmbedBuilder();
-    const fields: EmbedField[] = [
-      {
+    const fields: EmbedField[] = [];
+
+    if (pokemonDamageRelations.x4.length > 0) {
+      fields.push({
         name: 'Super Effective (x4)',
         value: `${pokemonDamageRelations.x4
           .map((type) => {
@@ -771,8 +775,10 @@ export class DexCommand implements Command {
           })
           .join('\n')}`,
         inline: false,
-      },
-      {
+      });
+    }
+    if (pokemonDamageRelations.x2.length > 0) {
+      fields.push({
         name: 'Super Effective (x2)',
         value: `${pokemonDamageRelations.x2
           .map((type) => {
@@ -780,8 +786,10 @@ export class DexCommand implements Command {
           })
           .join('\n')}`,
         inline: false,
-      },
-      {
+      });
+    }
+    if (pokemonDamageRelations.x1.length > 0) {
+      fields.push({
         name: 'Neutral (x1)',
         value: `${pokemonDamageRelations.x1
           .map((type) => {
@@ -789,37 +797,48 @@ export class DexCommand implements Command {
           })
           .join('\n')}`,
         inline: false,
-      },
-      {
-        name: 'Not very Effective (x0.5)',
+      });
+    }
+    if (pokemonDamageRelations.x05.length > 0) {
+      fields.push({
+        name: 'Not Very Effective (x0.5)',
         value: `${pokemonDamageRelations.x05
           .map((type) => {
             return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
           })
           .join('\n')}`,
         inline: false,
-      },
-      {
-        name: 'Not very Effective (x0.25)',
+      });
+    }
+    if (pokemonDamageRelations.x025.length > 0) {
+      fields.push({
+        name: 'Not Very Effective (x0.25)',
         value: `${pokemonDamageRelations.x025
           .map((type) => {
             return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
           })
           .join('\n')}`,
         inline: false,
-      },
-      {
-        name: 'No Effect (x0)',
+      });
+    }
+    if (pokemonDamageRelations.x0.length > 0) {
+      fields.push({
+        name: 'Not Effective (x0)',
         value: `${pokemonDamageRelations.x0
           .map((type) => {
             return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
           })
           .join('\n')}`,
         inline: false,
-      },
-    ];
-    embed.setTitle('Pokemon Damage Relations');
-    console.log(pokemonDamageRelations);
+      });
+    }
+    console.log(pokemonDamageRelations.types);
+    embed.setTitle(
+      `Strengths and Weaknesses (${pokemonDamageRelations.types
+        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
+        .join(' ')})`
+    );
+    embed.setColor(typeColors[pokemonDamageRelations.types[0]]);
     embed.addFields(fields.filter((field) => field.value !== ''));
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;

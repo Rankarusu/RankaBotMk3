@@ -1,4 +1,5 @@
 export interface PokemonDamageRelations {
+  types: string[];
   x4: string[];
   x2: string[];
   x1: string[];

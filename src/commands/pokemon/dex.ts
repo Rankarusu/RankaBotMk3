@@ -14,6 +14,8 @@ import {
 import {
   Ability,
   Berry,
+  ChainLink,
+  EvolutionChain,
   Item,
   MainClient,
   Move,
@@ -31,7 +33,6 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 
 import { types } from '../../../data/pokemonDamageRelations.json';
 import { PokemonDamageRelations } from '../../models/pokemon';
-import { first } from 'lodash';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -73,7 +74,6 @@ const typeColors = {
   dark: [112, 88, 72],
   fairy: [238, 153, 172],
 };
-
 const natures = [
   'hardy',
   'lonely',
@@ -101,6 +101,10 @@ const natures = [
   'careful',
   'quirky',
 ];
+
+const evoChainRegex = new RegExp(
+  /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//gm
+);
 
 export class DexCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -202,6 +206,8 @@ export class DexCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
+  i;
+
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   private api = new MainClient();
@@ -217,9 +223,21 @@ export class DexCommand implements Command {
         let pokemon: Pokemon;
         let species: PokemonSpecies;
         let abilities: Ability[];
+        let evoChain: EvolutionChain;
         try {
           pokemon = await this.api.pokemon.getPokemonByName(name);
-          species = await this.api.pokemon.getPokemonSpeciesByName(name);
+          species = await this.api.pokemon.getPokemonSpeciesByName(
+            pokemon.species.name
+          );
+
+          const evoChainId = parseInt(
+            evoChainRegex.exec(species.evolution_chain.url)[1]
+          );
+          evoChain = await this.api.evolution.getEvolutionChainById(evoChainId);
+
+          if (species.varieties.length > 1) {
+            //create additional embeds for all forms
+          }
           abilities = await Promise.all(
             pokemon.abilities.map(async (ability) => {
               const abi = await this.api.pokemon.getAbilityByName(
@@ -236,15 +254,15 @@ export class DexCommand implements Command {
           );
         }
 
-        const embed = this.createPokemonEmbed(pokemon, species);
+        const embed = this.createPokemonEmbed(pokemon, species, evoChain);
         const abilityEmbed = this.createPokemonAbilityPageEmbed(
           pokemon,
           abilities
         );
         const pdr = this.getDamageRelations(pokemon.types);
-        const pdrEmbed = this.createPDREmbedPage(pdr);
-        const actionRow = this.createActionRow(pokemon.name);
-        InteractionUtils.send(interaction, pdrEmbed, [actionRow]);
+        const pdrEmbed = this.createPDREmbedPage(pdr, pokemon);
+        const actionRow = this.createActionRow(pokemon.species.name);
+        InteractionUtils.send(interaction, embed, [actionRow]);
         break;
       }
       case 'ability': {
@@ -277,7 +295,6 @@ export class DexCommand implements Command {
             .replaceAll(/berry/gi, '')
             .replaceAll('-', '')
             .trim();
-          console.log(sanitizedBerryString);
           berry = await this.api.berry.getBerryByName(sanitizedBerryString);
           berryItem = await this.api.item.getItemByName(berry.item.name);
         } catch {
@@ -348,7 +365,8 @@ export class DexCommand implements Command {
 
   private createPokemonEmbed(
     pokemon: Pokemon,
-    species: PokemonSpecies
+    species: PokemonSpecies,
+    evoChain?: EvolutionChain
   ): EmbedBuilder {
     const embed = new EmbedBuilder();
     const statField = this.getStatBlock(pokemon.stats);
@@ -358,6 +376,7 @@ export class DexCommand implements Command {
       pokemon.height,
       pokemon.weight
     );
+    const evoChainField = this.getEvoChainField(evoChain);
 
     const genus = species.genera.find(
       (entry) => entry.language.name === 'en'
@@ -373,7 +392,13 @@ export class DexCommand implements Command {
       )}`
     );
     embed.setDescription(`**${genus}**\n\n${flavorText}`);
-    embed.addFields([typeField, abilityField, heightWeightField, statField]);
+    embed.addFields([
+      typeField,
+      abilityField,
+      heightWeightField,
+      evoChainField,
+      statField,
+    ]);
     embed.setThumbnail(pokemon.sprites.front_default);
     embed.setColor(typeColors[pokemon.types[0].type.name]);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
@@ -394,8 +419,9 @@ export class DexCommand implements Command {
     )}${strStats[5].padEnd(3)}\``;
 
     const statBlock = [row1, row2, row3, row4].join('\n');
+    const total = stats.reduce((acc, stat) => acc + stat.base_stat, 0);
     return {
-      name: 'Stats',
+      name: `Stats (Total: ${total})`,
       value: statBlock,
       inline: false,
     };
@@ -762,7 +788,10 @@ export class DexCommand implements Command {
     return damageRelations;
   }
 
-  private createPDREmbedPage(pokemonDamageRelations: PokemonDamageRelations) {
+  private createPDREmbedPage(
+    pokemonDamageRelations: PokemonDamageRelations,
+    pokemon?: Pokemon
+  ) {
     const embed = new EmbedBuilder();
     const fields: EmbedField[] = [];
 
@@ -832,15 +861,65 @@ export class DexCommand implements Command {
         inline: false,
       });
     }
-    console.log(pokemonDamageRelations.types);
     embed.setTitle(
       `Strengths and Weaknesses (${pokemonDamageRelations.types
         .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
         .join(' ')})`
     );
+
+    if (pokemon) {
+      embed.setThumbnail(pokemon.sprites.front_default);
+    }
+
     embed.setColor(typeColors[pokemonDamageRelations.types[0]]);
     embed.addFields(fields.filter((field) => field.value !== ''));
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
+  }
+
+  private getEvoChainField(evoChain: EvolutionChain) {
+    let text = `${evoChain.chain.species.name}`;
+    if (evoChain.chain.evolves_to.length > 0) {
+      text += ` → `;
+    }
+    text = this.getChainLink(text, evoChain.chain.evolves_to);
+    console.log(text);
+    return {
+      name: 'Evolution Chain',
+      value: text,
+      inline: true,
+    } as EmbedField;
+  }
+
+  private getChainLink(text: string, evolves_to: ChainLink[]) {
+    evolves_to.forEach((evo) => {
+      if (evo.evolves_to.length > 0) {
+        const evoCause = Object.keys(evo.evolution_details[0]).find(
+          (item) => evo.evolution_details[0][item]
+        );
+        const evoData = evo.evolution_details[0][evoCause];
+
+        text += `${
+          evo.species.name
+        } (${evo.evolution_details[0].trigger.name.replaceAll(
+          '-',
+          ' '
+        )} ${evoData}) → `;
+        text = this.getChainLink(text, evo.evolves_to);
+      } else {
+        const evoCause = Object.keys(evo.evolution_details[0]).find(
+          (item) => evo.evolution_details[0][item]
+        );
+        const evoData = evo.evolution_details[0][evoCause];
+
+        text += `${
+          evo.species.name
+        } (${evo.evolution_details[0].trigger.name.replaceAll(
+          '-',
+          ' '
+        )} ${evoData}) `;
+      }
+    });
+    return text;
   }
 }

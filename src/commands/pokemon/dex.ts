@@ -16,6 +16,8 @@ import {
   Berry,
   ChainLink,
   EvolutionChain,
+  EvolutionDetail,
+  EvolutionTriggers,
   Item,
   MainClient,
   Move,
@@ -104,6 +106,10 @@ const natures = [
 
 const evoChainRegex = new RegExp(
   /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//gm
+);
+
+const evoTriggerRegex = new RegExp(
+  /https:\/\/pokeapi\.co\/api\/v2\/evolution-trigger\/(\d+)\//gm
 );
 
 export class DexCommand implements Command {
@@ -233,6 +239,7 @@ export class DexCommand implements Command {
           const evoChainId = parseInt(
             evoChainRegex.exec(species.evolution_chain.url)[1]
           );
+
           evoChain = await this.api.evolution.getEvolutionChainById(evoChainId);
 
           if (species.varieties.length > 1) {
@@ -254,7 +261,7 @@ export class DexCommand implements Command {
           );
         }
 
-        const embed = this.createPokemonEmbed(pokemon, species, evoChain);
+        const embed = await this.createPokemonEmbed(pokemon, species, evoChain);
         const abilityEmbed = this.createPokemonAbilityPageEmbed(
           pokemon,
           abilities
@@ -363,11 +370,11 @@ export class DexCommand implements Command {
     }
   }
 
-  private createPokemonEmbed(
+  private async createPokemonEmbed(
     pokemon: Pokemon,
     species: PokemonSpecies,
     evoChain?: EvolutionChain
-  ): EmbedBuilder {
+  ): Promise<EmbedBuilder> {
     const embed = new EmbedBuilder();
     const statField = this.getStatBlock(pokemon.stats);
     const abilityField = this.getAbilityBlock(pokemon.abilities);
@@ -376,7 +383,7 @@ export class DexCommand implements Command {
       pokemon.height,
       pokemon.weight
     );
-    const evoChainField = this.getEvoChainField(evoChain);
+    const evoChainField = await this.getEvoChainField(evoChain);
 
     const genus = species.genera.find(
       (entry) => entry.language.name === 'en'
@@ -877,12 +884,12 @@ export class DexCommand implements Command {
     return embed;
   }
 
-  private getEvoChainField(evoChain: EvolutionChain) {
+  private async getEvoChainField(evoChain: EvolutionChain) {
     let text = `${evoChain.chain.species.name}`;
     if (evoChain.chain.evolves_to.length > 0) {
       text += ` → `;
+      text = await this.getChainLink(text, evoChain.chain.evolves_to);
     }
-    text = this.getChainLink(text, evoChain.chain.evolves_to);
     console.log(text);
     return {
       name: 'Evolution Chain',
@@ -891,35 +898,106 @@ export class DexCommand implements Command {
     } as EmbedField;
   }
 
-  private getChainLink(text: string, evolves_to: ChainLink[]) {
-    evolves_to.forEach((evo) => {
-      if (evo.evolves_to.length > 0) {
-        const evoCause = Object.keys(evo.evolution_details[0]).find(
-          (item) => evo.evolution_details[0][item]
-        );
-        const evoData = evo.evolution_details[0][evoCause];
+  private async getChainLink(text: string, evolves_to: ChainLink[]) {
+    const res = await Promise.all(
+      evolves_to.map(async (evo) => {
+        if (evo.evolves_to.length > 0) {
+          text += `${evo.species.name} ${await this.getChainLinkText(
+            evo.evolution_details
+          )} → `;
+          text = await this.getChainLink(text, evo.evolves_to);
+          return text;
+        } else {
+          text += `${evo.species.name} ${await this.getChainLinkText(
+            evo.evolution_details
+          )} `;
+          return text;
+        }
+      })
+    );
+    return res.join('');
+  }
 
-        text += `${
-          evo.species.name
-        } (${evo.evolution_details[0].trigger.name.replaceAll(
-          '-',
-          ' '
-        )} ${evoData}) → `;
-        text = this.getChainLink(text, evo.evolves_to);
-      } else {
-        const evoCause = Object.keys(evo.evolution_details[0]).find(
-          (item) => evo.evolution_details[0][item]
+  private async getChainLinkText(evoDetails: EvolutionDetail[]) {
+    const output = await Promise.all(
+      evoDetails.map(async (evoDetail) => {
+        const trigger = await this.api.evolution.getEvolutionTriggerByName(
+          evoDetail.trigger.name
         );
-        const evoData = evo.evolution_details[0][evoCause];
 
-        text += `${
-          evo.species.name
-        } (${evo.evolution_details[0].trigger.name.replaceAll(
-          '-',
-          ' '
-        )} ${evoData}) `;
-      }
-    });
-    return text;
+        let text = trigger.names.find(
+          (entry) => entry.language.name === 'en'
+        ).name;
+
+        if (evoDetail.gender) {
+          if (evoDetail.gender === 1) {
+            text += '(♂)';
+          }
+          if (evoDetail.gender === 2) {
+            text += '(♀)';
+          }
+        }
+        if (evoDetail.held_item) {
+          text += ` holding ${evoDetail.held_item.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.item) {
+          text += ` (${evoDetail.item.name.replaceAll('-', ' ')})`;
+          console.log(evoDetail.item);
+        }
+        if (evoDetail.known_move) {
+          text += ` knowing ${evoDetail.known_move.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.known_move_type) {
+          text += ` knowing a ${evoDetail.known_move_type.name}-type move`;
+        }
+        if (evoDetail.location) {
+          text += ` in ${evoDetail.location.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.min_affection) {
+          text += ` with at least ${evoDetail.min_affection} affection`;
+        }
+        if (evoDetail.min_beauty) {
+          text += ` with at least ${evoDetail.min_beauty} beauty`;
+        }
+        if (evoDetail.min_happiness) {
+          text += ` with at least ${evoDetail.min_happiness} happiness`;
+        }
+        if (evoDetail.min_level) {
+          text += ` (${evoDetail.min_level})`;
+        }
+        if (evoDetail.needs_overworld_rain) {
+          text += ` while it is raining`;
+        }
+        if (evoDetail.party_species) {
+          text += ` with a ${evoDetail.party_species.name} in the party`;
+        }
+        if (evoDetail.party_type) {
+          text += ` with a ${evoDetail.party_type.name}-type Pokémon in the party`;
+        }
+        if (evoDetail.relative_physical_stats !== null) {
+          switch (evoDetail.relative_physical_stats) {
+            case 1:
+              text += ` with Atk > Def`;
+              break;
+            case -1:
+              text += ` with Atk < Def`;
+              break;
+            case 0:
+              text += ` with Atk = Def`;
+          }
+        }
+        if (evoDetail.time_of_day) {
+          text += ` during the ${evoDetail.time_of_day}`;
+        }
+        if (evoDetail.trade_species) {
+          text += ` with ${evoDetail.trade_species.name}`;
+        }
+        if (evoDetail.turn_upside_down) {
+          text += ` while turning the console upside down`;
+        }
+        return text;
+      })
+    );
+    return output.join(', ');
   }
 }

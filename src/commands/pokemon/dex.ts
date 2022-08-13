@@ -35,7 +35,10 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 
 import { types } from '../../../data/pokemonDamageRelations.json';
 import { PokemonDamageRelations } from '../../models/pokemon';
-import { PaginationEmbed } from '../../models/pagination-embed';
+import {
+  ExtendedPaginationEmbed,
+  PaginationEmbed,
+} from '../../models/pagination-embed';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -263,16 +266,17 @@ export class DexCommand implements Command {
         const embed = await this.createPokemonEmbed(pokemon, species, evoChain);
         const abilityEmbed = this.createPokemonAbilityPageEmbed(
           pokemon,
+          species,
           abilities
         );
         const pdr = this.getDamageRelations(pokemon.types);
-        const pdrEmbed = this.createPDREmbedPage(pdr, pokemon);
+        const pdrEmbed = this.createPDREmbedPage(pdr, pokemon, species);
         const actionRow = this.createActionRow(pokemon.species.name);
-        const paginatedEmbed = new PaginationEmbed(interaction, [
-          embed,
-          abilityEmbed,
-          pdrEmbed,
-        ]);
+        const paginatedEmbed = new ExtendedPaginationEmbed(
+          interaction,
+          [embed, abilityEmbed, pdrEmbed],
+          [actionRow]
+        );
         // InteractionUtils.send(interaction, embed, [actionRow]);
         paginatedEmbed.start();
         break;
@@ -399,7 +403,7 @@ export class DexCommand implements Command {
       .find((entry) => entry.language.name === 'en').flavor_text;
 
     embed.setTitle(
-      `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
       )}`
     );
@@ -496,11 +500,12 @@ export class DexCommand implements Command {
 
   private createPokemonAbilityPageEmbed(
     pokemon: Pokemon,
+    species: PokemonSpecies,
     abilities: Ability[]
   ): EmbedBuilder {
     const embed = new EmbedBuilder();
     embed.setTitle(
-      `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
       )}: Abilities`
     );
@@ -802,7 +807,8 @@ export class DexCommand implements Command {
 
   private createPDREmbedPage(
     pokemonDamageRelations: PokemonDamageRelations,
-    pokemon?: Pokemon
+    pokemon?: Pokemon,
+    species?: PokemonSpecies
   ) {
     const embed = new EmbedBuilder();
     const fields: EmbedField[] = [];
@@ -883,7 +889,7 @@ export class DexCommand implements Command {
     }
 
     embed.setTitle(
-      `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
       )}: Strengths and Weaknesses`
     );

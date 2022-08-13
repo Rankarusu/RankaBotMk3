@@ -35,6 +35,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 
 import { types } from '../../../data/pokemonDamageRelations.json';
 import { PokemonDamageRelations } from '../../models/pokemon';
+import { PaginationEmbed } from '../../models/pagination-embed';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -267,7 +268,13 @@ export class DexCommand implements Command {
         const pdr = this.getDamageRelations(pokemon.types);
         const pdrEmbed = this.createPDREmbedPage(pdr, pokemon);
         const actionRow = this.createActionRow(pokemon.species.name);
-        InteractionUtils.send(interaction, embed, [actionRow]);
+        const paginatedEmbed = new PaginationEmbed(interaction, [
+          embed,
+          abilityEmbed,
+          pdrEmbed,
+        ]);
+        // InteractionUtils.send(interaction, embed, [actionRow]);
+        paginatedEmbed.start();
         break;
       }
       case 'ability': {
@@ -495,7 +502,7 @@ export class DexCommand implements Command {
     embed.setTitle(
       `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
         pokemon.name
-      )}`
+      )}: Abilities`
     );
     const fields: EmbedField[] = abilities.map((ability: Ability) => {
       return {
@@ -800,6 +807,14 @@ export class DexCommand implements Command {
     const embed = new EmbedBuilder();
     const fields: EmbedField[] = [];
 
+    fields.push({
+      name: `(${pokemonDamageRelations.types
+        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
+        .join(' ')})`,
+      value: '\u200B',
+      inline: false,
+    });
+
     if (pokemonDamageRelations.x4.length > 0) {
       fields.push({
         name: 'Super Effective (x4)',
@@ -857,7 +872,7 @@ export class DexCommand implements Command {
     }
     if (pokemonDamageRelations.x0.length > 0) {
       fields.push({
-        name: 'Not Effective (x0)',
+        name: 'No Effect (x0)',
         value: `${pokemonDamageRelations.x0
           .map((type) => {
             return `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`;
@@ -866,10 +881,11 @@ export class DexCommand implements Command {
         inline: false,
       });
     }
+
     embed.setTitle(
-      `Strengths and Weaknesses (${pokemonDamageRelations.types
-        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
-        .join(' ')})`
+      `#${pokemon.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+        pokemon.name
+      )}: Strengths and Weaknesses`
     );
 
     if (pokemon) {

@@ -105,11 +105,11 @@ const natures = [
 ];
 
 const evoChainRegex = new RegExp(
-  /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//gm
+  /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//i
 );
 
 const evoTriggerRegex = new RegExp(
-  /https:\/\/pokeapi\.co\/api\/v2\/evolution-trigger\/(\d+)\//gm
+  /https:\/\/pokeapi\.co\/api\/v2\/evolution-trigger\/(\d+)\//i
 );
 
 export class DexCommand implements Command {
@@ -212,8 +212,6 @@ export class DexCommand implements Command {
 
   public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
-  i;
-
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   private api = new MainClient();
@@ -225,7 +223,7 @@ export class DexCommand implements Command {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'pokemon': {
-        const name = interaction.options.getString('name');
+        const name = interaction.options.getString('name').toLowerCase();
         let pokemon: Pokemon;
         let species: PokemonSpecies;
         let abilities: Ability[];
@@ -236,15 +234,15 @@ export class DexCommand implements Command {
             pokemon.species.name
           );
 
-          const evoChainId = parseInt(
-            evoChainRegex.exec(species.evolution_chain.url)[1]
-          );
+          const evoChainIdStr = evoChainRegex.exec(species.evolution_chain.url);
+          const evoChainId = parseInt(evoChainIdStr[1], 10);
 
           evoChain = await this.api.evolution.getEvolutionChainById(evoChainId);
 
           if (species.varieties.length > 1) {
             //create additional embeds for all forms
           }
+
           abilities = await Promise.all(
             pokemon.abilities.map(async (ability) => {
               const abi = await this.api.pokemon.getAbilityByName(
@@ -885,12 +883,11 @@ export class DexCommand implements Command {
   }
 
   private async getEvoChainField(evoChain: EvolutionChain) {
-    let text = `${evoChain.chain.species.name}`;
+    let text = `**${StringUtils.toTitleCase(evoChain.chain.species.name)}**`;
     if (evoChain.chain.evolves_to.length > 0) {
       text += ` → `;
       text = await this.getChainLink(text, evoChain.chain.evolves_to);
     }
-    console.log(text);
     return {
       name: 'Evolution Chain',
       value: text,
@@ -902,20 +899,20 @@ export class DexCommand implements Command {
     const res = await Promise.all(
       evolves_to.map(async (evo) => {
         if (evo.evolves_to.length > 0) {
-          text += `${evo.species.name} ${await this.getChainLinkText(
-            evo.evolution_details
-          )} → `;
+          text += `**${StringUtils.toTitleCase(
+            evo.species.name
+          )}** (${await this.getChainLinkText(evo.evolution_details)}) → `;
           text = await this.getChainLink(text, evo.evolves_to);
           return text;
         } else {
-          text += `${evo.species.name} ${await this.getChainLinkText(
-            evo.evolution_details
-          )} `;
+          text += `**${StringUtils.toTitleCase(
+            evo.species.name
+          )}** (${await this.getChainLinkText(evo.evolution_details)}) `;
           return text;
         }
       })
     );
-    return res.join('');
+    return res.join('\n');
   }
 
   private async getChainLinkText(evoDetails: EvolutionDetail[]) {
@@ -931,18 +928,19 @@ export class DexCommand implements Command {
 
         if (evoDetail.gender) {
           if (evoDetail.gender === 1) {
-            text += '(♂)';
+            text += ' (only ♀)';
           }
           if (evoDetail.gender === 2) {
-            text += '(♀)';
+            text += ' (only ♂)';
           }
         }
         if (evoDetail.held_item) {
           text += ` holding ${evoDetail.held_item.name.replaceAll('-', ' ')}`;
         }
         if (evoDetail.item) {
-          text += ` (${evoDetail.item.name.replaceAll('-', ' ')})`;
-          console.log(evoDetail.item);
+          text += `: ${StringUtils.toTitleCase(
+            evoDetail.item.name.replaceAll('-', ' ')
+          )}`;
         }
         if (evoDetail.known_move) {
           text += ` knowing ${evoDetail.known_move.name.replaceAll('-', ' ')}`;

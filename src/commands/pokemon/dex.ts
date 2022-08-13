@@ -25,6 +25,7 @@ import {
   Pokemon,
   PokemonAbility,
   PokemonSpecies,
+  PokemonSpeciesVariety,
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
@@ -262,22 +263,37 @@ export class DexCommand implements Command {
             "I couldn't find any PokéMon matching that name or ID."
           );
         }
-
-        const embed = await this.createPokemonEmbed(pokemon, species, evoChain);
+        const pages: EmbedBuilder[] = [];
+        const baseEmbed = await this.createPokemonEmbed(
+          pokemon,
+          species,
+          evoChain
+        );
+        pages.push(baseEmbed);
         const abilityEmbed = this.createPokemonAbilityPageEmbed(
           pokemon,
           species,
           abilities
         );
+        pages.push(abilityEmbed);
         const pdr = this.getDamageRelations(pokemon.types);
         const pdrEmbed = this.createPDREmbedPage(pdr, pokemon, species);
+        pages.push(pdrEmbed);
+
+        if (species.varieties.length > 1) {
+          const additionalFormsEmbed = this.createAdditionalFormsEmbed(
+            pokemon,
+            species
+          );
+          pages.push(additionalFormsEmbed);
+        }
+
         const actionRow = this.createActionRow(pokemon.species.name);
-        const paginatedEmbed = new ExtendedPaginationEmbed(
-          interaction,
-          [embed, abilityEmbed, pdrEmbed],
-          [actionRow]
-        );
-        // InteractionUtils.send(interaction, embed, [actionRow]);
+
+        const paginatedEmbed = new ExtendedPaginationEmbed(interaction, pages, [
+          actionRow,
+        ]);
+
         paginatedEmbed.start();
         break;
       }
@@ -510,13 +526,21 @@ export class DexCommand implements Command {
       )}: Abilities`
     );
     const fields: EmbedField[] = abilities.map((ability: Ability) => {
+      let effect: string;
+      if (ability.effect_entries.length > 0) {
+        effect = ability.effect_entries.find((entry) => {
+          return entry.language.name === 'en';
+        }).short_effect;
+      } else {
+        effect = ability.flavor_text_entries.find((entry) => {
+          return entry.language.name === 'en';
+        }).flavor_text;
+      }
       return {
         name: ability.names.find((abilityName) => {
           return abilityName.language.name === 'en';
         }).name,
-        value: ability.effect_entries.find((entry) => {
-          return entry.language.name === 'en';
-        }).short_effect,
+        value: effect,
         inline: false,
       };
     });
@@ -1019,5 +1043,38 @@ export class DexCommand implements Command {
       })
     );
     return output.join(', ');
+  }
+
+  private createAdditionalFormsEmbed(
+    pokemon: Pokemon,
+    species: PokemonSpecies
+  ) {
+    const embed = new EmbedBuilder();
+    embed.setTitle(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+        pokemon.name
+      )}: Forms`
+    );
+
+    const forms = species.varieties
+      .map(
+        (variety) =>
+          `• ${StringUtils.toTitleCase(
+            variety.pokemon.name.replaceAll('-', ' ')
+          )}`
+      )
+      .join('\n');
+    const fields = [
+      {
+        name: '\u200B',
+        value: forms,
+        inline: false,
+      },
+    ];
+    embed.setThumbnail(pokemon.sprites.front_default);
+    embed.setColor(typeColors[pokemon.types[0].type.name]);
+    embed.addFields(fields);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
   }
 }

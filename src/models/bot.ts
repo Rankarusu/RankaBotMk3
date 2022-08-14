@@ -3,9 +3,9 @@ import { InteractionType, Routes } from 'discord-api-types/v10';
 import {
   ChatInputCommandInteraction,
   Client,
+  Events,
   Interaction,
   Message,
-  Events,
   MessageReaction,
   PartialMessageReaction,
   PartialUser,
@@ -14,6 +14,7 @@ import {
 import LogMessages from '../../logs/logs.json';
 import { Command } from '../commands';
 import {
+  AutoCompleteHandler,
   CommandHandler,
   MessageHandler,
   ReactionHandler,
@@ -35,7 +36,8 @@ export class Bot {
     private messageHandler: MessageHandler,
     private commandHandler: CommandHandler,
     private reactionHandler: ReactionHandler,
-    private selectMenuHandler: SelectMenuHandler
+    private selectMenuHandler: SelectMenuHandler,
+    private autoCompleteHandler: AutoCompleteHandler
   ) {}
 
   public async start(): Promise<void> {
@@ -120,6 +122,12 @@ export class Bot {
         );
       } catch (error) {
         Logger.error(LogMessages.error.selectMenu, error);
+      }
+    } else if (interaction.isAutocomplete()) {
+      try {
+        await this.autoCompleteHandler.process(interaction);
+      } catch (error) {
+        Logger.error(LogMessages.error.autoComplete, error);
       }
     }
   }

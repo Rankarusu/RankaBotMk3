@@ -33,6 +33,7 @@
     "apiRequest": "An error occurred while processing a '{HTTP_METHOD}' request to '{URL}'.",
     "databaseConnect": "An error occurred while connecting to the database.",
     "prismaError": "[Prisma] {TEXT}",
-    "selectMenu": "An error occurred while processing a select menu."
+    "selectMenu": "An error occurred while processing a select menu.",
+    "autoComplete": "An error occurred while processing an auto completion."
   }
 }

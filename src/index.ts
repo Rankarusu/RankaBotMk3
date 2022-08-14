@@ -31,6 +31,7 @@ import {
   UntimeoutCommand,
 } from './commands';
 import {
+  AutoCompleteHandler,
   CommandHandler,
   MessageHandler,
   ReactionHandler,
@@ -104,6 +105,7 @@ async function start(): Promise<void> {
   const messageHandler = new MessageHandler(triggerHandler);
   const reactionHandler = new ReactionHandler(reactions);
   const selectMenuHandler = new SelectMenuHandler(menus);
+  const autoCompleteHandler = new AutoCompleteHandler();
 
   // Bot
   bot = new Bot(
@@ -112,7 +114,8 @@ async function start(): Promise<void> {
     messageHandler,
     commandHandler,
     reactionHandler,
-    selectMenuHandler
+    selectMenuHandler,
+    autoCompleteHandler
   );
 
   // register help command so it can get all other commands from the handler

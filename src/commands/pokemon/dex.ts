@@ -17,7 +17,6 @@ import {
   ChainLink,
   EvolutionChain,
   EvolutionDetail,
-  EvolutionTriggers,
   Item,
   MainClient,
   Move,
@@ -25,7 +24,6 @@ import {
   Pokemon,
   PokemonAbility,
   PokemonSpecies,
-  PokemonSpeciesVariety,
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
@@ -35,11 +33,8 @@ import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 import { types } from '../../../data/pokemonDamageRelations.json';
+import { ExtendedPaginationEmbed } from '../../models/pagination-embed';
 import { PokemonDamageRelations } from '../../models/pokemon';
-import {
-  ExtendedPaginationEmbed,
-  PaginationEmbed,
-} from '../../models/pagination-embed';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -113,10 +108,6 @@ const evoChainRegex = new RegExp(
   /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//i
 );
 
-const evoTriggerRegex = new RegExp(
-  /https:\/\/pokeapi\.co\/api\/v2\/evolution-trigger\/(\d+)\//i
-);
-
 export class DexCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dex',
@@ -133,6 +124,7 @@ export class DexCommand implements Command {
             type: ApplicationCommandOptionType.String,
             description: 'the name or ID of a pokemon to search for',
             required: true,
+            autocomplete: true,
           },
         ],
       },
@@ -215,7 +207,7 @@ export class DexCommand implements Command {
 
   public category: CommandCategory = CommandCategory.POKEMON;
 
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.NONE;
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 

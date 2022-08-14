@@ -243,7 +243,9 @@ export class DexCommand implements Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  private api = new MainClient();
+  private api = new MainClient({
+    cacheOptions: { maxAge: 24 * 60 * 60 * 1000 }, //cache requests for a day
+  });
 
   public async execute(
     interaction: ChatInputCommandInteraction,
@@ -975,7 +977,6 @@ export class DexCommand implements Command {
   }
 
   private getDamageRelations(pokemonTypes: string[]): PokemonDamageRelations {
-    console.log(pokemonTypes);
     let type1: string;
     let type2: string;
     if (pokemonTypes.length === 1) {

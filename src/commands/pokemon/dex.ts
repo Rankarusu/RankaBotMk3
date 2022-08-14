@@ -199,6 +199,38 @@ export class DexCommand implements Command {
           },
         ],
       },
+      {
+        name: 'pdr',
+        type: ApplicationCommandOptionType.Subcommand,
+        description:
+          'Find out what types are strong against the selected type(s)',
+        options: [
+          {
+            name: 'type-1',
+            type: ApplicationCommandOptionType.String,
+            description: 'type',
+            required: true,
+            choices: Object.keys(types).map((type) => {
+              return {
+                name: type,
+                value: type,
+              };
+            }),
+          },
+          {
+            name: 'type-2',
+            type: ApplicationCommandOptionType.String,
+            description: 'type',
+            required: false,
+            choices: Object.keys(types).map((type) => {
+              return {
+                name: type,
+                value: type,
+              };
+            }),
+          },
+        ],
+      },
     ],
   };
 
@@ -268,7 +300,9 @@ export class DexCommand implements Command {
           abilities
         );
         pages.push(abilityEmbed);
-        const pdr = this.getDamageRelations(pokemon.types);
+        const pdr = this.getDamageRelations(
+          this.resolvePokemonTypes(pokemon.types)
+        );
         const pdrEmbed = this.createPDREmbedPage(pdr, pokemon, species);
         pages.push(pdrEmbed);
 
@@ -384,6 +418,14 @@ export class DexCommand implements Command {
         InteractionUtils.send(interaction, embed);
         break;
       }
+      case 'pdr': {
+        const type1 = interaction.options.getString('type-1');
+        const type2 = interaction.options.getString('type-2');
+        const pdr = this.getDamageRelations([type1, type2]);
+        const embed = this.createPDREmbed(pdr);
+        InteractionUtils.send(interaction, embed);
+        break;
+      }
     }
   }
 
@@ -492,20 +534,6 @@ export class DexCommand implements Command {
     return heightWeightField;
   }
 
-  private createAbilityEmbed(ability: Ability): EmbedBuilder {
-    const name = ability.names.find((abilityName) => {
-      return abilityName.language.name === 'en';
-    }).name;
-
-    const description = ability.effect_entries.find((entry) => {
-      return entry.language.name === 'en';
-    }).effect;
-
-    const embed = EmbedUtils.infoEmbed(description, name);
-    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
-    return embed;
-  }
-
   private createPokemonAbilityPageEmbed(
     pokemon: Pokemon,
     species: PokemonSpecies,
@@ -539,6 +567,216 @@ export class DexCommand implements Command {
     embed.setThumbnail(pokemon.sprites.front_default);
     embed.setColor(typeColors[pokemon.types[0].type.name]);
     embed.addFields(fields);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private createPDREmbedPage(
+    pokemonDamageRelations: PokemonDamageRelations,
+    pokemon?: Pokemon,
+    species?: PokemonSpecies
+  ) {
+    const embed = new EmbedBuilder();
+    const fields = this.createPDRFields(pokemonDamageRelations);
+
+    fields.unshift({
+      name: `(${pokemonDamageRelations.types
+        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
+        .join(' ')})`,
+      value: '\u200B',
+      inline: false,
+    });
+
+    embed.setTitle(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+        pokemon.name
+      )}: Strengths and Weaknesses`
+    );
+
+    if (pokemon) {
+      embed.setThumbnail(pokemon.sprites.front_default);
+    }
+
+    embed.setColor(typeColors[pokemonDamageRelations.types[0]]);
+    embed.addFields(fields.filter((field) => field.value !== ''));
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private createActionRow(name: string) {
+    const actionRow = new ActionRowBuilder<ButtonBuilder>();
+    const pokewikiButton = new ButtonBuilder()
+      .setLabel('PokéWiki')
+      .setStyle(ButtonStyle.Link)
+      .setURL(`https://www.pokewiki.de/${name}`);
+    const bulbapediaButton = new ButtonBuilder()
+      .setLabel('Bulbapedia')
+      .setStyle(ButtonStyle.Link)
+      .setURL(`https://bulbapedia.bulbagarden.net/wiki/${name}`);
+    actionRow.addComponents(pokewikiButton, bulbapediaButton);
+    return actionRow;
+  }
+
+  private createAdditionalFormsEmbed(
+    pokemon: Pokemon,
+    species: PokemonSpecies
+  ) {
+    const embed = new EmbedBuilder();
+    embed.setTitle(
+      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
+        pokemon.name
+      )}: Forms`
+    );
+
+    const forms = species.varieties
+      .map(
+        (variety) =>
+          `• ${StringUtils.toTitleCase(
+            variety.pokemon.name.replaceAll('-', ' ')
+          )}`
+      )
+      .join('\n');
+    const fields = [
+      {
+        name: '\u200B',
+        value: forms,
+        inline: false,
+      },
+    ];
+    embed.setThumbnail(pokemon.sprites.front_default);
+    embed.setColor(typeColors[pokemon.types[0].type.name]);
+    embed.addFields(fields);
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
+  }
+
+  private async getEvoChainField(evoChain: EvolutionChain) {
+    let text = `**${StringUtils.toTitleCase(evoChain.chain.species.name)}**`;
+    if (evoChain.chain.evolves_to.length > 0) {
+      text += ` → `;
+      text = await this.getChainLink(text, evoChain.chain.evolves_to);
+    }
+    return {
+      name: 'Evolution Chain',
+      value: text,
+      inline: true,
+    } as EmbedField;
+  }
+
+  private async getChainLink(text: string, evolves_to: ChainLink[]) {
+    const res = await Promise.all(
+      evolves_to.map(async (evo) => {
+        if (evo.evolves_to.length > 0) {
+          text += `**${StringUtils.toTitleCase(
+            evo.species.name
+          )}** (${await this.getChainLinkText(evo.evolution_details)}) → `;
+          text = await this.getChainLink(text, evo.evolves_to);
+          return text;
+        } else {
+          text += `**${StringUtils.toTitleCase(
+            evo.species.name
+          )}** (${await this.getChainLinkText(evo.evolution_details)}) `;
+          return text;
+        }
+      })
+    );
+    return res.join('\n');
+  }
+
+  private async getChainLinkText(evoDetails: EvolutionDetail[]) {
+    const output = await Promise.all(
+      evoDetails.map(async (evoDetail) => {
+        const trigger = await this.api.evolution.getEvolutionTriggerByName(
+          evoDetail.trigger.name
+        );
+
+        let text = trigger.names.find(
+          (entry) => entry.language.name === 'en'
+        ).name;
+
+        if (evoDetail.gender) {
+          if (evoDetail.gender === 1) {
+            text += ' (only ♀)';
+          }
+          if (evoDetail.gender === 2) {
+            text += ' (only ♂)';
+          }
+        }
+        if (evoDetail.held_item) {
+          text += ` holding ${evoDetail.held_item.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.item) {
+          text += `: ${StringUtils.toTitleCase(
+            evoDetail.item.name.replaceAll('-', ' ')
+          )}`;
+        }
+        if (evoDetail.known_move) {
+          text += ` knowing ${evoDetail.known_move.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.known_move_type) {
+          text += ` knowing a ${evoDetail.known_move_type.name}-type move`;
+        }
+        if (evoDetail.location) {
+          text += ` in ${evoDetail.location.name.replaceAll('-', ' ')}`;
+        }
+        if (evoDetail.min_affection) {
+          text += ` with at least ${evoDetail.min_affection} affection`;
+        }
+        if (evoDetail.min_beauty) {
+          text += ` with at least ${evoDetail.min_beauty} beauty`;
+        }
+        if (evoDetail.min_happiness) {
+          text += ` with at least ${evoDetail.min_happiness} happiness`;
+        }
+        if (evoDetail.min_level) {
+          text += ` (${evoDetail.min_level})`;
+        }
+        if (evoDetail.needs_overworld_rain) {
+          text += ` while it is raining`;
+        }
+        if (evoDetail.party_species) {
+          text += ` with a ${evoDetail.party_species.name} in the party`;
+        }
+        if (evoDetail.party_type) {
+          text += ` with a ${evoDetail.party_type.name}-type Pokémon in the party`;
+        }
+        if (evoDetail.relative_physical_stats !== null) {
+          switch (evoDetail.relative_physical_stats) {
+            case 1:
+              text += ` with Atk > Def`;
+              break;
+            case -1:
+              text += ` with Atk < Def`;
+              break;
+            case 0:
+              text += ` with Atk = Def`;
+          }
+        }
+        if (evoDetail.time_of_day) {
+          text += ` during the ${evoDetail.time_of_day}`;
+        }
+        if (evoDetail.trade_species) {
+          text += ` with ${evoDetail.trade_species.name}`;
+        }
+        if (evoDetail.turn_upside_down) {
+          text += ` while turning the console upside down`;
+        }
+        return text;
+      })
+    );
+    return output.join(', ');
+  }
+
+  private createAbilityEmbed(ability: Ability): EmbedBuilder {
+    const name = ability.names.find((abilityName) => {
+      return abilityName.language.name === 'en';
+    }).name;
+
+    const description = ability.effect_entries.find((entry) => {
+      return entry.language.name === 'en';
+    }).effect;
+
+    const embed = EmbedUtils.infoEmbed(description, name);
     embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
     return embed;
   }
@@ -718,30 +956,33 @@ export class DexCommand implements Command {
     return embed;
   }
 
-  private createActionRow(name: string) {
-    const actionRow = new ActionRowBuilder<ButtonBuilder>();
-    const pokewikiButton = new ButtonBuilder()
-      .setLabel('PokéWiki')
-      .setStyle(ButtonStyle.Link)
-      .setURL(`https://www.pokewiki.de/${name}`);
-    const bulbapediaButton = new ButtonBuilder()
-      .setLabel('Bulbapedia')
-      .setStyle(ButtonStyle.Link)
-      .setURL(`https://bulbapedia.bulbagarden.net/wiki/${name}`);
-    actionRow.addComponents(pokewikiButton, bulbapediaButton);
-    return actionRow;
+  private createPDREmbed(pokemonDamageRelations: PokemonDamageRelations) {
+    const embed = new EmbedBuilder();
+    const fields = this.createPDRFields(pokemonDamageRelations);
+    embed.setTitle(
+      `Effectivity of Moves against ${pokemonDamageRelations.types
+        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
+        .join(' ')} Pokemon`
+    );
+    embed.setColor(typeColors[pokemonDamageRelations.types[0]]);
+    embed.addFields(fields.filter((field) => field.value !== ''));
+    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
+    return embed;
   }
 
-  private getDamageRelations(
-    pokemonTypes: PokemonType[]
-  ): PokemonDamageRelations {
+  private resolvePokemonTypes(pokemonTypes: PokemonType[]): string[] {
+    return pokemonTypes.map((type) => type.type.name);
+  }
+
+  private getDamageRelations(pokemonTypes: string[]): PokemonDamageRelations {
+    console.log(pokemonTypes);
     let type1: string;
     let type2: string;
     if (pokemonTypes.length === 1) {
-      type1 = pokemonTypes[0].type.name;
+      type1 = pokemonTypes[0];
     } else {
-      type1 = pokemonTypes[0].type.name;
-      type2 = pokemonTypes[1].type.name;
+      type1 = pokemonTypes[0];
+      type2 = pokemonTypes[1];
     }
 
     const damageRelations = {
@@ -821,21 +1062,10 @@ export class DexCommand implements Command {
     return damageRelations;
   }
 
-  private createPDREmbedPage(
-    pokemonDamageRelations: PokemonDamageRelations,
-    pokemon?: Pokemon,
-    species?: PokemonSpecies
-  ) {
-    const embed = new EmbedBuilder();
+  private createPDRFields(
+    pokemonDamageRelations: PokemonDamageRelations
+  ): EmbedField[] {
     const fields: EmbedField[] = [];
-
-    fields.push({
-      name: `(${pokemonDamageRelations.types
-        .map((type) => `${typeEmoji[type]} ${StringUtils.toTitleCase(type)}`)
-        .join(' ')})`,
-      value: '\u200B',
-      inline: false,
-    });
 
     if (pokemonDamageRelations.x4.length > 0) {
       fields.push({
@@ -903,170 +1133,6 @@ export class DexCommand implements Command {
         inline: false,
       });
     }
-
-    embed.setTitle(
-      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
-      )}: Strengths and Weaknesses`
-    );
-
-    if (pokemon) {
-      embed.setThumbnail(pokemon.sprites.front_default);
-    }
-
-    embed.setColor(typeColors[pokemonDamageRelations.types[0]]);
-    embed.addFields(fields.filter((field) => field.value !== ''));
-    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
-    return embed;
-  }
-
-  private async getEvoChainField(evoChain: EvolutionChain) {
-    let text = `**${StringUtils.toTitleCase(evoChain.chain.species.name)}**`;
-    if (evoChain.chain.evolves_to.length > 0) {
-      text += ` → `;
-      text = await this.getChainLink(text, evoChain.chain.evolves_to);
-    }
-    return {
-      name: 'Evolution Chain',
-      value: text,
-      inline: true,
-    } as EmbedField;
-  }
-
-  private async getChainLink(text: string, evolves_to: ChainLink[]) {
-    const res = await Promise.all(
-      evolves_to.map(async (evo) => {
-        if (evo.evolves_to.length > 0) {
-          text += `**${StringUtils.toTitleCase(
-            evo.species.name
-          )}** (${await this.getChainLinkText(evo.evolution_details)}) → `;
-          text = await this.getChainLink(text, evo.evolves_to);
-          return text;
-        } else {
-          text += `**${StringUtils.toTitleCase(
-            evo.species.name
-          )}** (${await this.getChainLinkText(evo.evolution_details)}) `;
-          return text;
-        }
-      })
-    );
-    return res.join('\n');
-  }
-
-  private async getChainLinkText(evoDetails: EvolutionDetail[]) {
-    const output = await Promise.all(
-      evoDetails.map(async (evoDetail) => {
-        const trigger = await this.api.evolution.getEvolutionTriggerByName(
-          evoDetail.trigger.name
-        );
-
-        let text = trigger.names.find(
-          (entry) => entry.language.name === 'en'
-        ).name;
-
-        if (evoDetail.gender) {
-          if (evoDetail.gender === 1) {
-            text += ' (only ♀)';
-          }
-          if (evoDetail.gender === 2) {
-            text += ' (only ♂)';
-          }
-        }
-        if (evoDetail.held_item) {
-          text += ` holding ${evoDetail.held_item.name.replaceAll('-', ' ')}`;
-        }
-        if (evoDetail.item) {
-          text += `: ${StringUtils.toTitleCase(
-            evoDetail.item.name.replaceAll('-', ' ')
-          )}`;
-        }
-        if (evoDetail.known_move) {
-          text += ` knowing ${evoDetail.known_move.name.replaceAll('-', ' ')}`;
-        }
-        if (evoDetail.known_move_type) {
-          text += ` knowing a ${evoDetail.known_move_type.name}-type move`;
-        }
-        if (evoDetail.location) {
-          text += ` in ${evoDetail.location.name.replaceAll('-', ' ')}`;
-        }
-        if (evoDetail.min_affection) {
-          text += ` with at least ${evoDetail.min_affection} affection`;
-        }
-        if (evoDetail.min_beauty) {
-          text += ` with at least ${evoDetail.min_beauty} beauty`;
-        }
-        if (evoDetail.min_happiness) {
-          text += ` with at least ${evoDetail.min_happiness} happiness`;
-        }
-        if (evoDetail.min_level) {
-          text += ` (${evoDetail.min_level})`;
-        }
-        if (evoDetail.needs_overworld_rain) {
-          text += ` while it is raining`;
-        }
-        if (evoDetail.party_species) {
-          text += ` with a ${evoDetail.party_species.name} in the party`;
-        }
-        if (evoDetail.party_type) {
-          text += ` with a ${evoDetail.party_type.name}-type Pokémon in the party`;
-        }
-        if (evoDetail.relative_physical_stats !== null) {
-          switch (evoDetail.relative_physical_stats) {
-            case 1:
-              text += ` with Atk > Def`;
-              break;
-            case -1:
-              text += ` with Atk < Def`;
-              break;
-            case 0:
-              text += ` with Atk = Def`;
-          }
-        }
-        if (evoDetail.time_of_day) {
-          text += ` during the ${evoDetail.time_of_day}`;
-        }
-        if (evoDetail.trade_species) {
-          text += ` with ${evoDetail.trade_species.name}`;
-        }
-        if (evoDetail.turn_upside_down) {
-          text += ` while turning the console upside down`;
-        }
-        return text;
-      })
-    );
-    return output.join(', ');
-  }
-
-  private createAdditionalFormsEmbed(
-    pokemon: Pokemon,
-    species: PokemonSpecies
-  ) {
-    const embed = new EmbedBuilder();
-    embed.setTitle(
-      `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
-      )}: Forms`
-    );
-
-    const forms = species.varieties
-      .map(
-        (variety) =>
-          `• ${StringUtils.toTitleCase(
-            variety.pokemon.name.replaceAll('-', ' ')
-          )}`
-      )
-      .join('\n');
-    const fields = [
-      {
-        name: '\u200B',
-        value: forms,
-        inline: false,
-      },
-    ];
-    embed.setThumbnail(pokemon.sprites.front_default);
-    embed.setColor(typeColors[pokemon.types[0].type.name]);
-    embed.addFields(fields);
-    embed.setFooter({ text: 'Powered by the PokéAPI via Pokenode.ts' });
-    return embed;
+    return fields;
   }
 }

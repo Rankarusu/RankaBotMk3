@@ -76,8 +76,16 @@
     "value": "rattata"
   },
   {
+    "name": "Alolan Rattata",
+    "value": "rattata-alola"
+  },
+  {
     "name": "Raticate",
     "value": "raticate"
+  },
+  {
+    "name": "Alolan Raticate",
+    "value": "raticate-alola"
   },
   {
     "name": "Spearow",
@@ -104,6 +112,10 @@
     "value": "raichu"
   },
   {
+    "name": "Alolan Raichu",
+    "value": "raichu-alola"
+  },
+  {
     "name": "Sandshrew",
     "value": "sandshrew"
   },
@@ -112,8 +124,16 @@
     "value": "sandslash"
   },
   {
+    "name": "Alolan Sandshrew",
+    "value": "sandshrew-alola"
+  },
+  {
+    "name": "Alolan Sandslash",
+    "value": "sandslash-alola"
+  },
+  {
     "name": "Nidoran♀",
-    "value": "nidoran♀"
+    "value": "nidoran-f"
   },
   {
     "name": "Nidorina",
@@ -125,7 +145,7 @@
   },
   {
     "name": "Nidoran♂",
-    "value": "nidoran♂"
+    "value": "nidoran-m"
   },
   {
     "name": "Nidorino",
@@ -150,6 +170,14 @@
   {
     "name": "Ninetales",
     "value": "ninetales"
+  },
+  {
+    "name": "Alolan Vulpix",
+    "value": "vulpix-alola"
+  },
+  {
+    "name": "Alolan Ninetales",
+    "value": "ninetales-alola"
   },
   {
     "name": "Jigglypuff",
@@ -204,12 +232,32 @@
     "value": "dugtrio"
   },
   {
+    "name": "Alolan Diglett",
+    "value": "diglett-alola"
+  },
+  {
+    "name": "Alolan Dugtrio",
+    "value": "dugtrio-alola"
+  },
+  {
     "name": "Meowth",
     "value": "meowth"
   },
   {
     "name": "Persian",
     "value": "persian"
+  },
+  {
+    "name": "Galarian Meowth",
+    "value": "meowth-galar"
+  },
+  {
+    "name": "Alolan Meowth",
+    "value": "meowth-alola"
+  },
+  {
+    "name": "Alolan Persian",
+    "value": "persian-alola"
   },
   {
     "name": "Psyduck",
@@ -234,6 +282,14 @@
   {
     "name": "Arcanine",
     "value": "arcanine"
+  },
+  {
+    "name": "Hisuian Growlithe",
+    "value": "growlithe-hisui"
+  },
+  {
+    "name": "Hisuian Arcanine",
+    "value": "arcanine-hisui"
   },
   {
     "name": "Poliwag",
@@ -304,6 +360,18 @@
     "value": "golem"
   },
   {
+    "name": "Alolan Geodude",
+    "value": "geodude-alola"
+  },
+  {
+    "name": "Alolan Graveler",
+    "value": "graveler-alola"
+  },
+  {
+    "name": "Alolan Golem",
+    "value": "golem-alola"
+  },
+  {
     "name": "Ponyta",
     "value": "ponyta"
   },
@@ -312,12 +380,28 @@
     "value": "rapidash"
   },
   {
+    "name": "Galarian Ponyta",
+    "value": "ponyta-galar"
+  },
+  {
+    "name": "Galarian Rapidash",
+    "value": "rapidash-galar"
+  },
+  {
     "name": "Slowpoke",
     "value": "slowpoke"
   },
   {
     "name": "Slowbro",
     "value": "slowbro"
+  },
+  {
+    "name": "Galarian Slowpoke",
+    "value": "slowpoke-galar"
+  },
+  {
+    "name": "Galarian Slowbro",
+    "value": "slowbro-galar"
   },
   {
     "name": "Magnemite",
@@ -329,7 +413,11 @@
   },
   {
     "name": "Farfetch’d",
-    "value": "farfetch’d"
+    "value": "farfetchd"
+  },
+  {
+    "name": "Galarian Farfetch’d",
+    "value": "farfetchd-galar"
   },
   {
     "name": "Doduo",
@@ -354,6 +442,14 @@
   {
     "name": "Muk",
     "value": "muk"
+  },
+  {
+    "name": "Alolan Grimer",
+    "value": "grimer-alola"
+  },
+  {
+    "name": "Alolan Muk",
+    "value": "muk-alola"
   },
   {
     "name": "Shellder",
@@ -404,6 +500,14 @@
     "value": "electrode"
   },
   {
+    "name": "HisuianVoltorb",
+    "value": "voltorb-hisui"
+  },
+  {
+    "name": "Hisuian Electrode",
+    "value": "electrode-hisui"
+  },
+  {
     "name": "Exeggcute",
     "value": "exeggcute"
   },
@@ -412,12 +516,20 @@
     "value": "exeggutor"
   },
   {
+    "name": "Alolan Exeggutor",
+    "value": "exeggutor-alola"
+  },
+  {
     "name": "Cubone",
     "value": "cubone"
   },
   {
     "name": "Marowak",
     "value": "marowak"
+  },
+  {
+    "name": "Alolan Marowak",
+    "value": "marowak-alola"
   },
   {
     "name": "Hitmonlee",
@@ -488,6 +600,10 @@
     "value": "mr-mime"
   },
   {
+    "name": "Galarian Mr. Mime",
+    "value": "mr-mime-galar"
+  },
+  {
     "name": "Scyther",
     "value": "scyther"
   },
@@ -530,6 +646,10 @@
   {
     "name": "Eevee",
     "value": "eevee"
+  },
+  {
+    "name": "Eevee (Starter)",
+    "value": "eevee-starter"
   },
   {
     "name": "Vaporeon",
@@ -584,6 +704,18 @@
     "value": "moltres"
   },
   {
+    "name": "Galarian Articuno",
+    "value": "articuno-galar"
+  },
+  {
+    "name": "Galarian Zapdos",
+    "value": "zapdos-galar"
+  },
+  {
+    "name": "Galarian Moltres",
+    "value": "moltres-galar"
+  },
+  {
     "name": "Dratini",
     "value": "dratini"
   },
@@ -626,6 +758,10 @@
   {
     "name": "Typhlosion",
     "value": "typhlosion"
+  },
+  {
+    "name": "Hisuian Typhlosion",
+    "value": "typhlosion-hisui"
   },
   {
     "name": "Totodile",
@@ -796,6 +932,10 @@
     "value": "slowking"
   },
   {
+    "name": "Galarian Slowking",
+    "value": "slowking-galar"
+  },
+  {
     "name": "Misdreavus",
     "value": "misdreavus"
   },
@@ -844,6 +984,10 @@
     "value": "qwilfish"
   },
   {
+    "name": "Hisuian Qwilfish",
+    "value": "qwilfish-hisui"
+  },
+  {
     "name": "Scizor",
     "value": "scizor"
   },
@@ -886,6 +1030,10 @@
   {
     "name": "Corsola",
     "value": "corsola"
+  },
+  {
+    "name": "Galarian Corsola",
+    "value": "corsola-galar"
   },
   {
     "name": "Remoraid",
@@ -1052,8 +1200,16 @@
     "value": "zigzagoon"
   },
   {
+    "name": "Galarian Zigzagoon",
+    "value": "zigzagoon-galar"
+  },
+  {
     "name": "Linoone",
     "value": "linoone"
+  },
+  {
+    "name": "Galarian Linoone",
+    "value": "linoone-galar"
   },
   {
     "name": "Wurmple",
@@ -1404,6 +1560,18 @@
     "value": "castform"
   },
   {
+    "name": "Castform Sunny",
+    "value": "castform-sunny"
+  },
+  {
+    "name": "Castform Rainy",
+    "value": "castform-rainy"
+  },
+  {
+    "name": "Castform Snowy",
+    "value": "castform-snowy"
+  },
+  {
     "name": "Kecleon",
     "value": "kecleon"
   },
@@ -1528,8 +1696,16 @@
     "value": "kyogre"
   },
   {
+    "name": "Primal Kyogre",
+    "value": "kyogre-primal"
+  },
+  {
     "name": "Groudon",
     "value": "groudon"
+  },
+  {
+    "name": "Primal Groudon",
+    "value": "groudon-primal"
   },
   {
     "name": "Rayquaza",
@@ -1540,8 +1716,20 @@
     "value": "jirachi"
   },
   {
-    "name": "Deoxys",
+    "name": "Deoxys (Normal Forme)",
     "value": "deoxys"
+  },
+  {
+    "name": "Deoxys (Attack Forme)",
+    "value": "deoxys-attack"
+  },
+  {
+    "name": "Deoxys (Defense Forme)",
+    "value": "deoxys-defense"
+  },
+  {
+    "name": "Deoxys (Speed Forme)",
+    "value": "deoxys-speed"
   },
   {
     "name": "Turtwig",
@@ -1912,8 +2100,24 @@
     "value": "froslass"
   },
   {
-    "name": "Rotom",
-    "value": "rotom"
+    "name": "Rotom Heat",
+    "value": "rotom-heat"
+  },
+  {
+    "name": "Rotom Wash",
+    "value": "rotom-wash"
+  },
+  {
+    "name": "Rotom Frost",
+    "value": "rotom-frost"
+  },
+  {
+    "name": "Rotom Fan",
+    "value": "rotom-fan"
+  },
+  {
+    "name": "Rotom Mow",
+    "value": "rotom-mow"
   },
   {
     "name": "Uxie",
@@ -1932,8 +2136,16 @@
     "value": "dialga"
   },
   {
+    "name": "Dialga (Origin Forme)",
+    "value": "dialga-origin"
+  },
+  {
     "name": "Palkia",
     "value": "palkia"
+  },
+  {
+    "name": "Palkia (Origin Forme)",
+    "value": "palkia-origin"
   },
   {
     "name": "Heatran",
@@ -1944,8 +2156,12 @@
     "value": "regigigas"
   },
   {
-    "name": "Giratina",
-    "value": "giratina"
+    "name": "Giratina (Altered Frome)",
+    "value": "giratina-altered"
+  },
+  {
+    "name": "Giratina (Origin Frome)",
+    "value": "giratina-origin"
   },
   {
     "name": "Cresselia",
@@ -1964,8 +2180,12 @@
     "value": "darkrai"
   },
   {
-    "name": "Shaymin",
-    "value": "shaymin"
+    "name": "Shaymin (Land Forme)",
+    "value": "shaymin-land"
+  },
+  {
+    "name": "Shaymin (Sky Forme)",
+    "value": "shaymin-sky"
   },
   {
     "name": "Arceus",
@@ -2010,6 +2230,10 @@
   {
     "name": "Samurott",
     "value": "samurott"
+  },
+  {
+    "name": "Hisuian Samurott",
+    "value": "samurott-hisui"
   },
   {
     "name": "Patrat",
@@ -2196,8 +2420,20 @@
     "value": "lilligant"
   },
   {
-    "name": "Basculin",
-    "value": "basculin"
+    "name": "Hisuian Lilligant",
+    "value": "lilligant-hisui"
+  },
+  {
+    "name": "Basculin (Red Striped Form)",
+    "value": "basculin-red-striped-form"
+  },
+  {
+    "name": "Basculin (Blue Striped Form)",
+    "value": "basculin-blue-striped-form"
+  },
+  {
+    "name": "Basculin (White Striped Form)",
+    "value": "basculin-white-striped-form"
   },
   {
     "name": "Sandile",
@@ -2216,8 +2452,24 @@
     "value": "darumaka"
   },
   {
+    "name": "Galarian Darumaka",
+    "value": "darumaka-galar"
+  },
+  {
     "name": "Darmanitan",
-    "value": "darmanitan"
+    "value": "darmanitan-standard"
+  },
+  {
+    "name": "Darmanitan Zen Mode",
+    "value": "darmanitan-zen"
+  },
+  {
+    "name": "Galarian Darmanitan",
+    "value": "darmanitan-galar-standard"
+  },
+  {
+    "name": "Galarian Darmanitan Zen Mode",
+    "value": "darmanitan-galar-zen"
   },
   {
     "name": "Maractus",
@@ -2246,6 +2498,10 @@
   {
     "name": "Yamask",
     "value": "yamask"
+  },
+  {
+    "name": "Galarian Yamask",
+    "value": "yamask-galar"
   },
   {
     "name": "Cofagrigus",
@@ -2282,6 +2538,14 @@
   {
     "name": "Zoroark",
     "value": "zoroark"
+  },
+  {
+    "name": "Hisuian Zorua",
+    "value": "zorua-hisui"
+  },
+  {
+    "name": "Hisuian Zoroark",
+    "value": "zoroark-hisui"
   },
   {
     "name": "Minccino",
@@ -2472,6 +2736,10 @@
     "value": "stunfisk"
   },
   {
+    "name": "Galarian Stunfisk",
+    "value": "stunfisk-galar"
+  },
+  {
     "name": "Mienfoo",
     "value": "mienfoo"
   },
@@ -2510,6 +2778,10 @@
   {
     "name": "Braviary",
     "value": "braviary"
+  },
+  {
+    "name": "Hisuian Braviary",
+    "value": "braviary-hisui"
   },
   {
     "name": "Vullaby",
@@ -2560,12 +2832,20 @@
     "value": "virizion"
   },
   {
-    "name": "Tornadus",
-    "value": "tornadus"
+    "name": "Tornadus (Incarnate Forme)",
+    "value": "tornadus-incarnate"
   },
   {
-    "name": "Thundurus",
-    "value": "thundurus"
+    "name": "Tornadus (Therian Forme)",
+    "value": "tornadus-therian"
+  },
+  {
+    "name": "Thundurus (Incarnate Forme)",
+    "value": "thundurus-incarnate"
+  },
+  {
+    "name": "Thundurus (Therian Forme)",
+    "value": "thundurus-therian"
   },
   {
     "name": "Reshiram",
@@ -2576,20 +2856,40 @@
     "value": "zekrom"
   },
   {
-    "name": "Landorus",
-    "value": "landorus"
+    "name": "Landorus (Incarnate Forme)",
+    "value": "landorus-incarnate"
+  },
+  {
+    "name": "Landorus (Therian Forme)",
+    "value": "landorus-therian"
   },
   {
     "name": "Kyurem",
     "value": "kyurem"
   },
   {
-    "name": "Keldeo",
-    "value": "keldeo"
+    "name": "Black Kyurem",
+    "value": "kyurem-black"
   },
   {
-    "name": "Meloetta",
-    "value": "meloetta"
+    "name": "White Kyurem",
+    "value": "kyurem-white"
+  },
+  {
+    "name": "Keldeo",
+    "value": "keldeo-ordinary"
+  },
+  {
+    "name": "Keldeo (Resolute Forme)",
+    "value": "keldeo-resolute"
+  },
+  {
+    "name": "Meloetta (Aria Forme)",
+    "value": "meloetta-aria"
+  },
+  {
+    "name": "Meloetta (Pirouette Forme)",
+    "value": "meloetta-pirouette"
   },
   {
     "name": "Genesect",
@@ -2630,6 +2930,10 @@
   {
     "name": "Greninja",
     "value": "greninja"
+  },
+  {
+    "name": "Ash Greninja",
+    "value": "greninja-ash"
   },
   {
     "name": "Bunnelby",
@@ -2680,6 +2984,10 @@
     "value": "floette"
   },
   {
+    "name": "Eternal Floette",
+    "value": "floette-eternal"
+  },
+  {
     "name": "Florges",
     "value": "florges"
   },
@@ -2721,7 +3029,11 @@
   },
   {
     "name": "Aegislash",
-    "value": "aegislash"
+    "value": "aegislash-shield"
+  },
+  {
+    "name": "Aegislash (Blade Forme)",
+    "value": "aegislash-blade"
   },
   {
     "name": "Spritzee",
@@ -2824,6 +3136,14 @@
     "value": "goodra"
   },
   {
+    "name": "Hisuian Sliggoo",
+    "value": "sliggoo-hisui"
+  },
+  {
+    "name": "Hisuian Goodra",
+    "value": "goodra-hisui"
+  },
+  {
     "name": "Klefki",
     "value": "klefki"
   },
@@ -2836,8 +3156,20 @@
     "value": "trevenant"
   },
   {
+    "name": "Pumpkaboo (small)",
+    "value": "pumpkaboo-small"
+  },
+  {
     "name": "Pumpkaboo",
-    "value": "pumpkaboo"
+    "value": "pumpkaboo-average"
+  },
+  {
+    "name": "Pumpkaboo (large)",
+    "value": "pumpkaboo-large"
+  },
+  {
+    "name": "Pumpkaboo (super)",
+    "value": "pumpkaboo-super"
   },
   {
     "name": "Gourgeist",
@@ -2850,6 +3182,10 @@
   {
     "name": "Avalugg",
     "value": "avalugg"
+  },
+  {
+    "name": "Hisuian Avalugg",
+    "value": "avalugg-hisui"
   },
   {
     "name": "Noibat",
@@ -2869,7 +3205,15 @@
   },
   {
     "name": "Zygarde",
-    "value": "zygarde"
+    "value": "zygarde-50"
+  },
+  {
+    "name": "Zygarde (10% Forme)",
+    "value": "zygarde-10"
+  },
+  {
+    "name": "Zygarde (Complete Forme)",
+    "value": "zygarde-complete"
   },
   {
     "name": "Diancie",
@@ -2878,6 +3222,10 @@
   {
     "name": "Hoopa",
     "value": "hoopa"
+  },
+  {
+    "name": "Hoopa Unbound",
+    "value": "hoopa-unbound"
   },
   {
     "name": "Volcanion",
@@ -2894,6 +3242,10 @@
   {
     "name": "Decidueye",
     "value": "decidueye"
+  },
+  {
+    "name": "Hisuian Decidueye",
+    "value": "decidueye-hisui"
   },
   {
     "name": "Litten",
@@ -2960,8 +3312,20 @@
     "value": "crabominable"
   },
   {
-    "name": "Oricorio",
-    "value": "oricorio"
+    "name": "Oricorio (Baile Style)",
+    "value": "oricorio-baile"
+  },
+  {
+    "name": "Oricorio (Pom-Pom Style)",
+    "value": "oricorio-pom-pom"
+  },
+  {
+    "name": "Oricorio (Pa'u Style)",
+    "value": "oricorio-pau"
+  },
+  {
+    "name": "Oricorio (Sensu Style)",
+    "value": "oricorio-sensu"
   },
   {
     "name": "Cutiefly",
@@ -2976,12 +3340,24 @@
     "value": "rockruff"
   },
   {
-    "name": "Lycanroc",
-    "value": "lycanroc"
+    "name": "Lycanroc (Midday Form)",
+    "value": "lycanroc-midday"
+  },
+  {
+    "name": "Lycanroc (Midnight Form)",
+    "value": "lycanroc-midnight"
+  },
+  {
+    "name": "Lycanroc (Dusk Form)",
+    "value": "lycanroc-dusk"
   },
   {
     "name": "Wishiwashi",
-    "value": "wishiwashi"
+    "value": "wishiwashi-solo"
+  },
+  {
+    "name": "Wishiwashi School",
+    "value": "wishiwashi-school"
   },
   {
     "name": "Mareanie",
@@ -3092,8 +3468,12 @@
     "value": "silvally"
   },
   {
-    "name": "Minior",
-    "value": "minior"
+    "name": "Minior (Meteor Form)",
+    "value": "minior-red-meteor"
+  },
+  {
+    "name": "Minior (Core Form)",
+    "value": "minior-core"
   },
   {
     "name": "Komala",
@@ -3109,7 +3489,11 @@
   },
   {
     "name": "Mimikyu",
-    "value": "mimikyu"
+    "value": "mimikyu-disguised"
+  },
+  {
+    "name": "Mimikyu (Busted)",
+    "value": "mimikyu-busted"
   },
   {
     "name": "Bruxish",
@@ -3200,8 +3584,24 @@
     "value": "necrozma"
   },
   {
+    "name": "Dusk Mane Necrozma",
+    "value": "necrozma-dusk"
+  },
+  {
+    "name": "Dawn Wings Necrozma",
+    "value": "necrozma-dawn"
+  },
+  {
+    "name": "Ultra Necrozma",
+    "value": "necrozma-ultra"
+  },
+  {
     "name": "Magearna",
     "value": "magearna"
+  },
+  {
+    "name": "Original Color Magearna",
+    "value": "magearna-original"
   },
   {
     "name": "Marshadow",
@@ -3380,6 +3780,14 @@
     "value": "cramorant"
   },
   {
+    "name": "Cramorant (Gulping Form)",
+    "value": "cramorant-gulping"
+  },
+  {
+    "name": "Cramorant (Gorging Form)",
+    "value": "cramorant-gorging"
+  },
+  {
     "name": "Arrokuda",
     "value": "arrokuda"
   },
@@ -3392,8 +3800,12 @@
     "value": "toxel"
   },
   {
-    "name": "Toxtricity",
-    "value": "toxtricity"
+    "name": "Toxtricity (Amped Form)",
+    "value": "toxtricity-amped"
+  },
+  {
+    "name": "Toxtricity (Low-key Form)",
+    "value": "toxtricity-low-key"
   },
   {
     "name": "Sizzlipede",
@@ -3496,8 +3908,12 @@
     "value": "stonjourner"
   },
   {
-    "name": "Eiscue",
-    "value": "eiscue"
+    "name": "Eiscue (Ice Face)",
+    "value": "eiscue-ice"
+  },
+  {
+    "name": "Eiscue (Noice Face)",
+    "value": "eiscue-noice"
   },
   {
     "name": "Indeedee",
@@ -3505,7 +3921,11 @@
   },
   {
     "name": "Morpeko",
-    "value": "morpeko"
+    "value": "morpeko-full-belly"
+  },
+  {
+    "name": "Morpeko (Hangry Mode)",
+    "value": "morpeko-hangry"
   },
   {
     "name": "Cufant",
@@ -3552,8 +3972,16 @@
     "value": "zacian"
   },
   {
+    "name": "Zacian (Crowned Sword)",
+    "value": "zacian-crowned"
+  },
+  {
     "name": "Zamazenta",
     "value": "zamazenta"
+  },
+  {
+    "name": "Zamazenta (Crowned Shield)",
+    "value": "zamazenta-crowned"
   },
   {
     "name": "Eternatus",
@@ -3580,6 +4008,10 @@
     "value": "zarude"
   },
   {
+    "name": "Dada Zarude",
+    "value": "zarude-dada"
+  },
+  {
     "name": "Regieleki",
     "value": "regieleki"
   },
@@ -3598,6 +4030,50 @@
   {
     "name": "Calyrex",
     "value": "calyrex"
+  },
+  {
+    "name": "Ice Rider Calyrex",
+    "value": "calyrex-ice"
+  },
+  {
+    "name": "Shadow Rider Calyrex",
+    "value": "calyrex-shadow"
+  },
+  {
+    "name": "Wyrdeer",
+    "value": "wyrdeer"
+  },
+  {
+    "name": "Kleavor",
+    "value": "kleavor"
+  },
+  {
+    "name": "Ursaluna",
+    "value": "ursaluna"
+  },
+  {
+    "name": "Basculegion (Male)",
+    "value": "basculegion-male"
+  },
+  {
+    "name": "Basculegion (Female)",
+    "value": "basculegion-female"
+  },
+  {
+    "name": "Sneasler",
+    "value": "sneasler"
+  },
+  {
+    "name": "Overquwil",
+    "value": "overquwil"
+  },
+  {
+    "name": "Enamorus (Incarnate Forme)",
+    "value": "enamorus-incarnate"
+  },
+  {
+    "name": "Enamorus (Therian Forme)",
+    "value": "enamorus-therian"
   },
   {
     "name": "Mega Venusaur",
@@ -3852,8 +4328,12 @@
     "value": "sandaconda-gmax"
   },
   {
-    "name": "G-Max Toxtricity",
-    "value": "toxtricity-gmax"
+    "name": "G-Max Toxtricity (Amped Form)",
+    "value": "toxtricity-amped-gmax"
+  },
+  {
+    "name": "G-Max Toxtricity (Low-key Form)",
+    "value": "toxtricity-low-key-gmax"
   },
   {
     "name": "G-Max Centiscorch",
@@ -3906,5 +4386,65 @@
   {
     "name": "G-Max Urshifu (Rapid Strike Style)",
     "value": "urshifu-rapid-strike-gmax"
+  },
+  {
+    "name": "Pikachu Rock Star",
+    "value": "pikachu-rock-star"
+  },
+  {
+    "name": "Pikachu Belle",
+    "value": "pikachu-belle"
+  },
+  {
+    "name": "Pikachu Popstar",
+    "value": "pikachu-popstar"
+  },
+  {
+    "name": "Pikachu PhD",
+    "value": "pikachu-phd"
+  },
+  {
+    "name": "Pikachu Libre",
+    "value": "pikachu-libre"
+  },
+  {
+    "name": "Pikachu Cosplay",
+    "value": "pikachu-cosplay"
+  },
+  {
+    "name": "Pikachu Original Cap",
+    "value": "pikachu-original-cap"
+  },
+  {
+    "name": "Pikachu Hoenn Cap",
+    "value": "pikachu-hoenn-cap"
+  },
+  {
+    "name": "Pikachu Sinnoh Cap",
+    "value": "pikachu-sinnoh-cap"
+  },
+  {
+    "name": "Pikachu Unova Cap",
+    "value": "pikachu-unova-cap"
+  },
+  {
+    "name": "Pikachu Kalos Cap",
+    "value": "pikachu-kalos-cap"
+  },
+  {
+    "name": "Pikachu Alola Cap",
+    "value": "pikachu-alola-cap"
+  },
+  {
+    "name": "Pikachu Partner Cap",
+    "value": "pikachu-partner-cap"
+  },
+  {
+    "name": "Pikachu Starter",
+    "value": "pikachu-starter"
+  },
+  {
+    "name": "Pikachu World Cap",
+    "value": "pikachu-world-cap"
   }
 ]

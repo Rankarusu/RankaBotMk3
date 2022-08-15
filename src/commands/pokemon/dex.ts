@@ -456,7 +456,7 @@ export class DexCommand implements Command {
 
     embed.setTitle(
       `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
+        pokemon.name.replaceAll('-', ' ')
       )}`
     );
     embed.setDescription(`**${genus}**\n\n${flavorText}`);
@@ -544,7 +544,7 @@ export class DexCommand implements Command {
     const embed = new EmbedBuilder();
     embed.setTitle(
       `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
+        pokemon.name.replaceAll('-', ' ')
       )}: Abilities`
     );
     const fields: EmbedField[] = abilities.map((ability: Ability) => {
@@ -591,7 +591,7 @@ export class DexCommand implements Command {
 
     embed.setTitle(
       `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
+        pokemon.name.replaceAll('-', ' ')
       )}: Strengths and Weaknesses`
     );
 
@@ -626,7 +626,7 @@ export class DexCommand implements Command {
     const embed = new EmbedBuilder();
     embed.setTitle(
       `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
-        pokemon.name
+        pokemon.name.replaceAll('-', ' ')
       )}: Forms`
     );
 

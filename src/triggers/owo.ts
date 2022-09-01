@@ -9,7 +9,10 @@ export class OwoTrigger implements Trigger {
   requireGuild = true;
 
   conditionMet(msg: Message) {
-    return msg.content.toLowerCase().includes('trap');
+    return (
+      msg.content.toLowerCase().includes('trap') &&
+      !msg.content.toLowerCase().includes('are gay')
+    );
   }
 
   async execute(msg: Message, data: EventData) {

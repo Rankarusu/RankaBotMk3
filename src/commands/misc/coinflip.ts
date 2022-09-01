@@ -18,7 +18,7 @@ export class CoinflipCommand implements Command {
 
   public category: CommandCategory = CommandCategory.MISC;
 
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.NONE;
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 

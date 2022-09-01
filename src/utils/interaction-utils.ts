@@ -21,6 +21,7 @@ import { Command } from '../commands';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../../config/config.json';
 import { EventData } from '../models/event-data';
+import { EmbedUtils } from './embed-utils';
 
 const IGNORED_ERRORS = [
   RESTJSONErrorCodes.UnknownMessage,
@@ -163,6 +164,16 @@ export class InteractionUtils {
     //we set event data and throw so the command handler can take over.
     data.description = message;
     throw new Error(message);
+  }
+
+  public static sendWarning(
+    interaction: CommandInteraction,
+    data: EventData,
+    message: string
+  ) {
+    data.description = message;
+    const embed = EmbedUtils.warnEmbed(data);
+    InteractionUtils.send(interaction, embed);
   }
 
   public static canUse(

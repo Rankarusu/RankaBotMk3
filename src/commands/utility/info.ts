@@ -31,7 +31,6 @@ export class InfoCommand implements Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    //TODO: time formatter function
     const stats: EmbedField[] = [
       {
         name: 'Version',

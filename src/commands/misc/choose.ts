@@ -47,15 +47,25 @@ export class ChooseCommand implements Command {
         'Something went wrong while parsing your options, please try again'
       );
     }
+
+    if (optionsArr.includes('')) {
+      InteractionUtils.sendError(
+        data,
+        'Something went wrong while parsing your options, please try again'
+      );
+    }
+
     if (optionsArr.length < 2) {
-      data.description = 'Tough decision you got there...';
-      const embed = EmbedUtils.warnEmbed(data);
-      InteractionUtils.send(interaction, embed);
+      InteractionUtils.sendWarning(
+        interaction,
+        data,
+        'Tough decision you got there...'
+      );
       return;
     }
 
     const result = optionsArr[Math.floor(Math.random() * optionsArr.length)];
     const embed = EmbedUtils.infoEmbed(`🗳 ${result}`, 'Choose');
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 }

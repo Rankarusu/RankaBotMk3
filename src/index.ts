@@ -48,6 +48,7 @@ import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
 import { aniList } from './services/anilist';
+import { OwoTrigger } from './triggers/owo';
 
 const rest = new REST().setToken(Config.client.token);
 
@@ -94,7 +95,7 @@ async function start(): Promise<void> {
   const reactions: Reaction[] = [];
 
   // Triggers
-  const triggers: Trigger[] = [];
+  const triggers: Trigger[] = [new OwoTrigger()];
 
   // Select Menus
   const menus: SelectMenu[] = [];

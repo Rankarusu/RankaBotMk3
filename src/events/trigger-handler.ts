@@ -14,7 +14,7 @@ export class TriggerHandler implements EventHandler {
         return false;
       }
 
-      if (!trigger.triggered(msg)) {
+      if (!trigger.conditionMet(msg)) {
         return false;
       }
 

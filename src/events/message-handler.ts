@@ -1,4 +1,5 @@
 import { Message } from 'discord.js';
+import { PartialUtils } from '../utils';
 import { EventHandler } from './event-handler';
 import { TriggerHandler } from './trigger-handler';
 
@@ -10,5 +11,8 @@ export class MessageHandler implements EventHandler {
       // do not talk to yourself or other bots!
       return;
     }
+
+    // Process triggers
+    await this.triggerHandler.process(msg);
   }
 }

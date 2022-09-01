@@ -7,6 +7,7 @@ import {
   Interaction,
   Message,
   MessageReaction,
+  PartialMessage,
   PartialMessageReaction,
   PartialUser,
   User,
@@ -82,7 +83,7 @@ export class Bot {
     this.client.user.setActivity('Hello, World!');
   }
 
-  private async onMessage(msg: Message): Promise<void> {
+  private async onMessage(msg: Message | PartialMessage): Promise<void> {
     if (!this.ready) {
       return;
     }

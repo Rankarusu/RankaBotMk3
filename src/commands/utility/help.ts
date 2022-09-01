@@ -30,14 +30,7 @@ export class HelpCommand implements Command {
         type: ApplicationCommandOptionType.String,
         description: 'the command you need help with',
         required: false,
-        // we can register the help command afterwards so we can fetch all other commands and put them as choices.
-        // this is however not ideal, as we cannot have dynamic choices, nor more than 25 at a time.
-        // choices: bot.getCommands().map((command) => {
-        //   return {
-        //     name: command.metadata.name,
-        //     value: command.metadata.name,
-        //   };
-        // }),
+        autocomplete: true,
       },
     ],
   };
@@ -84,10 +77,8 @@ export class HelpCommand implements Command {
       } else {
         const desc = cmdhelp.metadata.description;
         const usage = cmdhelp.helpText;
-        // let prettyOptions: string[];
         let prettySubCommands: string[];
         if (cmdhelp.metadata.options) {
-          // prettyOptions = this.getPrettyOptions(cmdhelp);
           prettySubCommands = [this.getTree(cmdhelp)];
         }
 
@@ -96,7 +87,6 @@ export class HelpCommand implements Command {
           iconUrl,
           desc,
           usage,
-          // prettyOptions,
           prettySubCommands
         );
 

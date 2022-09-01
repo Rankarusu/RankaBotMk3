@@ -1,4 +1,5 @@
 import { AutocompleteInteraction } from 'discord.js';
+import { bot } from '..';
 import pokemon from '../../data/pokemon.json';
 import { EventHandler } from './event-handler';
 
@@ -25,6 +26,33 @@ export class AutoCompleteHandler implements EventHandler {
       }
       await intr.respond(
         filtered.map((choice) => ({ name: choice.name, value: choice.value }))
+      );
+    }
+
+    if (intr.commandName === 'help') {
+      const commands = bot.getCommands();
+      const focusedValue = intr.options.getFocused(true);
+      console.log(focusedValue);
+      const filtered = [];
+      let limit = 0;
+      for (const command of commands) {
+        if (
+          command.metadata.name
+            .toLowerCase()
+            .includes(focusedValue.value.toLowerCase())
+        ) {
+          filtered.push(command);
+          limit++;
+        }
+        if (limit === 10) {
+          break;
+        }
+      }
+      await intr.respond(
+        filtered.map((command) => ({
+          name: command.metadata.name,
+          value: command.metadata.name,
+        }))
       );
     }
   }

@@ -6,4 +6,5 @@ export { KingCrimsonTrigger } from './king-crimson';
 export { MarcoTrigger } from './marco';
 export { NoUTrigger } from './no-u';
 export { OwoTrigger } from './owo';
+export { PotOfGreedTrigger } from './pot-of-greed';
 export { Trigger } from './trigger';

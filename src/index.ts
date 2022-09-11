@@ -49,6 +49,9 @@ import {
   FubukinstrumentTrigger,
   KingCrimsonTrigger,
   MarcoTrigger,
+  NoUTrigger,
+  OwoTrigger,
+  PotOfGreedTrigger,
   Trigger,
 } from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
@@ -56,7 +59,6 @@ import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
 import { aniList } from './services/anilist';
-import { NoUTrigger, OwoTrigger } from './triggers';
 
 const rest = new REST().setToken(Config.client.token);
 
@@ -104,14 +106,15 @@ async function start(): Promise<void> {
 
   // Triggers
   const triggers: Trigger[] = [
-    new OwoTrigger(),
-    new NoUTrigger(),
     new AyyTrigger(),
+    new BeckonTrigger(),
     new FTrigger(),
     new FubukinstrumentTrigger(),
-    new BeckonTrigger(),
-    new MarcoTrigger(),
     new KingCrimsonTrigger(),
+    new MarcoTrigger(),
+    new NoUTrigger(),
+    new OwoTrigger(),
+    new PotOfGreedTrigger(),
   ];
 
   // Select Menus

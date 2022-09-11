@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=16.9.0"
   },
+  "files": [
+    "src/public/config.json"
+  ],
   "scripts": {
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}'",
     "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
@@ -13,12 +16,17 @@
     "prisma:gen": "npx prisma generate --schema src/services/prisma/schema.prisma",
     "prisma:pull": "npx prisma db pull --schema src/services/prisma/schema.prisma",
     "prisma:migrate": "npx prisma migrate dev --schema src/services/prisma/schema.prisma init",
-    "start": "ts-node src/index.ts",
+    "start:js": "node --trace-warnings dist/index.js",
+    "start:ts": "ts-node src/index.ts",
+    "clean-dist": "rm -rf ./dist/",
+    "prebuild": "npm run clean-dist",
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only --exit-child --watch src src/index.ts",
-    "prod": "npm run build && node dist/src/index.js",
+    "prod": "npm run build && npm run start:js",
     "watch": "tsc --watch",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "copy-static-assets": "ts-node copy-static-assets.ts",
+    "postbuild": "npm run copy-static-assets"
   },
   "keywords": [],
   "author": "",
@@ -46,6 +54,8 @@
   "devDependencies": {
     "@types/node": "^18.0.5",
     "@types/node-cron": "^3.0.2",
+    "@types/node-fetch": "^2.6.2",
+    "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "eslint": "^8.20.0",
@@ -58,6 +68,7 @@
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prisma": "^4.1.1",
+    "shelljs": "^0.8.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.4"

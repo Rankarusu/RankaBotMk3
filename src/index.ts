@@ -47,6 +47,7 @@ import {
   BeckonTrigger,
   FTrigger,
   FubukinstrumentTrigger,
+  MarcoTrigger,
   Trigger,
 } from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
@@ -108,6 +109,7 @@ async function start(): Promise<void> {
     new FTrigger(),
     new FubukinstrumentTrigger(),
     new BeckonTrigger(),
+    new MarcoTrigger(),
   ];
 
   // Select Menus

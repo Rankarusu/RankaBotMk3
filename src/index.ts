@@ -42,7 +42,7 @@ import { Bot } from './models/bot';
 import { Reaction } from './models/reaction';
 import { ActivityScheduler, Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
-import { Trigger } from './triggers';
+import { AyyTrigger, Trigger } from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
@@ -95,7 +95,11 @@ async function start(): Promise<void> {
   const reactions: Reaction[] = [];
 
   // Triggers
-  const triggers: Trigger[] = [new OwoTrigger(), new NoUTrigger()];
+  const triggers: Trigger[] = [
+    new OwoTrigger(),
+    new NoUTrigger(),
+    new AyyTrigger(),
+  ];
 
   // Select Menus
   const menus: SelectMenu[] = [];
@@ -118,10 +122,6 @@ async function start(): Promise<void> {
     selectMenuHandler,
     autoCompleteHandler
   );
-
-  // register help command so it can get all other commands from the handler
-  // Idea is postponed until we can have dynamic choices or more than 25 at a time.
-  // bot.registerHelpCommand();
 
   // Register Commands
   let commandsJson: RESTPostAPIChatInputApplicationCommandsJSONBody[];

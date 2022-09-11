@@ -47,6 +47,7 @@ import {
   BeckonTrigger,
   FTrigger,
   FubukinstrumentTrigger,
+  KingCrimsonTrigger,
   MarcoTrigger,
   Trigger,
 } from './triggers';
@@ -110,6 +111,7 @@ async function start(): Promise<void> {
     new FubukinstrumentTrigger(),
     new BeckonTrigger(),
     new MarcoTrigger(),
+    new KingCrimsonTrigger(),
   ];
 
   // Select Menus

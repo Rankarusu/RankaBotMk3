@@ -7,7 +7,9 @@ export class FTrigger implements Trigger {
   requireGuild = true;
 
   conditionMet(msg: Message) {
-    return msg.content.toLowerCase() === 'f';
+    const content = msg.content.toLowerCase();
+
+    return content === 'f';
   }
 
   async execute(msg: Message, data: EventData) {

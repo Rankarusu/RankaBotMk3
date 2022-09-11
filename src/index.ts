@@ -42,7 +42,12 @@ import { Bot } from './models/bot';
 import { Reaction } from './models/reaction';
 import { ActivityScheduler, Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
-import { AyyTrigger, FTrigger, Trigger } from './triggers';
+import {
+  AyyTrigger,
+  FTrigger,
+  FubukinstrumentTrigger,
+  Trigger,
+} from './triggers';
 // eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
@@ -100,6 +105,7 @@ async function start(): Promise<void> {
     new NoUTrigger(),
     new AyyTrigger(),
     new FTrigger(),
+    new FubukinstrumentTrigger(),
   ];
 
   // Select Menus

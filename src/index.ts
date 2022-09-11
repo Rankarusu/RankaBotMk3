@@ -54,7 +54,7 @@ import {
   PotOfGreedTrigger,
   Trigger,
 } from './triggers';
-// eslint-disable-next-line node/no-unpublished-import
+// // eslint-disable-next-line node/no-unpublished-import
 import Config from '../config/config.json';
 import LogMessages from '../logs/logs.json';
 import { SelectMenu } from './menus/select-menu';

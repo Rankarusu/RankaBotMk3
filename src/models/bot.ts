@@ -12,7 +12,7 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import LogMessages from '../../logs/logs.json';
+import LogMessages from '../public/logs/logs.json';
 import { Command } from '../commands';
 import {
   AutoCompleteHandler,
@@ -23,8 +23,7 @@ import {
 } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../config/config.json';
+import Config from '../public/config/config.json';
 
 export class Bot {
   private ready = false;

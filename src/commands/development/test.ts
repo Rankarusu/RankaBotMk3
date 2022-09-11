@@ -10,7 +10,8 @@ import {
 } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, PaginationEmbed } from '../../utils';
+import { PaginationEmbed } from '../../models/pagination-embed';
+import { EmbedUtils } from '../../utils';
 
 export class TestCommand implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

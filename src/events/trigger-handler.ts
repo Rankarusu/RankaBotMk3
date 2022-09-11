@@ -8,7 +8,7 @@ export class TriggerHandler implements EventHandler {
 
   constructor(private triggers: Trigger[]) {}
 
-  public async process(msg: Message): Promise<void> {
+  public process(msg: Message): Promise<void> {
     const triggers = this.triggers.filter((trigger) => {
       if (trigger.requireGuild && !msg.guild) {
         return false;

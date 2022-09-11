@@ -44,6 +44,7 @@ import { ActivityScheduler, Db, Logger } from './services';
 import { ReminderScheduler } from './services/reminder';
 import {
   AyyTrigger,
+  BeckonTrigger,
   FTrigger,
   FubukinstrumentTrigger,
   Trigger,
@@ -106,6 +107,7 @@ async function start(): Promise<void> {
     new AyyTrigger(),
     new FTrigger(),
     new FubukinstrumentTrigger(),
+    new BeckonTrigger(),
   ];
 
   // Select Menus

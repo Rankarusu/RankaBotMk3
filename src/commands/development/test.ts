@@ -78,6 +78,8 @@ export class TestCommand implements Command {
 
   public developerOnly?: boolean = true;
 
+  public nsfw?: boolean = true;
+
   public async execute(
     interaction: ChatInputCommandInteraction,
     data: EventData

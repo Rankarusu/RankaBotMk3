@@ -9,10 +9,10 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../../config/config.json';
+import Config from '../../public/config/config.json';
 
 import fs from 'fs';
+import path from 'path';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -41,7 +41,7 @@ export class HugCommand implements Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  private pathToImages = './data/hugs/';
+  private pathToImages = path.resolve(__dirname, '../../public/images/hugs/');
 
   public async execute(
     interaction: ChatInputCommandInteraction,
@@ -57,13 +57,14 @@ export class HugCommand implements Command {
 
   private getRandomHug() {
     const files = fs.readdirSync(this.pathToImages);
+
     const randomFile = files[Math.floor(Math.random() * files.length)];
     return randomFile;
   }
 
   private createHugEmbed(hugger: GuildMember, hugged: GuildMember) {
     const filename = this.getRandomHug();
-    const file = new AttachmentBuilder(`${this.pathToImages}${filename}`);
+    const file = new AttachmentBuilder(`${this.pathToImages}/${filename}`);
 
     let message: string;
 

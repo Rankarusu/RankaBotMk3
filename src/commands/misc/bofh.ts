@@ -2,7 +2,7 @@ import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-typ
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 // eslint-disable-next-line node/no-unpublished-import
-import bofh from '../../../data/bofh.json';
+import bofh from '../../public/data/bofh.json';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';

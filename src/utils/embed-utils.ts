@@ -6,8 +6,7 @@ import {
   GuildMember,
   User,
 } from 'discord.js';
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../config/config.json';
+import Config from '../public/config/config.json';
 import { EventData } from '../models/event-data';
 
 export class EmbedUtils {

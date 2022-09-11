@@ -7,16 +7,16 @@ import {
   ThreadChannel,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import LogMessages from '../../logs/logs.json';
+import LogMessages from '../public/logs/logs.json';
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../config/config.json';
+import Config from '../public/config/config.json';
+import path from 'path';
 
-const pathToImages = './data/pictures/';
+const pathToImages = path.resolve(__dirname, '../public/images/');
 const nsfwimage = 'nsfw.png';
 
 export class CommandHandler implements EventHandler {
@@ -121,7 +121,7 @@ export class CommandHandler implements EventHandler {
       if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
         data.description = 'lewd.';
         const embed = EmbedUtils.warnEmbed(data);
-        const image = new AttachmentBuilder(`${pathToImages}${nsfwimage}`);
+        const image = new AttachmentBuilder(`${pathToImages}/${nsfwimage}`);
         embed.setImage(`attachment://${nsfwimage}`);
         await InteractionUtils.send(interaction, embed, undefined, [image]);
         return;

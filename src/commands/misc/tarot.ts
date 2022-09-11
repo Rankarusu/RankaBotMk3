@@ -205,7 +205,7 @@ export class TarotCommand implements Command {
       fields
     );
     const file = new AttachmentBuilder(
-      `${this.deck.pathToImages}${reverse ? card.imgReverse : card.img}`
+      `${this.deck.pathToImages}/${reverse ? card.imgReverse : card.img}`
     );
     embed.setImage(`attachment://${reverse ? card.imgReverse : card.img}`);
     return { embed, file };

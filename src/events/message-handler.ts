@@ -1,5 +1,4 @@
 import { Message } from 'discord.js';
-import { PartialUtils } from '../utils';
 import { EventHandler } from './event-handler';
 import { TriggerHandler } from './trigger-handler';
 

@@ -1,7 +1,7 @@
 import { Client } from 'discord.js';
 import * as cron from 'node-cron';
 import { Logger } from '.';
-import LogMessages from '../../logs/logs.json';
+import LogMessages from '../public/logs/logs.json';
 
 export class ActivityScheduler {
   client: Client;

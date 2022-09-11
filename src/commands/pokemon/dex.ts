@@ -32,7 +32,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-import { types } from '../../../data/pokemonDamageRelations.json';
+import { types } from '../../public/data/pokemonDamageRelations.json';
 import { ExtendedPaginationEmbed } from '../../models/pagination-embed';
 import { PokemonDamageRelations } from '../../models/pokemon';
 

@@ -8,8 +8,7 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../../config/config.json';
+import Config from '../../public/config/config.json';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';

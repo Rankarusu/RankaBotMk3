@@ -1,8 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Logger } from '.';
-// eslint-disable-next-line node/no-unpublished-import
-import Config from '../../config/config.json';
-import LogMessages from '../../logs/logs.json';
+import Config from '../public/config/config.json';
+import LogMessages from '../public/logs/logs.json';
 import { LogEvent } from '../models/prisma-events';
 
 //prevent hot reloading from creating instances of the prisma client

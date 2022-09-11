@@ -1,4 +1,4 @@
-export { Command, CommandCategory, CommandDeferType } from './command';
+export { Command, CommandDeferType, CommandCategory } from './command';
 export { TestCommand } from './development/test';
 export { BofhCommand } from './misc/bofh';
 export { ChooseCommand } from './misc/choose';
@@ -16,9 +16,10 @@ export { PurgeCommand } from './moderation/purge';
 export { TimeoutCommand } from './moderation/timeout';
 export { UnbanCommand } from './moderation/unban';
 export { UntimeoutCommand } from './moderation/untimeout';
+export { Rule34Command } from './nsfw/rule34';
+export { DexCommand } from './pokemon/dex';
 export { HelpCommand } from './utility/help';
 export { InfoCommand } from './utility/info';
 export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
 export { AnimeCommand } from './weebshit/anime';
-export { DexCommand } from './pokemon/dex';

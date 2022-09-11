@@ -23,6 +23,7 @@ import {
   PollCommand,
   PurgeCommand,
   RemindCommand,
+  Rule34Command,
   StickerCommand,
   TarotCommand,
   TestCommand,
@@ -98,6 +99,7 @@ async function start(): Promise<void> {
     new StickerCommand(),
     new AnimeCommand(),
     new DexCommand(),
+    new Rule34Command(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

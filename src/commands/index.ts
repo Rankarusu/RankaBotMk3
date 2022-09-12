@@ -16,6 +16,7 @@ export { PurgeCommand } from './moderation/purge';
 export { TimeoutCommand } from './moderation/timeout';
 export { UnbanCommand } from './moderation/unban';
 export { UntimeoutCommand } from './moderation/untimeout';
+export { DanbooruCommand } from './nsfw/danbooru';
 export { Rule34Command } from './nsfw/rule34';
 export { DexCommand } from './pokemon/dex';
 export { HelpCommand } from './utility/help';

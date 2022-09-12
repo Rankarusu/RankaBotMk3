@@ -6,9 +6,13 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import axios, { AxiosResponse } from 'axios';
 import { EventData } from '../../models/event-data';
-import { InteractionUtils } from '../../utils';
+import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 import { Rule34Post } from '../../models/rule34post';
+import { triggerAsyncId } from 'async_hooks';
+
+const limit = 100;
+const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&`;
 
 export class Rule34Command implements Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -46,11 +50,41 @@ export class Rule34Command implements Command {
         description: 'a tag to search for',
         required: false,
       },
+      {
+        name: 'tag-06',
+        type: ApplicationCommandOptionType.String,
+        description: 'a tag to search for',
+        required: false,
+      },
+      {
+        name: 'tag-07',
+        type: ApplicationCommandOptionType.String,
+        description: 'a tag to search for',
+        required: false,
+      },
+      {
+        name: 'tag-08',
+        type: ApplicationCommandOptionType.String,
+        description: 'a tag to search for',
+        required: false,
+      },
+      {
+        name: 'tag-09',
+        type: ApplicationCommandOptionType.String,
+        description: 'a tag to search for',
+        required: false,
+      },
+      {
+        name: 'tag-10',
+        type: ApplicationCommandOptionType.String,
+        description: 'a tag to search for',
+        required: false,
+      },
     ],
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/rule34 `1girls` `gloves`';
+  public helpText = '/rule34 `1girls` `gloves` `fate_(series)`';
 
   public category: CommandCategory = CommandCategory.NSFW;
 
@@ -66,17 +100,46 @@ export class Rule34Command implements Command {
   ): Promise<void> {
     const tags = interaction.options.data
       .filter((option) => option.name.match(/tag-\d\d/g))
-      .map((tag) => tag.value);
-    const limit = 5;
-    const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&&json=1&limit=${limit}&tags=${tags.join(
-      ' '
-    )}`;
+      .map((tag) => tag.value) as string[];
+
+    const posts: Rule34Post[] = await this.getPost(tags, data);
+
+    if (posts.length === 0) {
+      InteractionUtils.sendWarning(
+        interaction,
+        data,
+        'I could not find anything matching your taste you sick fuck.'
+      );
+      return;
+    }
+
+    const post = posts[Math.floor(Math.random() * posts.length)];
+
+    const embed = EmbedUtils.infoEmbed(undefined, 'Rule34');
+    embed
+      .setFooter({ text: 'Powered by rule34.xxx' })
+      .setURL(`https://rule34.xxx/index.php?page=post&s=view&id=${post.id}`)
+      .setColor('#AAE5A4')
+      .setImage(post.file_url);
+
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private async getPost(
+    tags: string[],
+    data: EventData
+  ): Promise<Rule34Post[]> {
     let response: AxiosResponse;
     try {
       response = await axios.get(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
+        },
+        params: {
+          limit,
+          tags: tags.join(' '),
+          json: 1,
         },
       });
     } catch (error) {
@@ -85,8 +148,6 @@ export class Rule34Command implements Command {
         'An error occurred while communicating with the API'
       );
     }
-    const posts: Rule34Post[] = response.data;
-    const urls = posts.map((post) => post.file_url);
-    InteractionUtils.send(interaction, urls.join('\n'));
+    return response.data;
   }
 }

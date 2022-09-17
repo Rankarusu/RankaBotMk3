@@ -60,6 +60,7 @@ import Config from './public/config/config.json';
 import LogMessages from './public/logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
 import { aniList } from './services/anilist';
+import { lewds } from './services/lewds';
 
 const rest = new REST().setToken(Config.client.token);
 
@@ -177,6 +178,8 @@ async function start(): Promise<void> {
   activityScheduler.start();
   const aniListScheduler = aniList;
   aniListScheduler.start();
+  const lewdsScheduler = lewds;
+  lewdsScheduler.start();
 
   // Finally start the bot
   await bot.start();

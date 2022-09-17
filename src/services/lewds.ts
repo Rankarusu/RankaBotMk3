@@ -6,6 +6,8 @@ import LogMessages from '../public/logs/logs.json';
 
 const limit = 100;
 
+const validPostHints = ['link', 'image', 'hosted:video'];
+
 interface GuildCounter {
   [key: string]: number;
 }
@@ -13,13 +15,13 @@ interface GuildCounter {
 class Lewds {
   //implementing a Singleton that automatically gets new data from a MultiReddit.
 
-  private lewds: RedditPostData[];
+  private lewds: RedditPostData[] = [];
 
   private url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
 
   private next = '';
 
-  public guildCounters: GuildCounter[];
+  private guildCounters: GuildCounter[] = [];
 
   private static _instance: Lewds;
 
@@ -37,7 +39,7 @@ class Lewds {
       //try again in 30 seconds
     }
 
-    cron.schedule('* 0,15,30,45 * * *', async () => {
+    cron.schedule('0,15,30,45 * * * *', async () => {
       if (this.lewds.length >= 10000) {
         this.lewds = [];
         this.next = '';
@@ -57,40 +59,48 @@ class Lewds {
   }
 
   private async fetchLewds(after?: string): Promise<RedditListing> {
-    const data = await axios
-      .get<RedditListing>(this.url, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'axios',
-        },
-        params: {
-          limit: limit,
-          count: limit,
-          after: after,
-        },
-      })
-      .then((res) => {
-        return res.data;
-      });
+    let data;
+    try {
+      data = await axios
+        .get<RedditListing>(this.url, {
+          headers: {
+            Accept: 'application/json',
+            'User-Agent': 'axios',
+          },
+          params: {
+            limit: limit,
+            count: limit,
+            after: after,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        });
+    } catch (error) {
+      console.log(error);
+    }
     return data;
   }
 
   private getPosts(listing: RedditListing): RedditPostData[] {
-    const posts = listing.data.children.map((child: RedditPost) => {
-      return {
-        name: child.data.name,
-        subreddit: child.data.subreddit,
-        title: child.data.title,
-        url: child.data.url,
-        permalink: child.data.permalink,
-      } as RedditPostData;
-    });
+    const posts = listing.data.children
+      .filter((child) => validPostHints.includes(child.data.post_hint))
+      .map((child: RedditPost) => {
+        //check that we actually have media to display, otherwise the embeds might fail.
+        return {
+          name: child.data.name,
+          subreddit: child.data.subreddit,
+          title: child.data.title,
+          url: child.data.url,
+          permalink: child.data.permalink,
+        } as RedditPostData;
+      });
     return posts;
   }
 
   public getLewdsFromStash(amount: number, guildId: string): RedditPostData[] {
     //get point in lewds array where guild left off or make them start from the beginning.
-    let pos = this.guildCounters[guildId] ? this.guildCounters[guildId] : 0;
+    let pos = guildId in this.guildCounters ? this.guildCounters[guildId] : 0;
 
     const res: RedditPostData[] = [];
 
@@ -102,7 +112,6 @@ class Lewds {
     }
 
     this.guildCounters[guildId] = pos;
-
     return res;
   }
 }

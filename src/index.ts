@@ -20,6 +20,7 @@ import {
   HugCommand,
   InfoCommand,
   KickCommand,
+  LewdsCommand,
   PingCommand,
   PollCommand,
   PurgeCommand,
@@ -103,6 +104,7 @@ async function start(): Promise<void> {
     new DexCommand(),
     new Rule34Command(),
     new DanbooruCommand(),
+    new LewdsCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions
@@ -179,7 +181,7 @@ async function start(): Promise<void> {
   const aniListScheduler = aniList;
   aniListScheduler.start();
   const lewdsScheduler = lewds;
-  lewdsScheduler.start();
+  await lewdsScheduler.start();
 
   // Finally start the bot
   await bot.start();

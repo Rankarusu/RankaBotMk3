@@ -5,6 +5,8 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import { EventData } from '../../models/event-data';
+import { lewds } from '../../services/lewds';
+import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class LewdsCommand implements Command {
@@ -36,8 +38,28 @@ export class LewdsCommand implements Command {
 
   public nsfw?: boolean = true;
 
+  //TODO: put a rate limiter here.
+
   public async execute(
     interaction: ChatInputCommandInteraction,
     data: EventData
-  ): Promise<void> {}
+  ): Promise<void> {
+    const amount = interaction.options.getNumber('amount');
+
+    const posts = lewds.getLewdsFromStash(amount, interaction.guildId);
+    if (posts.length === 0) {
+      InteractionUtils.sendWarning(
+        interaction,
+        data,
+        'There are currently no more lewds available, please try again in a few minutes.'
+      );
+    }
+    posts.forEach(async (post) => {
+      const embed = EmbedUtils.infoEmbed(undefined, post.title)
+        .setURL(`https://reddit.com${post.permalink}`)
+        .setImage(post.url)
+        .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
+      await InteractionUtils.send(interaction, embed);
+    });
+  }
 }

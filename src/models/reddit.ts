@@ -9,6 +9,7 @@ export interface RedditPostData {
   name: string;
   permalink: string;
   url: string;
+  post_hint: string;
 }
 
 export interface RedditListing {

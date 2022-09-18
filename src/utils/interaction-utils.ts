@@ -52,7 +52,11 @@ export class InteractionUtils {
 
   public static async send(
     interaction: CommandInteraction | MessageComponentInteraction,
-    content: string | EmbedBuilder | InteractionReplyOptions,
+    content:
+      | string
+      | EmbedBuilder
+      | Array<EmbedBuilder>
+      | InteractionReplyOptions,
     // components?: APIActionRowComponent<APIMessageActionRowComponent>[],
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     files?: AttachmentBuilder[],
@@ -64,6 +68,8 @@ export class InteractionUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
       if (interaction.deferred || interaction.replied) {
         return (await interaction.followUp({
@@ -105,7 +111,7 @@ export class InteractionUtils {
 
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
-    content: string | EmbedBuilder,
+    content: string | EmbedBuilder | Array<EmbedBuilder>,
     // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
@@ -115,6 +121,8 @@ export class InteractionUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
       return (await intr.editReply({ ...options, components })) as Message;
     } catch (error) {
@@ -131,7 +139,11 @@ export class InteractionUtils {
 
   public static async update(
     intr: MessageComponentInteraction,
-    content?: string | EmbedBuilder | InteractionUpdateOptions,
+    content?:
+      | string
+      | EmbedBuilder
+      | Array<EmbedBuilder>
+      | InteractionUpdateOptions,
     // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
@@ -141,6 +153,8 @@ export class InteractionUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
 
       return (await intr.update({

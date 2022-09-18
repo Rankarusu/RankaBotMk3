@@ -54,12 +54,22 @@ export class LewdsCommand implements Command {
         'There are currently no more lewds available, please try again in a few minutes.'
       );
     }
-    posts.forEach(async (post) => {
-      const embed = EmbedUtils.infoEmbed(undefined, post.title)
+    const embeds = posts.map((post) => {
+      return EmbedUtils.infoEmbed(undefined, post.title)
         .setURL(`https://reddit.com${post.permalink}`)
         .setImage(post.url)
         .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
-      await InteractionUtils.send(interaction, embed);
+    });
+
+    //we partition the array into chunks of 5 to send less messages. discord limits embeds/message to 5
+    const chunks = [];
+    for (let i = 0; i < embeds.length; i += 5) {
+      const chunk = embeds.slice(i, i + 5);
+      chunks.push(chunk);
+    }
+
+    chunks.forEach(async (chunk) => {
+      await InteractionUtils.send(interaction, chunk);
     });
   }
 }

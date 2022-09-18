@@ -21,7 +21,7 @@ const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
 export class MessageUtils {
   public static async send(
     target: User | TextBasedChannel,
-    content: string | EmbedBuilder | MessageOptions
+    content: string | EmbedBuilder | Array<EmbedBuilder> | MessageOptions
   ): Promise<Message> {
     try {
       const options: MessageOptions =
@@ -29,6 +29,8 @@ export class MessageUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
       return await target.send(options);
     } catch (error) {
@@ -38,7 +40,7 @@ export class MessageUtils {
 
   public static async reply(
     msg: Message,
-    content: string | EmbedBuilder | MessageOptions
+    content: string | EmbedBuilder | Array<EmbedBuilder> | MessageOptions
   ): Promise<Message> {
     try {
       const options: MessageOptions =
@@ -46,6 +48,8 @@ export class MessageUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
       return await msg.reply(options);
     } catch (error) {
@@ -55,7 +59,7 @@ export class MessageUtils {
 
   public static async edit(
     msg: Message,
-    content?: string | EmbedBuilder | MessageEditOptions,
+    content?: string | EmbedBuilder | Array<EmbedBuilder> | MessageEditOptions,
     // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
@@ -65,7 +69,10 @@ export class MessageUtils {
           ? { content }
           : content instanceof EmbedBuilder
           ? { embeds: [content] }
+          : content instanceof Array<EmbedBuilder>
+          ? { embeds: content }
           : content;
+
       return await msg.edit({ ...options, components });
     } catch (error) {
       if (

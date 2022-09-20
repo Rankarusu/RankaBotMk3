@@ -18,4 +18,8 @@ export class StringUtils {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
+
+  public static truncate(str: string, n: number) {
+    return str.length > n ? str.slice(0, n - 3) + '...' : str;
+  }
 }

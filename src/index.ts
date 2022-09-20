@@ -24,6 +24,7 @@ import {
   PingCommand,
   PollCommand,
   PurgeCommand,
+  RedditCommand,
   RemindCommand,
   Rule34Command,
   StickerCommand,
@@ -105,6 +106,7 @@ async function start(): Promise<void> {
     new Rule34Command(),
     new DanbooruCommand(),
     new LewdsCommand(),
+    new RedditCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

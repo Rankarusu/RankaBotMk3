@@ -1,4 +1,4 @@
-export { Command, CommandDeferType, CommandCategory } from './command';
+export { Command, CommandCategory, CommandDeferType } from './command';
 export { TestCommand } from './development/test';
 export { BofhCommand } from './misc/bofh';
 export { ChooseCommand } from './misc/choose';
@@ -8,6 +8,7 @@ export { EightballCommand } from './misc/eightball';
 export { FactCommand } from './misc/fact';
 export { HugCommand } from './misc/hug';
 export { PollCommand } from './misc/poll';
+export { RedditCommand } from './misc/reddit';
 export { StickerCommand } from './misc/sticker';
 export { TarotCommand } from './misc/tarot';
 export { BanCommand } from './moderation/ban';

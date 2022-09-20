@@ -7,9 +7,11 @@ export interface RedditPostData {
   subreddit: string;
   title: string;
   name: string;
+  selftext: string;
   permalink: string;
   url: string;
   post_hint: string;
+  stickied: boolean;
 }
 
 export interface RedditListing {

@@ -3,15 +3,11 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  PermissionsString,
-} from 'discord.js';
+import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import { EventData } from '../../models/event-data';
 import { RedditListing, RedditPost, RedditPostData } from '../../models/reddit';
-import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
+import { InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
@@ -102,33 +98,23 @@ export class RedditCommand implements Command {
       await this.fetchPosts(subreddit, listing, amount + stickyLimit) // reddit has a sticky post limit of 2. we generally do not want to send those.
     );
 
-    const embeds: EmbedBuilder[] = [];
+    const links: string[] = [];
 
     posts.forEach((post) => {
-      if (!post.stickied && embeds.length < amount) {
-        const embed = EmbedUtils.infoEmbed(undefined, post.title)
-          .setColor('#FF4500') //reddit orange
-          .setURL(`https://reddit.com${post.permalink}`)
-          .setImage(post.url)
-          .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
-        if (post.selftext !== '') {
-          embed.setDescription(StringUtils.truncate(post.selftext, 1000));
-        }
-        embeds.push(embed);
+      //using id for shorter links
+      if (!post.stickied && links.length < amount) {
+        links.push(`${baseUrl}/r/${post.subreddit}/${post.id}`);
       }
     });
 
-    //TODO: check why external vid does not work
-
-    // we partition the array into chunks of 5 to send less messages. discord limits embeds/message to 5
     const chunks = [];
-    for (let i = 0; i < embeds.length; i += 5) {
-      const chunk = embeds.slice(i, i + 5);
+    for (let i = 0; i < links.length; i += 5) {
+      const chunk = links.slice(i, i + 5);
       chunks.push(chunk);
     }
 
     chunks.forEach(async (chunk) => {
-      await InteractionUtils.send(interaction, chunk);
+      await InteractionUtils.send(interaction, chunk.join('\n'));
     });
   }
 
@@ -165,11 +151,8 @@ export class RedditCommand implements Command {
   private getPosts(listing: RedditListing): RedditPostData[] {
     const posts = listing.data.children.map((child: RedditPost) => {
       return {
-        name: child.data.name,
+        id: child.data.id,
         subreddit: child.data.subreddit,
-        title: child.data.title,
-        selftext: child.data.selftext,
-        permalink: child.data.permalink,
         url: child.data.url,
         stickied: child.data.stickied,
       } as RedditPostData;

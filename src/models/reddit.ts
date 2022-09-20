@@ -12,6 +12,15 @@ export interface RedditPostData {
   url: string;
   post_hint: string;
   stickied: boolean;
+  ups: number;
+  downs: number;
+  over_18: boolean;
+  id: string;
+  media?: {
+    reddit_video?: {
+      fallback_url: string;
+    };
+  };
 }
 
 export interface RedditListing {

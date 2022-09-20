@@ -6,7 +6,7 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import { EventData } from '../../models/event-data';
 import { lewds } from '../../services/lewds';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { ArrayUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class LewdsCommand implements Command {
@@ -54,6 +54,7 @@ export class LewdsCommand implements Command {
         'There are currently no more lewds available, please try again in a few minutes.'
       );
     }
+    //even though embeds of videos do not work, we use our own embeds here just so we circumvent the "over 18?"-embed.
     const embeds = posts.map((post) => {
       return EmbedUtils.infoEmbed(undefined, post.title)
         .setURL(`https://reddit.com${post.permalink}`)
@@ -61,14 +62,9 @@ export class LewdsCommand implements Command {
         .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
     });
 
-    //we partition the array into chunks of 5 to send less messages. discord limits embeds/message to 5
-    const chunks = [];
-    for (let i = 0; i < embeds.length; i += 5) {
-      const chunk = embeds.slice(i, i + 5);
-      chunks.push(chunk);
-    }
+    const partitionedEmbeds = ArrayUtils.partition(embeds, 5);
 
-    chunks.forEach(async (chunk) => {
+    partitionedEmbeds.forEach(async (chunk) => {
       await InteractionUtils.send(interaction, chunk);
     });
   }

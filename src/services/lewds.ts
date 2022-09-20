@@ -1,23 +1,19 @@
-import axios from 'axios';
 import * as cron from 'node-cron';
 import { Logger } from '.';
-import { RedditListing, RedditPost, RedditPostData } from '../models/reddit';
+import { RedditPostData } from '../models/reddit';
 import LogMessages from '../public/logs/logs.json';
-
-const limit = 100;
-
-const validPostHints = ['link', 'image', 'hosted:video'];
+import { RedditUtils } from '../utils';
 
 interface GuildCounter {
   [key: string]: number;
 }
+const url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
+const limit = 100;
 
 class Lewds {
   //implementing a Singleton that automatically gets new data from a MultiReddit.
 
   private lewds: RedditPostData[] = [];
-
-  private url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
 
   private next = '';
 
@@ -32,9 +28,9 @@ class Lewds {
   public async start() {
     try {
       //get data once and then in intervals.
-      const lewds = await this.fetchLewds(this.next);
+      const lewds = await RedditUtils.fetchPosts(url, this.next, limit);
       this.next = lewds.data.after;
-      this.lewds.push(...this.getPosts(lewds));
+      this.lewds.push(...RedditUtils.getPostList(lewds, true));
     } catch (error) {
       //try again in 30 seconds
     }
@@ -56,46 +52,6 @@ class Lewds {
 
   public static get Instance() {
     return this._instance || (this._instance = new this());
-  }
-
-  private async fetchLewds(after?: string): Promise<RedditListing> {
-    let data;
-    try {
-      data = await axios
-        .get<RedditListing>(this.url, {
-          headers: {
-            Accept: 'application/json',
-            'User-Agent': 'axios',
-          },
-          params: {
-            limit: limit,
-            count: limit,
-            after: after,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        });
-    } catch (error) {
-      console.log(error);
-    }
-    return data;
-  }
-
-  private getPosts(listing: RedditListing): RedditPostData[] {
-    const posts = listing.data.children
-      .filter((child) => validPostHints.includes(child.data.post_hint))
-      .map((child: RedditPost) => {
-        //check that we actually have media to display, otherwise the embeds might fail.
-        return {
-          name: child.data.name,
-          subreddit: child.data.subreddit,
-          title: child.data.title,
-          url: child.data.url,
-          permalink: child.data.permalink,
-        } as RedditPostData;
-      });
-    return posts;
   }
 
   public getLewdsFromStash(amount: number, guildId: string): RedditPostData[] {

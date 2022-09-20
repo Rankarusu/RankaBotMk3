@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -6,8 +5,8 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 
 import { EventData } from '../../models/event-data';
-import { RedditListing, RedditPost, RedditPostData } from '../../models/reddit';
-import { InteractionUtils } from '../../utils';
+import { InteractionUtils, RedditUtils } from '../../utils';
+import { ArrayUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
@@ -94,8 +93,9 @@ export class RedditCommand implements Command {
       return;
     }
 
-    const posts = this.getPosts(
-      await this.fetchPosts(subreddit, listing, amount + stickyLimit) // reddit has a sticky post limit of 2. we generally do not want to send those.
+    const url = `${baseUrl}/r/${subreddit}/${listing}.json`;
+    const posts = RedditUtils.getPostList(
+      await RedditUtils.fetchPosts(url, null, amount + stickyLimit) // reddit has a sticky post limit of 2. we generally do not want to send those.
     );
 
     const links: string[] = [];
@@ -107,56 +107,10 @@ export class RedditCommand implements Command {
       }
     });
 
-    const chunks = [];
-    for (let i = 0; i < links.length; i += 5) {
-      const chunk = links.slice(i, i + 5);
-      chunks.push(chunk);
-    }
+    const partitionedLinks = ArrayUtils.partition(links, 5);
 
-    chunks.forEach(async (chunk) => {
+    partitionedLinks.forEach(async (chunk) => {
       await InteractionUtils.send(interaction, chunk.join('\n'));
     });
-  }
-
-  private async fetchPosts(
-    subreddit: string,
-    listing: string,
-    amount: number
-  ): Promise<RedditListing> {
-    let data;
-    try {
-      data = await axios
-        .get<RedditListing>(`${baseUrl}/r/${subreddit}/${listing}.json`, {
-          headers: {
-            Accept: 'application/json',
-            'User-Agent': 'axios',
-          },
-          params: {
-            limit: amount,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        });
-    } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-      return;
-    }
-    return data;
-  }
-
-  private getPosts(listing: RedditListing): RedditPostData[] {
-    const posts = listing.data.children.map((child: RedditPost) => {
-      return {
-        id: child.data.id,
-        subreddit: child.data.subreddit,
-        url: child.data.url,
-        stickied: child.data.stickied,
-      } as RedditPostData;
-    });
-    return posts;
   }
 }

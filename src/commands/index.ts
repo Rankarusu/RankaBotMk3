@@ -1,4 +1,4 @@
-export { Command, CommandCategory, CommandDeferType } from './command';
+export { Command, CommandDeferType, CommandCategory } from './command';
 export { TestCommand } from './development/test';
 export { BofhCommand } from './misc/bofh';
 export { ChooseCommand } from './misc/choose';
@@ -26,3 +26,4 @@ export { InfoCommand } from './utility/info';
 export { PingCommand } from './utility/ping';
 export { RemindCommand } from './utility/remind';
 export { AnimeCommand } from './weebshit/anime';
+export { UwuifyCommand } from './weebshit/uwuify';

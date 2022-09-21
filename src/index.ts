@@ -33,6 +33,7 @@ import {
   TimeoutCommand,
   UnbanCommand,
   UntimeoutCommand,
+  UwuifyCommand,
 } from './commands';
 import {
   AutoCompleteHandler,
@@ -107,6 +108,7 @@ async function start(): Promise<void> {
     new DanbooruCommand(),
     new LewdsCommand(),
     new RedditCommand(),
+    new UwuifyCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

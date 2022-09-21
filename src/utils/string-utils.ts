@@ -1,5 +1,4 @@
 import { CommandInteractionOption } from 'discord.js';
-import { words } from 'lodash';
 
 export class StringUtils {
   public static prettifyCommandOptions(

@@ -7,7 +7,7 @@ import {
   EmojiResolvable,
   Message,
   MessageEditOptions,
-  MessageOptions,
+  BaseMessageOptions,
   MessageReaction,
   SelectMenuBuilder,
   StartThreadOptions,
@@ -21,10 +21,10 @@ const IGNORED_ERRORS = [RESTJSONErrorCodes.UnknownMessage];
 export class MessageUtils {
   public static async send(
     target: User | TextBasedChannel,
-    content: string | EmbedBuilder | Array<EmbedBuilder> | MessageOptions
+    content: string | EmbedBuilder | Array<EmbedBuilder> | BaseMessageOptions
   ): Promise<Message> {
     try {
-      const options: MessageOptions =
+      const options: BaseMessageOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof EmbedBuilder
@@ -40,10 +40,10 @@ export class MessageUtils {
 
   public static async reply(
     msg: Message,
-    content: string | EmbedBuilder | Array<EmbedBuilder> | MessageOptions
+    content: string | EmbedBuilder | Array<EmbedBuilder> | BaseMessageOptions
   ): Promise<Message> {
     try {
-      const options: MessageOptions =
+      const options: BaseMessageOptions =
         typeof content === 'string'
           ? { content }
           : content instanceof EmbedBuilder

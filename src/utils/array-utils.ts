@@ -10,4 +10,13 @@ export class ArrayUtils {
     }
     return chunks;
   }
+
+  public static groupBy<T>(data: Array<T>, key: string) {
+    return data.reduce(function (storage, item) {
+      const group = item[key];
+      storage[group] = storage[group] || [];
+      storage[group].push(item);
+      return storage;
+    }, {});
+  }
 }

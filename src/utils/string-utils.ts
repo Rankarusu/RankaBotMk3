@@ -1,4 +1,5 @@
 import { CommandInteractionOption } from 'discord.js';
+import { words } from 'lodash';
 
 export class StringUtils {
   public static prettifyCommandOptions(
@@ -9,6 +10,10 @@ export class StringUtils {
       optionString += `${options[i].name}: ${options[i].value} `;
     }
     return optionString;
+  }
+
+  public static capitalize(str: string) {
+    return str.toLowerCase().charAt(0).toUpperCase() + str.slice(1);
   }
 
   public static toTitleCase(str: string) {

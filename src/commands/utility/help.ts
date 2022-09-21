@@ -9,13 +9,17 @@ import {
   CommandInteraction,
   PermissionsString,
 } from 'discord.js';
-import { capitalize, groupBy } from 'lodash';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import {
+  ArrayUtils,
+  EmbedUtils,
+  InteractionUtils,
+  StringUtils,
+} from '../../utils';
 
 export class HelpCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -105,13 +109,15 @@ export class HelpCommand extends Command {
       );
     });
 
-    const groupedCommands = groupBy(filteredCommands, 'category');
+    const groupedCommands = ArrayUtils.groupBy(filteredCommands, 'category');
     const output: { [key: string]: string[] } = {};
     Object.keys(groupedCommands).forEach((key) => {
-      output[capitalize(key)] = groupedCommands[key].map((command) => {
-        //TODO: handle subcommands and subcommand groups differently
-        return `</${command.metadata.name}:${command.id}> - ${command.metadata.description}`;
-      });
+      output[StringUtils.capitalize(key)] = groupedCommands[key].map(
+        (command: Command) => {
+          //TODO: handle subcommands and subcommand groups differently
+          return `</${command.metadata.name}:${command.id}> - ${command.metadata.description}`;
+        }
+      );
     });
     return output;
   }

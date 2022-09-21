@@ -41,9 +41,9 @@ class Lewds {
         this.next = '';
       }
 
-      const lewds = await this.fetchLewds(this.next);
+      const lewds = await RedditUtils.fetchPosts(this.next);
       this.next = lewds.data.after;
-      this.lewds.push(...this.getPosts(lewds));
+      this.lewds.push(...RedditUtils.getPostList(lewds));
     });
     Logger.info(
       LogMessages.info.cronInfo.replaceAll('{TEXT}', 'Lewds scheduler started')

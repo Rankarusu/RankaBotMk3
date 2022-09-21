@@ -13,7 +13,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class UntimeoutCommand implements Command {
+export class UntimeoutCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'untimeout',
     description: 'enables text communication for a user again',

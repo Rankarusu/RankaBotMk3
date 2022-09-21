@@ -6,7 +6,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class CoinflipCommand implements Command {
+export class CoinflipCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'coinflip',
     description: 'Flip a coin',

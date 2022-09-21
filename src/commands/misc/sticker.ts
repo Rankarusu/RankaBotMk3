@@ -19,7 +19,7 @@ const allowedTypes = [
   'video/mp4',
 ];
 
-export class StickerCommand implements Command {
+export class StickerCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'sticker',
     description: 'Save and post custom stickers on your server',

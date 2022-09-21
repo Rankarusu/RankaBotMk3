@@ -6,7 +6,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class DadJokeCommand implements Command {
+export class DadJokeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dadjoke',
     description: 'post a dad joke',

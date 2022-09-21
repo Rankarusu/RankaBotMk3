@@ -7,7 +7,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class BofhCommand implements Command {
+export class BofhCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'bofh',
     description: 'generates a bastard-operator-from-hell™-like excuse',

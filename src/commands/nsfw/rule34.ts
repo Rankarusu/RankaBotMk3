@@ -14,7 +14,7 @@ import { triggerAsyncId } from 'async_hooks';
 const limit = 100;
 const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&`;
 
-export class Rule34Command implements Command {
+export class Rule34Command extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'rule34',
     description: 'browse rule34',

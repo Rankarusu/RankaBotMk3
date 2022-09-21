@@ -13,7 +13,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class BanCommand implements Command {
+export class BanCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'ban',
     description: 'Bans a user from the server',

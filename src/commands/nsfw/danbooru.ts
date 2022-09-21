@@ -12,7 +12,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 const limit = 100;
 const url = 'https://danbooru.donmai.us/posts.json';
 
-export class DanbooruCommand implements Command {
+export class DanbooruCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'danbooru',
     description: 'browse danbooru',

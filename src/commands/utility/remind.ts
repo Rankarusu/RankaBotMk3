@@ -11,7 +11,7 @@ import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
 
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class RemindCommand implements Command {
+export class RemindCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'remind',
     description: 'reminds you of something after a certain amount of time.',

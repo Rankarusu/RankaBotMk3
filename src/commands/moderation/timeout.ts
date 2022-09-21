@@ -15,7 +15,7 @@ import { EventData } from '../../models/event-data';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class TimeoutCommand implements Command {
+export class TimeoutCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'timeout',
     description: 'disables text communication for a user',

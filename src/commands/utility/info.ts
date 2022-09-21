@@ -11,7 +11,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 import os from 'os';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 
-export class InfoCommand implements Command {
+export class InfoCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'info',
     description: 'display information about me',

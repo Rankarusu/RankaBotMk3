@@ -15,7 +15,7 @@ import { Tarot } from '../../services/tarot';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class TarotCommand implements Command {
+export class TarotCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'tarot',
     description: 'draw or search for tarot cards',

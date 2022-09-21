@@ -11,9 +11,9 @@ import {
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
-import { EmbedUtils } from '../../utils';
+import { EmbedUtils, InteractionUtils } from '../../utils';
 
-export class TestCommand implements Command {
+export class TestCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'test',
     description: 'test',
@@ -22,47 +22,8 @@ export class TestCommand implements Command {
     options: [
       {
         name: 'test-option',
-        type: ApplicationCommandOptionType.SubcommandGroup,
+        type: ApplicationCommandOptionType.String,
         description: 'test-option-description',
-
-        options: [
-          {
-            name: 'test-option1',
-            type: ApplicationCommandOptionType.Subcommand,
-            description: 'test-option-description1',
-
-            options: [
-              {
-                name: 'test-option2',
-                type: ApplicationCommandOptionType.String,
-                description: 'test-option-description',
-              },
-              {
-                name: 'test-option3',
-                type: ApplicationCommandOptionType.String,
-                description: 'test-option-description',
-              },
-            ],
-          },
-          {
-            name: 'test-option10',
-            type: ApplicationCommandOptionType.Subcommand,
-            description: 'test-option-description1',
-
-            options: [
-              {
-                name: 'test-option20',
-                type: ApplicationCommandOptionType.String,
-                description: 'test-option-description',
-              },
-              {
-                name: 'test-option30',
-                type: ApplicationCommandOptionType.String,
-                description: 'test-option-description',
-              },
-            ],
-          },
-        ],
       },
     ],
   };
@@ -72,9 +33,9 @@ export class TestCommand implements Command {
 
   public category: CommandCategory = CommandCategory.DEVELOPMENT;
 
-  public deferType: CommandDeferType = CommandDeferType.HIDDEN;
+  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
-  public requireClientPerms: PermissionsString[] = ['Administrator'];
+  public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public developerOnly?: boolean = true;
 
@@ -84,22 +45,7 @@ export class TestCommand implements Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const embed1 = EmbedUtils.infoEmbed('test-body 1', 'test-title 1');
-    const embed2 = EmbedUtils.infoEmbed('test-body 2', 'test-title 2');
-    const embed3 = EmbedUtils.infoEmbed('test-body 3', 'test-title 3');
-    const embed4 = EmbedUtils.infoEmbed('test-body 4', 'test-title 4');
-    const embed5 = EmbedUtils.infoEmbed('test-body 5', 'test-title 5');
-    const btn1 = new ButtonBuilder()
-      .setCustomId('test-btn-1')
-      .setLabel('◀')
-      .setStyle(ButtonStyle.Primary);
-    const btn2 = new ButtonBuilder()
-      .setCustomId('test-btn-2')
-      .setLabel('▶')
-      .setStyle(ButtonStyle.Primary);
-
-    const pages = [embed1, embed2, embed3, embed4, embed5];
-
-    await new PaginationEmbed(interaction, pages).start();
+    console.log(this.id);
+    InteractionUtils.send(interaction, `</${this.metadata.name}:${this.id}>`);
   }
 }

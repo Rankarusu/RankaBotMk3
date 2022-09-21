@@ -15,7 +15,7 @@ import { aniList } from '../../services/anilist';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class AnimeCommand implements Command {
+export class AnimeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'anime',
     description: 'Get information about anime',

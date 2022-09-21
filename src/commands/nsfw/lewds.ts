@@ -9,7 +9,7 @@ import { lewds } from '../../services/lewds';
 import { ArrayUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class LewdsCommand implements Command {
+export class LewdsCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'lewds',
     description:

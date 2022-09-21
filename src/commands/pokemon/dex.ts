@@ -108,7 +108,7 @@ const evoChainRegex = new RegExp(
   /https:\/\/pokeapi\.co\/api\/v2\/evolution-chain\/(\d+)\//i
 );
 
-export class DexCommand implements Command {
+export class DexCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dex',
     description: 'Get information about Pokemon',

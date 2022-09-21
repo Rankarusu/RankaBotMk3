@@ -3,20 +3,31 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventData } from '../models/event-data';
 
-export interface Command {
+export abstract class Command {
+  id?: string;
+
   metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
+
   helpText?: string;
+
   developerOnly?: boolean;
+
   cooldown?: RateLimiter;
+
   nsfw?: boolean;
+
   category: CommandCategory;
+
   deferType: CommandDeferType;
+
   requireClientPerms: PermissionsString[];
-  execute(
+
+  abstract execute(
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void>;
 }
+
 export enum CommandDeferType {
   PUBLIC = 'PUBLIC',
   HIDDEN = 'HIDDEN',

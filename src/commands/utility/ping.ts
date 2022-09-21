@@ -4,7 +4,7 @@ import { EventData } from '../../models/event-data';
 import { InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-export class PingCommand implements Command {
+export class PingCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'ping',
     description: 'pings you back and shows you your latency',

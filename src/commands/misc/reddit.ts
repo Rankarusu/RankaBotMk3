@@ -13,7 +13,7 @@ const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
 const baseUrl = 'https://www.reddit.com';
 const stickyLimit = 2;
 
-export class RedditCommand implements Command {
+export class RedditCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'reddit',
     description: 'browse for posts of a specific subreddit',

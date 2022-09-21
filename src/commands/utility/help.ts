@@ -17,7 +17,7 @@ import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 
-export class HelpCommand implements Command {
+export class HelpCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'help',
     description:
@@ -108,10 +108,10 @@ export class HelpCommand implements Command {
     const groupedCommands = groupBy(filteredCommands, 'category');
     const output: { [key: string]: string[] } = {};
     Object.keys(groupedCommands).forEach((key) => {
-      output[capitalize(key)] = groupedCommands[key].map(
-        (command) =>
-          `\`${command.metadata.name}\` - ${command.metadata.description}`
-      );
+      output[capitalize(key)] = groupedCommands[key].map((command) => {
+        //TODO: handle subcommands and subcommand groups differently
+        return `</${command.metadata.name}:${command.id}> - ${command.metadata.description}`;
+      });
     });
     return output;
   }

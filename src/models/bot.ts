@@ -80,6 +80,14 @@ export class Bot {
     Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}', userTag));
     await this.registerGuildCommands();
     this.client.user.setActivity('Hello, World!');
+
+    //put the application command ids into our command classes so we can mention them in the help command.
+    const appCommands = await this.client.application.commands.fetch();
+    appCommands.forEach((appCommand) => {
+      this.commandHandler.commands.find(
+        (command) => command.metadata.name === appCommand.name
+      ).id = appCommand.id;
+    });
   }
 
   private async onMessage(msg: Message | PartialMessage): Promise<void> {
@@ -165,6 +173,13 @@ export class Bot {
   private async registerGuildCommands() {
     //TODO: find a better place to put this.
     const rest = new REST().setToken(Config.client.token);
+    rest.put(
+      Routes.applicationGuildCommands(
+        this.client.application.id,
+        '243426641840177154'
+      ),
+      { body: [] }
+    );
     const commands = this.getCommands();
     const commandsJson = commands.map((command) => command.metadata);
     // const guildIds = this.client.guilds.cache.map((guild) => guild.id);

@@ -25,5 +25,4 @@ RUN npm install --omit=dev
 COPY --from=build /app/dist dist
 #build our database models
 RUN npm run prisma:gen
-
-ENTRYPOINT [ "npm", "run", "prod" ]
+ENTRYPOINT [ "npm", "run", "prod:db" ]

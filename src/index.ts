@@ -175,6 +175,7 @@ async function start(): Promise<void> {
     Logger.info(LogMessages.info.databaseConnect);
   } catch (error) {
     Logger.error(LogMessages.error.databaseConnect, error);
+    return;
   }
 
   // start schedulers

@@ -5,3 +5,4 @@ config/config.json
 docker-compose.yml
 src/services/prisma/migrations
 src/public/config/config.json
+prisma/migrations

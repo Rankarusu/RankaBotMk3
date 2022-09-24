@@ -8,7 +8,7 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-import Config from '../../public/config/config.json';
+const Config = require('../../public/config/config.json');
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';

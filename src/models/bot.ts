@@ -23,7 +23,7 @@ import {
 } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
-import Config from '../public/config/config.json';
+const Config = require('../public/config/config.json');
 
 export class Bot {
   private ready = false;

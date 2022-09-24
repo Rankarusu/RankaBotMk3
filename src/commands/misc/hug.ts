@@ -9,7 +9,7 @@ import {
   PermissionsString,
 } from 'discord.js';
 
-import Config from '../../public/config/config.json';
+const Config = require('../../public/config/config.json');
 
 import fs from 'fs';
 import path from 'path';

@@ -59,7 +59,7 @@ import {
   PotOfGreedTrigger,
   Trigger,
 } from './triggers';
-import Config from './public/config/config.json';
+const Config = require('./public/config/config.json');
 import LogMessages from './public/logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
 import { aniList } from './services/anilist';

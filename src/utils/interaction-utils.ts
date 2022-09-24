@@ -18,10 +18,10 @@ import {
   User,
 } from 'discord.js';
 import { Command } from '../commands';
-// eslint-disable-next-line node/no-unpublished-import
-const Config = require('../public/config/config.json');
 import { EventData } from '../models/event-data';
 import { EmbedUtils } from './embed-utils';
+
+const Config = require('../../config/config.json');
 
 const IGNORED_ERRORS = [
   RESTJSONErrorCodes.UnknownMessage,

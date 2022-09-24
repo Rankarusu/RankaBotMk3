@@ -8,14 +8,13 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-
-const Config = require('../../public/config/config.json');
-
 import fs from 'fs';
 import path from 'path';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
+
+const Config = require('../../../config/config.json');
 
 export class HugCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

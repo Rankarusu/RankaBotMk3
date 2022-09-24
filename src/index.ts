@@ -59,11 +59,12 @@ import {
   PotOfGreedTrigger,
   Trigger,
 } from './triggers';
-const Config = require('./public/config/config.json');
-import LogMessages from './public/logs/logs.json';
+import LogMessages from './static/logs/logs.json';
 import { SelectMenu } from './menus/select-menu';
 import { aniList } from './services/anilist';
 import { lewds } from './services/lewds';
+
+const Config = require('../config/config.json');
 
 const rest = new REST().setToken(Config.client.token);
 

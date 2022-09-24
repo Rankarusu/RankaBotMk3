@@ -6,6 +6,7 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY patches ./patches
 COPY prisma ./prisma
+COPY config ./config
 
 RUN npm install
 COPY . .
@@ -20,6 +21,7 @@ COPY package.json ./
 COPY package-lock.json ./
 COPY patches ./patches
 COPY prisma ./prisma
+COPY config ./config
 
 RUN npm install --omit=dev
 COPY --from=build /app/dist dist

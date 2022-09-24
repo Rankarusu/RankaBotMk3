@@ -7,16 +7,17 @@ import {
   ThreadChannel,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import LogMessages from '../public/logs/logs.json';
+import LogMessages from '../static/logs/logs.json';
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
-const Config = require('../public/config/config.json');
 import path from 'path';
 
-const pathToImages = path.resolve(__dirname, '../public/images/');
+const Config = require('../../config/config.json');
+
+const pathToImages = path.resolve(__dirname, '../static/images/');
 const nsfwimage = 'nsfw.png';
 
 export class CommandHandler implements EventHandler {

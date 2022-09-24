@@ -1,4 +1,4 @@
-import tarotCards from '../public/data/tarot.json';
+import tarotCards from '../static/data/tarot.json';
 import { TarotCard, TarotCardDraw } from '../models/tarot-card';
 import path from 'path';
 

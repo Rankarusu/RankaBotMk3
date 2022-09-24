@@ -1,2 +1,2 @@
 import { cp } from 'shelljs';
-cp('-R', 'src/public/images', 'dist/public/images');
+cp('-R', 'src/static/images', 'dist/static/images');

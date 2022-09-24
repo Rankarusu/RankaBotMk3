@@ -1,6 +1,6 @@
 import { AutocompleteInteraction } from 'discord.js';
 import { bot } from '..';
-import pokemon from '../public/data/pokemon.json';
+import pokemon from '../static/data/pokemon.json';
 import { EventHandler } from './event-handler';
 
 export class AutoCompleteHandler implements EventHandler {

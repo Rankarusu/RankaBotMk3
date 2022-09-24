@@ -6,8 +6,9 @@ import {
   GuildMember,
   User,
 } from 'discord.js';
-const Config = require('../public/config/config.json');
 import { EventData } from '../models/event-data';
+
+const Config = require('../../config/config.json');
 
 export class EmbedUtils {
   public static errorEmbed(data: EventData) {

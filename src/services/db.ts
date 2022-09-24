@@ -1,8 +1,9 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Logger } from '.';
-const Config = require('../public/config/config.json');
-import LogMessages from '../public/logs/logs.json';
+import LogMessages from '../static/logs/logs.json';
 import { LogEvent } from '../models/prisma-events';
+
+const Config = require('../../config/config.json');
 
 //prevent hot reloading from creating instances of the prisma client
 //for that we declare prisma globally as globals are not reset by hot reload

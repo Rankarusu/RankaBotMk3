@@ -12,7 +12,7 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import LogMessages from '../public/logs/logs.json';
+import LogMessages from '../static/logs/logs.json';
 import { Command } from '../commands';
 import {
   AutoCompleteHandler,
@@ -23,7 +23,8 @@ import {
 } from '../events';
 import { Logger } from '../services';
 import { PartialUtils } from '../utils';
-const Config = require('../public/config/config.json');
+
+const Config = require('../../config/config.json');
 
 export class Bot {
   private ready = false;

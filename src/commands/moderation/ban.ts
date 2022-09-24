@@ -7,11 +7,11 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-
-const Config = require('../../public/config/config.json');
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
+
+const Config = require('../../../config/config.json');
 
 export class BanCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

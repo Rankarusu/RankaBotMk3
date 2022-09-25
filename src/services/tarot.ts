@@ -11,7 +11,7 @@ export class Tarot {
 
   public pathToImages = path.resolve(
     __dirname,
-    '../public/images/tarot-cards/'
+    '../static/images/tarot-cards/'
   );
 
   public drawCard(reverseChance = 0.5): TarotCardDraw {

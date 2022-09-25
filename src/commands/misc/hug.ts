@@ -40,7 +40,7 @@ export class HugCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  private pathToImages = path.resolve(__dirname, '../../public/images/hugs/');
+  private pathToImages = path.resolve(__dirname, '../../static/images/hugs/');
 
   public async execute(
     interaction: ChatInputCommandInteraction,

@@ -7,6 +7,7 @@ import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
   AnimeCommand,
   BanCommand,
+  BlessCommand,
   BofhCommand,
   ChooseCommand,
   CoinflipCommand,
@@ -26,6 +27,7 @@ import {
   PurgeCommand,
   RedditCommand,
   RemindCommand,
+  RollCommand,
   Rule34Command,
   StickerCommand,
   TarotCommand,
@@ -43,10 +45,14 @@ import {
   SelectMenuHandler,
   TriggerHandler,
 } from './events';
+import { SelectMenu } from './menus/select-menu';
 import { Bot } from './models/bot';
 import { Reaction } from './models/reaction';
 import { ActivityScheduler, Db, Logger } from './services';
+import { aniList } from './services/anilist';
+import { lewds } from './services/lewds';
 import { ReminderScheduler } from './services/reminder';
+import LogMessages from './static/logs/logs.json';
 import {
   AyyTrigger,
   BeckonTrigger,
@@ -59,10 +65,6 @@ import {
   PotOfGreedTrigger,
   Trigger,
 } from './triggers';
-import LogMessages from './static/logs/logs.json';
-import { SelectMenu } from './menus/select-menu';
-import { aniList } from './services/anilist';
-import { lewds } from './services/lewds';
 
 const Config = require('../config/config.json');
 
@@ -110,6 +112,8 @@ async function start(): Promise<void> {
     new LewdsCommand(),
     new RedditCommand(),
     new UwuifyCommand(),
+    new RollCommand(),
+    new BlessCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

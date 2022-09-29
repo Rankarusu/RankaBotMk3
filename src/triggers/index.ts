@@ -1,5 +1,6 @@
 export { AyyTrigger } from './ayy';
 export { BeckonTrigger } from './beckon';
+export { ExpTrigger } from './exp';
 export { FTrigger } from './f';
 export { FubukinstrumentTrigger } from './fubukinstrument';
 export { KingCrimsonTrigger } from './king-crimson';

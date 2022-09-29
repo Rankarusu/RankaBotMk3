@@ -96,4 +96,49 @@ export class DbUtils {
       },
     });
   }
+
+  //exp
+  public static async getExpByGuild(guildId: Snowflake) {
+    const exp = await Db.exp.findMany({
+      where: { guildId },
+      orderBy: { xp: 'desc' },
+    });
+
+    return exp;
+  }
+
+  public static async getExpByUser(guildId: Snowflake, userId: Snowflake) {
+    const exp = await Db.exp.findUnique({
+      where: {
+        userId_guildId: { userId, guildId },
+      },
+    });
+    return exp;
+  }
+
+  public static async upsertExp(
+    guildId: Snowflake,
+    userId: Snowflake,
+    amount: number,
+    level: number,
+    xpLock: Date
+  ) {
+    await Db.exp.upsert({
+      where: { userId_guildId: { userId, guildId } },
+      create: {
+        guildId,
+        userId,
+        xp: 0,
+        level: 1,
+        xpLock: new Date(),
+      },
+      update: {
+        xp: {
+          increment: amount,
+        },
+        level,
+        xpLock,
+      },
+    });
+  }
 }

@@ -56,6 +56,7 @@ import LogMessages from './static/logs/logs.json';
 import {
   AyyTrigger,
   BeckonTrigger,
+  ExpTrigger,
   FTrigger,
   FubukinstrumentTrigger,
   KingCrimsonTrigger,
@@ -130,6 +131,7 @@ async function start(): Promise<void> {
     new NoUTrigger(),
     new OwoTrigger(),
     new PotOfGreedTrigger(),
+    new ExpTrigger(),
   ];
 
   // Select Menus

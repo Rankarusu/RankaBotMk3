@@ -8,12 +8,13 @@ datasource db {
 }
 
 model Exp {
-  userId  String    @id @map("user_id")
+  userId  String    @map("user_id")
   guildId String    @map("guild_id")
   xp      Int?
   level   Int?
   xpLock  DateTime? @map("xp_lock") @db.Timestamp(6)
 
+  @@id([userId, guildId])
   @@map("exp")
 }
 

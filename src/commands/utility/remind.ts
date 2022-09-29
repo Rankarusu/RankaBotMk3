@@ -95,9 +95,8 @@ export class RemindCommand extends Command {
         }
 
         //check for too short of a notice
-        const minutes = new Date().getMinutes() + 2;
-        const in2minutes = new Date();
-        in2minutes.setMinutes(minutes);
+        const in2minutes = new Date(new Date().getTime() + 2 * 60 * 1000);
+
         if (parsedTime < in2minutes) {
           InteractionUtils.sendError(
             data,

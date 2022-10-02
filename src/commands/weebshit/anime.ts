@@ -8,7 +8,6 @@ import {
   PermissionsString,
 } from 'discord.js';
 import { AniListSearchItem } from '../../models/anilist';
-
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import { aniList } from '../../services/anilist';
@@ -18,7 +17,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class AnimeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'anime',
-    description: 'Get information about anime',
+    description: 'get information about anime',
     dm_permission: true,
     options: [
       {
@@ -29,7 +28,7 @@ export class AnimeCommand extends Command {
           {
             name: 'title',
             type: ApplicationCommandOptionType.String,
-            description: 'the title of the anime to search for',
+            description: 'a title to search for',
             required: true,
           },
         ],
@@ -37,7 +36,7 @@ export class AnimeCommand extends Command {
       {
         name: 'schedule',
         type: ApplicationCommandOptionType.Subcommand,
-        description: 'get the schedule of all airing anime in Japan this week',
+        description: 'get the schedule of all airing anime this week',
       },
     ],
   };

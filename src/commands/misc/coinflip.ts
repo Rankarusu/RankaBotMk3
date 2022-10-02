@@ -1,7 +1,5 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -9,7 +7,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class CoinflipCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'coinflip',
-    description: 'Flip a coin',
+    description: 'flip a coin',
     dm_permission: true,
   };
 

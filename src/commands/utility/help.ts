@@ -25,7 +25,7 @@ export class HelpCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'help',
     description:
-      'gives and overview of all commands or further details of a specific one',
+      'get and overview of all commands or further details of a specific one',
     dm_permission: true,
     default_member_permissions: undefined,
     options: [
@@ -39,7 +39,8 @@ export class HelpCommand extends Command {
     ],
   };
 
-  public helpText = 'Hey, no recursing!';
+  public helpText = `\`/help\`
+  /help \`dex\``;
 
   public category: CommandCategory = CommandCategory.UTILITY;
 

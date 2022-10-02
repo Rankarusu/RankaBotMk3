@@ -1,17 +1,11 @@
 import {
   ApplicationCommandOptionType,
-  ButtonStyle,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import {
-  ButtonBuilder,
-  ChatInputCommandInteraction,
-  PermissionsString,
-} from 'discord.js';
+import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { EventData } from '../../models/event-data';
-import { PaginationEmbed } from '../../models/pagination-embed';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { InteractionUtils } from '../../utils';
 
 export class TestCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

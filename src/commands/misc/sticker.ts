@@ -1,14 +1,13 @@
+import { Sticker } from '@prisma/client';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-import { Sticker } from '@prisma/client';
 import { EventData } from '../../models/event-data';
+import { StickerListSelectEmbed } from '../../models/pagination-embed';
 import { DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
-import { StickerListSelectEmbed } from '../../models/pagination-embed';
 
 const allowedTypes = [
   'image/png',
@@ -22,7 +21,7 @@ const allowedTypes = [
 export class StickerCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'sticker',
-    description: 'Save and post custom stickers on your server',
+    description: 'save and post custom stickers on your server',
     dm_permission: false,
     options: [
       {
@@ -66,7 +65,9 @@ export class StickerCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/';
+  public helpText = `/sticker add \`seiba\` \`<uploaded file>\`
+  /sticker list
+  /sticker post \`seiba\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

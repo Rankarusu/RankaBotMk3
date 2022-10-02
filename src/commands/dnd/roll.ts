@@ -10,13 +10,13 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class RollCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'roll',
-    description: 'roll dice!',
+    description: 'roll polyhedral dice',
     dm_permission: true,
     options: [
       {
         name: 'dice',
         type: ApplicationCommandOptionType.String,
-        description: 'dice to roll and modifiers to add',
+        description: 'dice and modifiers',
         required: true,
         max_length: 128,
       },

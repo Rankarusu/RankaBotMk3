@@ -3,8 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -25,7 +23,7 @@ export class ChooseCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/choose spam, eggs';
+  public helpText = '/choose `spam, eggs`';
 
   public category: CommandCategory = CommandCategory.MISC;
 

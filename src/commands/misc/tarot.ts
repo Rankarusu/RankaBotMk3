@@ -8,7 +8,6 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-
 import { EventData } from '../../models/event-data';
 import { TarotCard, TarotCardDraw } from '../../models/tarot-card';
 import { Tarot } from '../../services/tarot';
@@ -29,7 +28,7 @@ export class TarotCommand extends Command {
           {
             name: 'no-reverse',
             type: ApplicationCommandOptionType.Boolean,
-            description: 'do not pull reverse cards',
+            description: 'exclude reverse cards',
             required: false,
           },
         ],
@@ -136,8 +135,8 @@ export class TarotCommand extends Command {
 
   // cooldown?: RateLimiter;
   public helpText = `/tarot draw
-  /tarot search major-arcana Death True
-  /tarot search minor-arcana cups 10 False`;
+  /tarot search major-arcana \`XXI - The World\` \`True\`
+  /tarot search minor-arcana \`cups\` \`10\` \`False\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

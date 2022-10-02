@@ -3,8 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -12,13 +10,13 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class PurgeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'purge',
-    description: 'deletes the last x messages in the channel',
+    description: 'delete the last x messages in the channel',
     dm_permission: false,
     options: [
       {
         name: 'amount',
         type: ApplicationCommandOptionType.Number,
-        description: 'the amount of messages to be deleted',
+        description: 'the amount of messages to delete',
         min_value: 1,
         max_value: 100,
         required: true,
@@ -29,7 +27,7 @@ export class PurgeCommand extends Command {
   // cooldown?: RateLimiter;
   public helpText = `due to bot limitations, this command can only delete 100 messages at a time. It can also not delete messages older than 2 weeks.
   **Example:**
-  /purge 20`;
+  /purge \`20\``;
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

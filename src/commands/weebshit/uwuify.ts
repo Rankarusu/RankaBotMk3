@@ -33,7 +33,6 @@ const uwuMap = [
     replaceValue: 'uv',
   },
 ];
-
 const kaomoji = [
   // `(・\`ω\´・)`,
   ';;w;;',
@@ -70,7 +69,7 @@ const discordCharLimit = 2000;
 export class UwuifyCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'uwuify',
-    description: 'Get information about anime',
+    description: 'make your text more uwu',
     dm_permission: true,
     options: [
       {

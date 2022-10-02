@@ -7,8 +7,6 @@ import {
   PermissionsString,
   User,
 } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -16,7 +14,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class UnbanCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'unban',
-    description: 'Unbans a user from the current server',
+    description: 'unban a user from the server',
     dm_permission: false,
     options: [
       {
@@ -35,7 +33,7 @@ export class UnbanCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/unban 446368889700905000';
+  public helpText = '/unban `446368889700905000`';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

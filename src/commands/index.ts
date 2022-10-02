@@ -1,4 +1,4 @@
-export { Command, CommandDeferType, CommandCategory } from './command';
+export { Command, CommandCategory, CommandDeferType } from './command';
 export { TestCommand } from './development/test';
 export { BlessCommand } from './dnd/bless';
 export { RollCommand } from './dnd/roll';

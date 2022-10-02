@@ -3,7 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -11,13 +10,13 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class EightballCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'eightball',
-    description: 'helps you on hard decisions',
+    description: 'ask a digital ball for advice',
     dm_permission: true,
     options: [
       {
         name: 'question',
         type: ApplicationCommandOptionType.String,
-        description: 'the question you want to ask the eightball',
+        description: 'the question you want to ask',
         required: false,
       },
     ],

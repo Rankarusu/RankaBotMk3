@@ -7,8 +7,6 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -16,7 +14,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class UntimeoutCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'untimeout',
-    description: 'enables text communication for a user again',
+    description: 'enable text communication for a user again',
     dm_permission: false,
     options: [
       {

@@ -8,24 +8,23 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { ReminderListSelectEmbed } from '../../models/pagination-embed';
 import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
-
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class RemindCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'remind',
-    description: 'reminds you of something after a certain amount of time.',
+    description: 'remind yourself of something after a certain amount of time.',
     dm_permission: true,
     default_member_permissions: undefined,
     options: [
       {
         name: 'list',
-        description: 'List and manage reminders',
+        description: 'list and manage reminders',
         type: ApplicationCommandOptionType.Subcommand,
       },
       {
         name: 'set',
-        description: 'Sets a reminder',
+        description: 'set a reminder',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {

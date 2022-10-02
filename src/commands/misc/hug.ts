@@ -19,20 +19,20 @@ const Config = require('../../../config/config.json');
 export class HugCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'hug',
-    description: 'Display your affinity to a user by hugging them',
+    description: 'display your affinity to a user by hugging them',
     dm_permission: false,
     options: [
       {
         name: 'user',
         type: ApplicationCommandOptionType.User,
-        description: 'The user to hug',
+        description: 'the user to hug',
         required: true,
       },
     ],
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/hug @user#0815';
+  public helpText = '/hug `@User`';
 
   public category: CommandCategory = CommandCategory.MISC;
 

@@ -4,12 +4,10 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
-import { EventData } from '../../models/event-data';
-import { Command, CommandCategory, CommandDeferType } from '../command';
 import os from 'os';
+import { EventData } from '../../models/event-data';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class InfoCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

@@ -27,14 +27,12 @@ import {
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
-
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
-
-import { types } from '../../static/data/pokemonDamageRelations.json';
 import { ExtendedPaginationEmbed } from '../../models/pagination-embed';
 import { PokemonDamageRelations } from '../../models/pokemon';
+import { types } from '../../static/data/pokemonDamageRelations.json';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',
@@ -111,7 +109,7 @@ const evoChainRegex = new RegExp(
 export class DexCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dex',
-    description: 'Get information about Pokemon',
+    description: 'get information about pokemon',
     dm_permission: true,
     options: [
       {
@@ -203,7 +201,7 @@ export class DexCommand extends Command {
         name: 'pdr',
         type: ApplicationCommandOptionType.Subcommand,
         description:
-          'Find out what types are strong against the selected type(s)',
+          'find out what types are strong against the selected type(s)',
         options: [
           {
             name: 'type-1',
@@ -235,7 +233,15 @@ export class DexCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = ``;
+  public helpText = `
+  /dex pokemon \`Mega Charizard X\`
+  /dex ablity \`pressure\`
+  /dex berry \`enigma\`
+  /dex item \`potion\`
+  /dex move \`hyper-beam\`
+  /dex nature \`adamant\`
+  /dex pdr \`water\` \`fire\`
+  `;
 
   public category: CommandCategory = CommandCategory.POKEMON;
 
@@ -887,7 +893,7 @@ export class DexCommand extends Command {
       .find((entry) => {
         return entry.language.name === 'en';
       })
-      .effect.replaceAll('$effect_chance', move.effect_chance.toString());
+      .effect.replaceAll('$effect_chance', move.effect_chance?.toString());
 
     const embed = new EmbedBuilder()
       .setTitle(name)

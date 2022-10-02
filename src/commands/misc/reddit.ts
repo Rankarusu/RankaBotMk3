@@ -3,10 +3,8 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
 import { EventData } from '../../models/event-data';
-import { InteractionUtils, RedditUtils } from '../../utils';
-import { ArrayUtils } from '../../utils';
+import { ArrayUtils, InteractionUtils, RedditUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
@@ -22,7 +20,7 @@ export class RedditCommand extends Command {
       {
         name: 'subreddit',
         type: ApplicationCommandOptionType.String,
-        description: 'name of the subreddit',
+        description: 'the name of the subreddit',
         required: true,
       },
       {
@@ -69,7 +67,7 @@ export class RedditCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/reddit `linux` `5`';
+  public helpText = '/reddit `unixporn` `5` `top`';
 
   public category: CommandCategory = CommandCategory.MISC;
 

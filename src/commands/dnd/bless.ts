@@ -15,12 +15,12 @@ const blessImage = 'bless.png';
 export class BlessCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'bless',
-    description: 'reminds you that you have bless up',
+    description: 'remind yourself that you have bless up',
     dm_permission: true,
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/bless`';
+  public helpText = '/bless';
 
   public category: CommandCategory = CommandCategory.DND;
 

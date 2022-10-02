@@ -22,7 +22,7 @@ export class ExpCommand extends Command {
     options: [
       {
         name: 'user',
-        description: 'display your exp on this server',
+        description: 'display a users exp on this server',
         type: ApplicationCommandOptionType.Subcommand,
         options: [
           {
@@ -35,14 +35,16 @@ export class ExpCommand extends Command {
       },
       {
         name: 'leaderboard',
-        description: 'display the exp leaderboard for this server',
+        description: 'display a leaderboard for this server',
         type: ApplicationCommandOptionType.Subcommand,
       },
     ],
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/exp`';
+  public helpText = `/exp
+  /exp \`@User\`
+  /exp leaderboard`;
 
   public category: CommandCategory = CommandCategory.EXP;
 

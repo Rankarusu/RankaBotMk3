@@ -7,12 +7,12 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class PingCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'ping',
-    description: 'pings you back and shows you your latency',
+    description: 'pong!',
     dm_permission: true,
   };
 
   // cooldown?: RateLimiter;
-  public helpText = 'just /ping';
+  public helpText = '/ping';
 
   public category: CommandCategory = CommandCategory.UTILITY;
 

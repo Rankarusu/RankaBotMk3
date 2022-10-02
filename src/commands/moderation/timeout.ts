@@ -1,16 +1,14 @@
+import * as chrono from 'chrono-node';
 import {
   ApplicationCommandOptionType,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
   RESTJSONErrorCodes,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
   ChatInputCommandInteraction,
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
-import * as chrono from 'chrono-node';
 import { EventData } from '../../models/event-data';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -18,7 +16,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class TimeoutCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'timeout',
-    description: 'disables text communication for a user',
+    description: 'disable text communication for a user',
     dm_permission: false,
     options: [
       {

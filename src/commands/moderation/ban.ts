@@ -16,7 +16,7 @@ const Config = require('../../../config/config.json');
 export class BanCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'ban',
-    description: 'Bans a user from the server',
+    description: 'ban a user from the server',
     dm_permission: false,
     options: [
       {
@@ -35,14 +35,14 @@ export class BanCommand extends Command {
         name: 'delete-message-days',
         type: ApplicationCommandOptionType.Number,
         description:
-          'deletes the messages of the last x days sent by the banned user.',
+          'delete the messages of the last x days sent by the banned user.',
         required: false,
       },
     ],
   };
 
   // cooldown?: RateLimiter;
-  public helpText = 'just /ban @User';
+  public helpText = '/ban `@User` `being an idiot` `3`';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

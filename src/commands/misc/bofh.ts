@@ -1,16 +1,14 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-// eslint-disable-next-line node/no-unpublished-import
-import bofh from '../../static/data/bofh.json';
 import { EventData } from '../../models/event-data';
+import bofh from '../../static/data/bofh.json';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class BofhCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'bofh',
-    description: 'generates a bastard-operator-from-hell™-like excuse',
+    description: 'generate a bastard-operator-from-hell™-like excuse',
     dm_permission: true,
   };
 

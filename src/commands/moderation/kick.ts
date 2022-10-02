@@ -16,7 +16,7 @@ const Config = require('../../../config/config.json');
 export class KickCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'kick',
-    description: 'Kicks a user from the server',
+    description: 'kick a user from the server',
     dm_permission: false,
     options: [
       {
@@ -34,7 +34,7 @@ export class KickCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = 'just /kick @User';
+  public helpText = '/kick `@User` `being an idiot`';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

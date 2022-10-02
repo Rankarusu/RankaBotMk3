@@ -1,15 +1,13 @@
+import axios, { AxiosResponse } from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
-import axios, { AxiosResponse } from 'axios';
 import { EventData } from '../../models/event-data';
+import { Rule34Post } from '../../models/rule34post';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
-import { Rule34Post } from '../../models/rule34post';
-import { triggerAsyncId } from 'async_hooks';
 
 const limit = 100;
 const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&`;

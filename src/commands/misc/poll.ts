@@ -3,7 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-
 import { EventData } from '../../models/event-data';
 import { Poll } from '../../models/poll';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -11,7 +10,7 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 export class PollCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'poll',
-    description: 'start a poll to decide on something with up to 10 options',
+    description: 'start a poll with up to 10 options',
     dm_permission: false,
     options: [
       {

@@ -16,6 +16,7 @@ import {
   DanbooruCommand,
   DexCommand,
   EightballCommand,
+  ExpCommand,
   FactCommand,
   HelpCommand,
   HugCommand,
@@ -115,6 +116,7 @@ async function start(): Promise<void> {
     new UwuifyCommand(),
     new RollCommand(),
     new BlessCommand(),
+    new ExpCommand(),
   ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
 
   // Reactions

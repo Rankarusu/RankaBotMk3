@@ -4,6 +4,10 @@ import { EventData } from '../models/event-data';
 import { DbUtils } from '../utils';
 
 export class ExpTrigger implements Trigger {
+  /* this could have been part of the message handler as well but putting it here
+  makes it fee more "pluggable". I might add a feature to en/disable certain 
+  commands and triggers on a server */
+
   requireGuild = true;
 
   conditionMet(msg: Message) {
@@ -28,8 +32,6 @@ export class ExpTrigger implements Trigger {
       newXp += exp.xp;
       level = Math.floor((newXp / 42) ** 0.55);
     }
-    console.log(exp);
-    console.log(newXp);
     await DbUtils.upsertExp(guildId, userId, newXp, level, newLock);
     return;
   }

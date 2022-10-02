@@ -42,4 +42,5 @@ export enum CommandCategory {
   POKEMON = 'Pokémon',
   NSFW = 'NSFW',
   DND = 'DND',
+  EXP = 'EXP',
 }

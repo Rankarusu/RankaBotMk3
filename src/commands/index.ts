@@ -2,6 +2,7 @@ export { Command, CommandDeferType, CommandCategory } from './command';
 export { TestCommand } from './development/test';
 export { BlessCommand } from './dnd/bless';
 export { RollCommand } from './dnd/roll';
+export { ExpCommand } from './exp/exp';
 export { BofhCommand } from './misc/bofh';
 export { ChooseCommand } from './misc/choose';
 export { CoinflipCommand } from './misc/coinflip';

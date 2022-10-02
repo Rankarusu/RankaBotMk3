@@ -62,7 +62,11 @@ export class HelpCommand extends Command {
       const commands = bot.getCommands();
 
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
-      const embed = EmbedUtils.helpEmbed(prettyCommands, iconUrl);
+      const embed = EmbedUtils.helpEmbed(
+        prettyCommands,
+        iconUrl,
+        this.mention()
+      );
       await new PaginationEmbed(interaction, embed, 20).start();
     } else {
       //specific command
@@ -120,7 +124,16 @@ export class HelpCommand extends Command {
     Object.keys(groupedCommands).forEach((key) => {
       output[StringUtils.capitalize(key)] = groupedCommands[key].map(
         (command: Command) => {
-          //TODO: handle subcommands and subcommand groups differently
+          if (
+            command.metadata.options?.find(
+              (option) =>
+                //slash command mentions only work with full subcommand or subcommand group. to keep the help dialogue more concise we do not put all subcommands here.
+                option.type === ApplicationCommandOptionType.Subcommand ||
+                option.type === ApplicationCommandOptionType.SubcommandGroup
+            )
+          ) {
+            return `\`/${command.metadata.name}\` - ${command.metadata.description}`;
+          }
           return `${command.mention()} - ${command.metadata.description}`;
         }
       );

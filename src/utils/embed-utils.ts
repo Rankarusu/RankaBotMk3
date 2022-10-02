@@ -119,7 +119,8 @@ export class EmbedUtils {
 
   public static helpEmbed(
     commands: { [key: string]: string[] },
-    iconUrl: string
+    iconUrl: string,
+    helpMention: string
   ) {
     const embed = new EmbedBuilder()
       .setTitle('Help')
@@ -127,6 +128,10 @@ export class EmbedUtils {
       .setDescription(
         `Welcome to the fully automated, paginated and generally very based RankaBotMk3 help dialog!
         (Seriously, I put a lot of effort into this. Please use it.)
+        
+        these </commands:0> are directly invocable by clicking on them.
+        these \`/commands\` are only invokable via **subcommands**. 
+        Use ${helpMention} \`command\` for more details.
         
         Below you can see all commands that are available to you.`
       )

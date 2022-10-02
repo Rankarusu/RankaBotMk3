@@ -1,4 +1,4 @@
-import { Reminder, Sticker } from '@prisma/client';
+import { Exp, Reminder, Sticker } from '@prisma/client';
 import { Db } from '../services';
 import { Snowflake } from 'discord.js';
 
@@ -98,7 +98,7 @@ export class DbUtils {
   }
 
   //exp
-  public static async getExpByGuild(guildId: Snowflake) {
+  public static async getExpByGuild(guildId: Snowflake): Promise<Exp[]> {
     const exp = await Db.exp.findMany({
       where: { guildId },
       orderBy: { xp: 'desc' },
@@ -107,7 +107,10 @@ export class DbUtils {
     return exp;
   }
 
-  public static async getExpByUser(guildId: Snowflake, userId: Snowflake) {
+  public static async getExpByUser(
+    guildId: Snowflake,
+    userId: Snowflake
+  ): Promise<Exp> {
     const exp = await Db.exp.findUnique({
       where: {
         userId_guildId: { userId, guildId },
@@ -119,25 +122,37 @@ export class DbUtils {
   public static async upsertExp(
     guildId: Snowflake,
     userId: Snowflake,
-    amount: number,
+    xp: number,
     level: number,
     xpLock: Date
-  ) {
+  ): Promise<void> {
     await Db.exp.upsert({
       where: { userId_guildId: { userId, guildId } },
       create: {
         guildId,
         userId,
-        xp: 0,
+        xp: xp,
         level: 1,
         xpLock: new Date(),
       },
       update: {
-        xp: {
-          increment: amount,
-        },
+        xp,
         level,
         xpLock,
+      },
+    });
+  }
+
+  public static async deleteExpById(
+    guildId: Snowflake,
+    userIds: Snowflake | Snowflake[]
+  ) {
+    await Db.exp.deleteMany({
+      where: {
+        guildId,
+        userId: {
+          in: userIds,
+        },
       },
     });
   }

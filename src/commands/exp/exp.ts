@@ -4,14 +4,13 @@ import {
 } from 'discord-api-types/v10';
 import {
   ChatInputCommandInteraction,
-  Client,
   EmbedField,
   GuildMember,
   PermissionsString,
 } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
-import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import { DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class ExpCommand extends Command {

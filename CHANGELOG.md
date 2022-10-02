@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Rankarusu/RankaBotMk3/compare/v1.1.0...v1.2.0) (2022-10-02)
+
+
+### Features
+
+* **database:** changed exp pk to composite pk ([c797bf4](https://github.com/Rankarusu/RankaBotMk3/commit/c797bf4e4e8384f1457101a2683c2b00343b804f))
+* **exp:** add exp command to output personal evaluation and ranking ([37c8214](https://github.com/Rankarusu/RankaBotMk3/commit/37c821433b3ec99742fe190cfde2d2028fed9f1e))
+* **exp:** add scheduler to remove orphaned users from the database ([f80ac26](https://github.com/Rankarusu/RankaBotMk3/commit/f80ac2638742825b87c40543da3dd8bc66e6572e))
+* **exp:** added exp tracking trigger ([6480818](https://github.com/Rankarusu/RankaBotMk3/commit/64808184f43d1d4a20ca989e57ca0d64072e435b))
+
 ## 1.1.0 (2022-09-25)
 
 

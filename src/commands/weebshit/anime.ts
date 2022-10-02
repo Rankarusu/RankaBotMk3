@@ -42,7 +42,7 @@ export class AnimeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `/anime schedule
+  public usage = `/anime schedule
   /anime search \`attack on titan\``;
 
   public category: CommandCategory = CommandCategory.WEEBSHIT;

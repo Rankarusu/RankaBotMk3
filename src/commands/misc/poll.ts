@@ -97,7 +97,7 @@ export class PollCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText =
+  public usage =
     '/poll `Whats your favorite color?` `True` `30` `red` `blue` `green`';
 
   public category: CommandCategory = CommandCategory.MISC;

@@ -233,7 +233,7 @@ export class DexCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `
+  public usage = `
   /dex pokemon \`Mega Charizard X\`
   /dex ablity \`pressure\`
   /dex berry \`enigma\`

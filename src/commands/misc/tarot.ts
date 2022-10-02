@@ -134,7 +134,7 @@ export class TarotCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `/tarot draw
+  public usage = `/tarot draw
   /tarot search major-arcana \`XXI - The World\` \`True\`
   /tarot search minor-arcana \`cups\` \`10\` \`False\``;
 

@@ -67,7 +67,7 @@ export class RedditCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/reddit `unixporn` `5` `top`';
+  public usage = '/reddit `unixporn` `5` `top`';
 
   public category: CommandCategory = CommandCategory.MISC;
 

@@ -39,8 +39,10 @@ export class HelpCommand extends Command {
     ],
   };
 
-  public helpText = `\`/help\`
+  public usage = `\`/help\`
   /help \`dex\``;
+
+  public note = 'Hey, no recursing!';
 
   public category: CommandCategory = CommandCategory.UTILITY;
 
@@ -79,24 +81,27 @@ export class HelpCommand extends Command {
           data,
           `Command \`${cmd.toLowerCase()}\` not found or you may not use it`
         );
-      } else {
-        const desc = cmdhelp.metadata.description;
-        const usage = cmdhelp.helpText;
-        let prettySubCommands: string[];
-        if (cmdhelp.metadata.options) {
-          prettySubCommands = [this.getTree(cmdhelp)];
-        }
-
-        const embed = EmbedUtils.cmdHelpEmbed(
-          cmdhelp.metadata.name,
-          iconUrl,
-          desc,
-          usage,
-          prettySubCommands
-        );
-
-        InteractionUtils.send(interaction, embed);
+        return;
       }
+
+      const desc = cmdhelp.metadata.description;
+      const usage = cmdhelp.usage;
+      const note = cmdhelp.note;
+      let prettySubCommands: string[];
+      if (cmdhelp.metadata.options) {
+        prettySubCommands = [this.getTree(cmdhelp)];
+      }
+
+      const embed = EmbedUtils.cmdHelpEmbed(
+        cmdhelp.metadata.name,
+        iconUrl,
+        desc,
+        usage,
+        note,
+        prettySubCommands
+      );
+
+      InteractionUtils.send(interaction, embed);
     }
   }
 

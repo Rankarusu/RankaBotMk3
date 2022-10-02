@@ -13,7 +13,7 @@ export class DadJokeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/dadjoke';
+  public usage = '/dadjoke';
 
   public category: CommandCategory = CommandCategory.MISC;
 

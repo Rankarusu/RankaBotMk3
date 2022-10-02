@@ -8,7 +8,9 @@ export abstract class Command {
 
   metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
 
-  helpText?: string;
+  usage: string;
+
+  note?: string;
 
   developerOnly?: boolean;
 

@@ -42,9 +42,12 @@ export class ExpCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `/exp
+  public usage = `/exp
   /exp \`@User\`
   /exp leaderboard`;
+
+  public note =
+    'EXP is acquired by sending messages. The amount gained is slightly randomized.';
 
   public category: CommandCategory = CommandCategory.EXP;
 

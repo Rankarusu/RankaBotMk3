@@ -25,9 +25,10 @@ export class PurgeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `due to bot limitations, this command can only delete 100 messages at a time. It can also not delete messages older than 2 weeks.
-  **Example:**
-  /purge \`20\``;
+  public usage = '/purge `20`';
+
+  public note =
+    'Due to bot limitations, this command can only delete 100 messages at a time. It can also not delete messages older than 2 weeks.';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

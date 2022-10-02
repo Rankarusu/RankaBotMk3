@@ -23,7 +23,7 @@ export class EightballCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/eightball';
+  public usage = '/eightball';
 
   public category: CommandCategory = CommandCategory.MISC;
 

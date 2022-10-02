@@ -37,7 +37,7 @@ export class RemindCommand extends Command {
             name: 'notification-text',
             type: ApplicationCommandOptionType.String,
             description: 'what you want to be notified of',
-            required: false,
+            required: true,
           },
         ],
       },
@@ -48,15 +48,11 @@ export class RemindCommand extends Command {
 
   public category: CommandCategory = CommandCategory.UTILITY;
 
-  public helpText = `The input can be any direct date (e.g. YYYY-MM-DD) or a human
-  readable offset.
-
-  **Examples:**
-  - /remind set \`next thursday at 3pm\` \`do something funny\`
-  - /remind set \`tomorrow\`
-  - /remind set \`in 3 days\` \`do the thing\`
-  - /remind set \`5 mins\` \`get food\`
-  - /remind list`;
+  public usage = `/remind set \`next thursday at 3pm\` \`do something funny\`
+  /remind set \`tomorrow\`
+  /remind set \`in 3 days\` \`do the thing\`
+  /remind set \`5 mins\` \`get food\`
+  /remind list`;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

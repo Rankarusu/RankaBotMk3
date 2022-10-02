@@ -65,7 +65,7 @@ export class StickerCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `/sticker add \`seiba\` \`<uploaded file>\`
+  public usage = `/sticker add \`seiba\` \`<uploaded file>\`
   /sticker list
   /sticker post \`seiba\``;
 

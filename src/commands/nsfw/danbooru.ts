@@ -33,9 +33,9 @@ export class DanbooruCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = `
-  The danbooru API limits free requests to 2 tags per query.
-  /danbooru \`armpits\` \`nude\``;
+  public usage = '/danbooru `armpits` `nude`';
+
+  public note = 'The danbooru API limits free requests to 2 tags per query.';
 
   public category: CommandCategory = CommandCategory.NSFW;
 

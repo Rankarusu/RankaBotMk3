@@ -41,7 +41,7 @@ export class TimeoutCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText =
+  public usage =
     '/timeout @User 2 hours "for telling a mod his waifu was shit"';
 
   public category: CommandCategory = CommandCategory.MODERATION;

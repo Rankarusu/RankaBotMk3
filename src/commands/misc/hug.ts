@@ -32,7 +32,7 @@ export class HugCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/hug `@User`';
+  public usage = '/hug `@User`';
 
   public category: CommandCategory = CommandCategory.MISC;
 

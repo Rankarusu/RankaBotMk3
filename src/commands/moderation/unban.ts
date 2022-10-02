@@ -33,7 +33,7 @@ export class UnbanCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/unban `446368889700905000`';
+  public usage = '/unban `446368889700905000`';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

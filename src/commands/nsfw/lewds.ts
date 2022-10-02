@@ -27,7 +27,7 @@ export class LewdsCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/lewds `5`';
+  public usage = '/lewds `5`';
 
   public category: CommandCategory = CommandCategory.NSFW;
 

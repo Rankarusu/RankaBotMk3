@@ -34,7 +34,7 @@ export class KickCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/kick `@User` `being an idiot`';
+  public usage = '/kick `@User` `being an idiot`';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

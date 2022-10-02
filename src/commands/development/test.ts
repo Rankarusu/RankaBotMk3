@@ -23,7 +23,7 @@ export class TestCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText?: string = 'usage: /ping';
+  public usage = 'usage: /ping';
 
   public category: CommandCategory = CommandCategory.DEVELOPMENT;
 

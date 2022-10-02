@@ -27,7 +27,7 @@ export class UntimeoutCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/untimeout @User';
+  public usage = '/untimeout @User';
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

@@ -32,7 +32,6 @@ export class AutoCompleteHandler implements EventHandler {
     if (intr.commandName === 'help') {
       const commands = bot.getCommands();
       const focusedValue = intr.options.getFocused(true);
-      console.log(focusedValue);
       const filtered = [];
       let limit = 0;
       for (const command of commands) {

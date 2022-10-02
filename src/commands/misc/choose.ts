@@ -23,7 +23,10 @@ export class ChooseCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public helpText = '/choose `spam, eggs`';
+  public usage = '/choose `spam, eggs`';
+
+  public note =
+    'Click on the interaction link above the message to see all options.';
 
   public category: CommandCategory = CommandCategory.MISC;
 

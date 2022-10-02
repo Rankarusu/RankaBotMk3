@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as cron from 'node-cron';
-import { Logger } from '.';
+import { Logger, Scheduler } from '.';
 import LogMessages from '../static/logs/logs.json';
 import {
   AniListAiringScheduleItem,
@@ -9,7 +9,7 @@ import {
   MediaType,
 } from '../models/anilist';
 
-class AniList {
+class AniList implements Scheduler {
   //implementing a Singleton that automatically gets new data from AniList.
   private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
 
@@ -21,7 +21,7 @@ class AniList {
     // private constructor, so that it can only be instantiated once
   }
 
-  public start() {
+  public async start() {
     //get data once and then in intervals.
     try {
       this.updateSchedule(this.getTimestamps());

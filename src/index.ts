@@ -49,7 +49,13 @@ import {
 import { SelectMenu } from './menus/select-menu';
 import { Bot } from './models/bot';
 import { Reaction } from './models/reaction';
-import { ActivityScheduler, Db, Logger } from './services';
+import {
+  ActivityScheduler,
+  Db,
+  ExpScheduler,
+  Logger,
+  Scheduler,
+} from './services';
 import { aniList } from './services/anilist';
 import { lewds } from './services/lewds';
 import { ReminderScheduler } from './services/reminder';
@@ -187,15 +193,16 @@ async function start(): Promise<void> {
     return;
   }
 
-  // start schedulers
-  const reminderScheduler = new ReminderScheduler(client);
-  reminderScheduler.start();
-  const activityScheduler = new ActivityScheduler(client);
-  activityScheduler.start();
-  const aniListScheduler = aniList;
-  aniListScheduler.start();
-  const lewdsScheduler = lewds;
-  await lewdsScheduler.start();
+  // Start Schedulers
+  const schedulers: Scheduler[] = [
+    new ReminderScheduler(client),
+    new ActivityScheduler(client),
+    new ExpScheduler(client),
+    aniList,
+    lewds,
+  ];
+
+  schedulers.forEach((scheduler) => scheduler.start());
 
   // Finally start the bot
   await bot.start();

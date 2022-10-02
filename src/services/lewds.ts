@@ -1,5 +1,5 @@
 import * as cron from 'node-cron';
-import { Logger } from '.';
+import { Logger, Scheduler } from '.';
 import { RedditPostData } from '../models/reddit';
 import LogMessages from '../static/logs/logs.json';
 import { RedditUtils } from '../utils';
@@ -10,7 +10,7 @@ interface GuildCounter {
 const url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
 const limit = 100;
 
-class Lewds {
+class Lewds implements Scheduler {
   //implementing a Singleton that automatically gets new data from a MultiReddit.
 
   private lewds: RedditPostData[] = [];

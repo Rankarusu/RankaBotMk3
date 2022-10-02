@@ -42,7 +42,7 @@ export class BanCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/ban `@User` `being an idiot` `3`';
+  public usage = () => `${this.mention()} \`@User\` \`being an idiot\` \`3\``;
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

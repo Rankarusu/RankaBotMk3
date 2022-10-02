@@ -17,7 +17,7 @@ export class InfoCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/info';
+  public usage = () => this.mention();
 
   public category: CommandCategory = CommandCategory.UTILITY;
 

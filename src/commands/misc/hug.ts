@@ -32,7 +32,7 @@ export class HugCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/hug `@User`';
+  public usage = () => `${this.mention()} \`@User\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

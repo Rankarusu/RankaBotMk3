@@ -65,9 +65,9 @@ export class StickerCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `/sticker add \`seiba\` \`<uploaded file>\`
-  /sticker list
-  /sticker post \`seiba\``;
+  public usage = () => `${this.mention('add')} \`seiba\` \`<uploaded file>\`
+  ${this.mention('list')}
+  ${this.mention('post')} \`seiba\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

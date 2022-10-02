@@ -13,7 +13,7 @@ export class FactCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/fact';
+  public usage = () => this.mention();
 
   public category: CommandCategory = CommandCategory.MISC;
 

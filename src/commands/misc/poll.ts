@@ -97,8 +97,8 @@ export class PollCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage =
-    '/poll `Whats your favorite color?` `True` `30` `red` `blue` `green`';
+  public usage = () =>
+    `${this.mention()} \`Whats your favorite color?\` \`True\` \`30\` \`red\` \`blue\` \`green\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

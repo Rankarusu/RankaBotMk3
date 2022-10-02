@@ -25,7 +25,7 @@ export class PurgeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/purge `20`';
+  public usage = () => `${this.mention()} \`20\``;
 
   public note =
     'Due to bot limitations, this command can only delete 100 messages at a time. It can also not delete messages older than 2 weeks.';

@@ -12,7 +12,7 @@ export class CoinflipCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/coinflip';
+  public usage = () => this.mention();
 
   public category: CommandCategory = CommandCategory.MISC;
 

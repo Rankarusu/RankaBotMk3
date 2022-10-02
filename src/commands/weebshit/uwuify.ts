@@ -82,7 +82,7 @@ export class UwuifyCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `/uwuify \`insert copypasta here\``;
+  public usage = () => `${this.mention()} \`insert copypasta here\``;
 
   public category: CommandCategory = CommandCategory.WEEBSHIT;
 

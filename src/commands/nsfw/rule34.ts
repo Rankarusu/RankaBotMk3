@@ -82,7 +82,8 @@ export class Rule34Command extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/rule34 `1girls` `gloves` `fate_(series)`';
+  public usage = () =>
+    `${this.mention()} \`1girls\` \`gloves\` \`fate_(series)\``;
 
   public category: CommandCategory = CommandCategory.NSFW;
 

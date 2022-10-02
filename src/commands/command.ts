@@ -8,7 +8,7 @@ export abstract class Command {
 
   metadata: RESTPostAPIChatInputApplicationCommandsJSONBody;
 
-  usage: string;
+  usage: () => string; //making a function out of this so we can evaluate the string literals at runtime, therefore getting access to the command ids for slash command mentinos.
 
   note?: string;
 
@@ -23,6 +23,12 @@ export abstract class Command {
   deferType: CommandDeferType;
 
   requireClientPerms: PermissionsString[];
+
+  public mention(subcommand?: string, subcommandGroup?: string) {
+    return `</${this.metadata.name}${
+      subcommandGroup ? ` ${subcommandGroup}` : ''
+    }${subcommand ? ` ${subcommand}` : ''}:${this.id}>`;
+  }
 
   abstract execute(
     interaction: ChatInputCommandInteraction,

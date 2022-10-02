@@ -42,9 +42,9 @@ export class ExpCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `/exp
-  /exp \`@User\`
-  /exp leaderboard`;
+  public usage = () => `${this.mention()}
+  ${this.mention()} \`@User\`
+  ${this.mention('leaderboard')}`;
 
   public note =
     'EXP is acquired by sending messages. The amount gained is slightly randomized.';

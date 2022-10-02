@@ -23,7 +23,7 @@ export class ChooseCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/choose `spam, eggs`';
+  public usage = () => `${this.mention()} \`spam, eggs\``;
 
   public note =
     'Click on the interaction link above the message to see all options.';

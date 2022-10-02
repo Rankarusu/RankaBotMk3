@@ -151,7 +151,7 @@ export class EmbedUtils {
     subcommands?: string[]
   ) {
     const embed = new EmbedBuilder()
-      .setTitle(`Help for \`${cmd}\``)
+      .setTitle(`Help for ${cmd}`)
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(desc)
       .addFields([{ name: 'Usage', value: usage }])

@@ -27,7 +27,7 @@ export class UntimeoutCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/untimeout @User';
+  public usage = () => `${this.mention()} \`@User\``;
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

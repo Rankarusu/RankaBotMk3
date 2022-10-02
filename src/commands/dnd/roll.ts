@@ -24,7 +24,7 @@ export class RollCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/roll `4d10+20`';
+  public usage = () => `${this.mention()} \`4d10+20\``;
 
   public category: CommandCategory = CommandCategory.DND;
 

@@ -33,7 +33,7 @@ export class DanbooruCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/danbooru `armpits` `nude`';
+  public usage = () => `${this.mention()} \`armpits\` \`nude\``;
 
   public note = 'The danbooru API limits free requests to 2 tags per query.';
 

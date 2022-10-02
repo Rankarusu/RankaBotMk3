@@ -23,7 +23,7 @@ export class EightballCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/eightball';
+  public usage = () => `${this.mention()} \`Are Traps gay?\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

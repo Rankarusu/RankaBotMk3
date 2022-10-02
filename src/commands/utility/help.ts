@@ -39,8 +39,8 @@ export class HelpCommand extends Command {
     ],
   };
 
-  public usage = `\`/help\`
-  /help \`dex\``;
+  public usage = () => `${this.mention()}
+  ${this.mention()} \`dex\``;
 
   public note = 'Hey, no recursing!';
 
@@ -93,10 +93,10 @@ export class HelpCommand extends Command {
       }
 
       const embed = EmbedUtils.cmdHelpEmbed(
-        cmdhelp.metadata.name,
+        cmdhelp.mention(),
         iconUrl,
         desc,
-        usage,
+        usage(),
         note,
         prettySubCommands
       );
@@ -121,23 +121,11 @@ export class HelpCommand extends Command {
       output[StringUtils.capitalize(key)] = groupedCommands[key].map(
         (command: Command) => {
           //TODO: handle subcommands and subcommand groups differently
-          return `</${command.metadata.name}:${command.id}> - ${command.metadata.description}`;
+          return `${command.mention()} - ${command.metadata.description}`;
         }
       );
     });
     return output;
-  }
-
-  private getPrettyOptions(cmdhelp: Command) {
-    const options = cmdhelp.metadata.options.filter(
-      (option) =>
-        option.type !== ApplicationCommandOptionType.Subcommand &&
-        option.type !== ApplicationCommandOptionType.SubcommandGroup
-    );
-    const prettyOptions = options.map((option) => {
-      return `\`${option.name}\` - ${option.description}`;
-    });
-    return prettyOptions;
   }
 
   private getTree(cmdhelp: Command) {

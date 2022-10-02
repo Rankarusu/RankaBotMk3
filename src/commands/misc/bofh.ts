@@ -13,7 +13,7 @@ export class BofhCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/bofh';
+  public usage = () => this.mention();
 
   public category: CommandCategory = CommandCategory.MISC;
 

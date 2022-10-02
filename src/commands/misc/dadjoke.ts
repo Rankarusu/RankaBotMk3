@@ -13,7 +13,7 @@ export class DadJokeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/dadjoke';
+  public usage = () => this.mention();
 
   public category: CommandCategory = CommandCategory.MISC;
 

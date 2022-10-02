@@ -41,8 +41,8 @@ export class TimeoutCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage =
-    '/timeout @User 2 hours "for telling a mod his waifu was shit"';
+  public usage = () =>
+    `${this.mention()} \`@User\` \`2 hours\` \`for telling a mod his waifu was shit\``;
 
   public category: CommandCategory = CommandCategory.MODERATION;
 

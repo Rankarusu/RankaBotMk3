@@ -42,8 +42,8 @@ export class AnimeCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `/anime schedule
-  /anime search \`attack on titan\``;
+  public usage = () => `${this.mention('schedule')}
+  ${this.mention('search')} \`attack on titan\``;
 
   public category: CommandCategory = CommandCategory.WEEBSHIT;
 

@@ -233,14 +233,14 @@ export class DexCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `
-  /dex pokemon \`Mega Charizard X\`
-  /dex ablity \`pressure\`
-  /dex berry \`enigma\`
-  /dex item \`potion\`
-  /dex move \`hyper-beam\`
-  /dex nature \`adamant\`
-  /dex pdr \`water\` \`fire\`
+  public usage = () => `
+  ${this.mention('pokemon')} \`Mega Charizard X\`
+  ${this.mention('abiliy')} \`pressure\`
+  ${this.mention('berry')} \`enigma\`
+  ${this.mention('item')} \`potion\`
+  ${this.mention('move')} \`hyper-beam\`
+  ${this.mention('nature')} \`adamant\`
+  ${this.mention('pdr')} \`water\` \`fire\`
   `;
 
   public category: CommandCategory = CommandCategory.POKEMON;

@@ -134,9 +134,9 @@ export class TarotCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = `/tarot draw
-  /tarot search major-arcana \`XXI - The World\` \`True\`
-  /tarot search minor-arcana \`cups\` \`10\` \`False\``;
+  public usage = () => `${this.mention('draw')}
+  ${this.mention('major-arcana', 'search')} \`XXI - The World\` \`True\`
+  ${this.mention('minor-arcana', 'search')} \`cups\` \`10\` \`False\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 

@@ -48,11 +48,13 @@ export class RemindCommand extends Command {
 
   public category: CommandCategory = CommandCategory.UTILITY;
 
-  public usage = `/remind set \`next thursday at 3pm\` \`do something funny\`
-  /remind set \`tomorrow\`
-  /remind set \`in 3 days\` \`do the thing\`
-  /remind set \`5 mins\` \`get food\`
-  /remind list`;
+  public usage = () => `${this.mention(
+    'set'
+  )} \`next thursday at 3pm\` \`do something funny\`
+  ${this.mention('set')} \`tomorrow\`
+  ${this.mention('set')} \`in 3 days\` \`do the thing\`
+  ${this.mention('set')} \`5 mins\` \`get food\`
+  ${this.mention('list')}`;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

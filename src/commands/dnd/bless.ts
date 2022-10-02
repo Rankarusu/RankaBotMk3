@@ -20,7 +20,7 @@ export class BlessCommand extends Command {
   };
 
   // cooldown?: RateLimiter;
-  public usage = '/bless';
+  public usage = () => this.mention();
 
   public note = 'This command will ping you once every minute for 5 minutes.';
 

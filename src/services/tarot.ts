@@ -32,7 +32,3 @@ export class Tarot {
     return card;
   }
 }
-
-//get suits
-//getBySuit
-//getByRank

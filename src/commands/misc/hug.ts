@@ -15,6 +15,7 @@ import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const Config = require('../../../config/config.json');
+const pathToImages = path.resolve(__dirname, '../../static/images/hugs/');
 
 export class HugCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -40,8 +41,6 @@ export class HugCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  private pathToImages = path.resolve(__dirname, '../../static/images/hugs/');
-
   public async execute(
     interaction: ChatInputCommandInteraction,
     data: EventData
@@ -55,7 +54,7 @@ export class HugCommand extends Command {
   }
 
   private getRandomHug() {
-    const files = fs.readdirSync(this.pathToImages);
+    const files = fs.readdirSync(pathToImages);
 
     const randomFile = files[Math.floor(Math.random() * files.length)];
     return randomFile;
@@ -63,7 +62,7 @@ export class HugCommand extends Command {
 
   private createHugEmbed(hugger: GuildMember, hugged: GuildMember) {
     const filename = this.getRandomHug();
-    const file = new AttachmentBuilder(`${this.pathToImages}/${filename}`);
+    const file = new AttachmentBuilder(`${pathToImages}/${filename}`);
 
     let message: string;
 

@@ -5,6 +5,8 @@ import bofh from '../../static/data/bofh.json';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
+const excuses = bofh.excuses;
+
 export class BofhCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'bofh',
@@ -21,8 +23,6 @@ export class BofhCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  private excuses: string[] = bofh.excuses;
-
   public async execute(
     interaction: ChatInputCommandInteraction,
     data: EventData
@@ -37,8 +37,7 @@ export class BofhCommand extends Command {
   }
 
   private getExcuse(): string {
-    const excuse =
-      this.excuses[Math.floor(Math.random() * this.excuses.length)];
+    const excuse = excuses[Math.floor(Math.random() * excuses.length)];
     return excuse;
   }
 }

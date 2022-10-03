@@ -41,6 +41,7 @@ export enum CommandDeferType {
   HIDDEN = 'HIDDEN',
   NONE = 'NONE',
 }
+
 export enum CommandCategory {
   UTILITY = 'Utility',
   DEVELOPMENT = 'Development',

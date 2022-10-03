@@ -3,6 +3,21 @@ import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
 import LogMessages from '../static/logs/logs.json';
 
+const activities = [
+  'with the Discord API',
+  'with Discord.js',
+  'with lewds',
+  'with socks',
+  'Pokémon',
+  'with tights',
+  'with a trebuchet',
+  'RealLife.exe',
+  'around with deadly lasers',
+  'the smallest violin in the world',
+  'a bunch of monsters in one turn',
+  'with RankaBot and RankaBot2',
+];
+
 export class ActivityScheduler implements Scheduler {
   client: Client;
 
@@ -10,24 +25,8 @@ export class ActivityScheduler implements Scheduler {
     this.client = client;
   }
 
-  private activities = [
-    'with the Discord API',
-    'with Discord.js',
-    'with lewds',
-    'with socks',
-    'Pokémon',
-    'with tights',
-    'with a trebuchet',
-    'RealLife.exe',
-    'around with deadly lasers',
-    'the smallest violin in the world',
-    'a bunch of monsters in one turn',
-    'with RankaBot and RankaBot2',
-  ];
-
   private async changeActivity() {
-    const activity =
-      this.activities[Math.floor(Math.random() * this.activities.length)];
+    const activity = activities[Math.floor(Math.random() * activities.length)];
     this.client.user.setActivity(activity);
   }
 

@@ -9,11 +9,65 @@ import {
   MediaType,
 } from '../models/anilist';
 
+const url = 'https://graphql.anilist.co';
+
+const scheduleQuery = `
+query ($start: Int, $end: Int) {
+  Page(page: 1, perPage: 50) {
+    airingSchedules(
+      airingAt_greater: $start
+      airingAt_lesser: $end
+      sort: TIME
+    ) {
+      episode
+      airingAt
+      media {
+        title {
+          native
+          romaji
+          english
+        }
+        type
+        countryOfOrigin
+        format
+      }
+    }
+  }
+}
+`;
+
+const searchQuery = `
+query ($search: String, $format: MediaFormat) {
+  Page(page: 1, perPage: 1) {
+    media(search: $search, format: $format) {
+      idMal
+      title {
+        native
+        romaji
+        english
+      }
+      type
+      format
+      description
+      genres
+      season
+      seasonYear
+      averageScore
+      meanScore
+      siteUrl
+      coverImage {
+        medium
+      }
+      nextAiringEpisode {
+        airingAt
+      }
+    }
+  }
+}
+`;
 class AniList implements Scheduler {
   //implementing a Singleton that automatically gets new data from AniList.
   private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
-
-  private url = 'https://graphql.anilist.co';
 
   private static _instance: AniList;
 
@@ -48,69 +102,14 @@ class AniList implements Scheduler {
     return this._instance || (this._instance = new this());
   }
 
-  private scheduleQuery = `
-  query ($start: Int, $end: Int) {
-    Page(page: 1, perPage: 50) {
-      airingSchedules(
-        airingAt_greater: $start
-        airingAt_lesser: $end
-        sort: TIME
-      ) {
-        episode
-        airingAt
-        media {
-          title {
-            native
-            romaji
-            english
-          }
-          type
-          countryOfOrigin
-          format
-        }
-      }
-    }
-  }
-  `;
-
-  private searchQuery = `
-  query ($search: String, $format: MediaFormat) {
-    Page(page: 1, perPage: 1) {
-      media(search: $search, format: $format) {
-        idMal
-        title {
-          native
-          romaji
-          english
-        }
-        type
-        format
-        description
-        genres
-        season
-        seasonYear
-        averageScore
-        meanScore
-        siteUrl
-        coverImage {
-          medium
-        }
-        nextAiringEpisode {
-          airingAt
-        }
-      }
-    }
-  }
-  `;
-
   public async searchMedia(title: string): Promise<AniListSearchItem> {
     const data = await axios
-      .post(this.url, {
+      .post(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
         },
-        query: this.searchQuery,
+        query: searchQuery,
         variables: { search: title, format: MediaFormat.TV },
       })
       .then((res) => {
@@ -140,12 +139,12 @@ class AniList implements Scheduler {
     end: number
   ): Promise<AniListAiringScheduleItem[]> {
     const data = await axios
-      .post(this.url, {
+      .post(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
         },
-        query: this.scheduleQuery,
+        query: scheduleQuery,
         variables: { start, end },
       })
       .then((res) => {

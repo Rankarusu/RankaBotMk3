@@ -6,7 +6,7 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { Rule34Post } from '../../models/rule34post';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const limit = 100;
@@ -81,9 +81,10 @@ export class Rule34Command extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () =>
     `${this.mention()} \`1girls\` \`gloves\` \`fate_(series)\``;
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.NSFW;
 

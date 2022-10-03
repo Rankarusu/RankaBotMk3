@@ -28,7 +28,12 @@ import {
   PokemonType,
 } from 'pokenode-ts';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
+import {
+  ClientUtils,
+  EmbedUtils,
+  InteractionUtils,
+  StringUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 import { ExtendedPaginationEmbed } from '../../models/pagination-embed';
 import { PokemonDamageRelations } from '../../models/pokemon';
@@ -232,7 +237,6 @@ export class DexCommand extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => `
   ${this.mention('pokemon')} \`Mega Charizard X\`
   ${this.mention('abiliy')} \`pressure\`
@@ -242,6 +246,8 @@ export class DexCommand extends Command {
   ${this.mention('nature')} \`adamant\`
   ${this.mention('pdr')} \`water\` \`fire\`
   `;
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.POKEMON;
 

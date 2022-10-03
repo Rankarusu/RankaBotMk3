@@ -7,11 +7,12 @@
     "token": "",
     "secret": "",
     "intents": [
-      "GUILDS",
-      "GUILD_MESSAGES",
-      "GUILD_MESSAGE_REACTIONS",
-      "DIRECT_MESSAGES",
-      "DIRECT_MESSAGE_REACTIONS"
+      "Guilds",
+      "GuildMessages",
+      "GuildMessageReactions",
+      "DirectMessages",
+      "DirectMessageReactions",
+      "MessageContent"
     ],
     "partials": [
       "MESSAGE",
@@ -33,6 +34,24 @@
     "success": "#00ff83",
     "warning": "#ffcc66",
     "error": "#ff4a4a"
+  },
+  "cooldowns": {
+    "commands": {
+      "amount": 10,
+      "interval": 30
+    },
+    "triggers": {
+      "amount": 10,
+      "interval": 30
+    },
+    "apiCallCommands": {
+      "amount": 2,
+      "interval": 10
+    },
+    "dbCommands": {
+      "amount": 2,
+      "interval": 10
+    }
   },
   "env": "",
   "devServers": []

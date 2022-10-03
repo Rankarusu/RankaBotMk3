@@ -5,7 +5,7 @@ import {
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const limit = 100;
@@ -32,10 +32,11 @@ export class DanbooruCommand extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => `${this.mention()} \`armpits\` \`nude\``;
 
   public note = 'The danbooru API limits free requests to 2 tags per query.';
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.NSFW;
 

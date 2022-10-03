@@ -7,7 +7,13 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { ReminderListSelectEmbed } from '../../models/pagination-embed';
-import { DateUtils, DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import {
+  ClientUtils,
+  DateUtils,
+  DbUtils,
+  EmbedUtils,
+  InteractionUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class RemindCommand extends Command {
@@ -44,17 +50,17 @@ export class RemindCommand extends Command {
     ],
   };
 
-  // public cooldown = new RateLimiter(1, 5000);
-
-  public category: CommandCategory = CommandCategory.UTILITY;
-
   public usage = () => `${this.mention(
     'set'
   )} \`next thursday at 3pm\` \`do something funny\`
-  ${this.mention('set')} \`tomorrow\`
-  ${this.mention('set')} \`in 3 days\` \`do the thing\`
-  ${this.mention('set')} \`5 mins\` \`get food\`
-  ${this.mention('list')}`;
+    ${this.mention('set')} \`tomorrow\`
+    ${this.mention('set')} \`in 3 days\` \`do the thing\`
+    ${this.mention('set')} \`5 mins\` \`get food\`
+    ${this.mention('list')}`;
+
+  public cooldown = ClientUtils.DbCommandRateLimiter();
+
+  public category: CommandCategory = CommandCategory.UTILITY;
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 

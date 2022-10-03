@@ -10,7 +10,12 @@ import {
 } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
-import { DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import {
+  ClientUtils,
+  DbUtils,
+  EmbedUtils,
+  InteractionUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class ExpCommand extends Command {
@@ -48,6 +53,8 @@ export class ExpCommand extends Command {
 
   public note =
     'EXP is acquired by sending messages. The amount gained is slightly randomized.';
+
+  public cooldown = ClientUtils.DbCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.EXP;
 

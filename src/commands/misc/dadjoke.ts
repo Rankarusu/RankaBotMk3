@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventData } from '../../models/event-data';
-import { EmbedUtils, InteractionUtils } from '../../utils';
+import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class DadJokeCommand extends Command {
@@ -12,8 +13,9 @@ export class DadJokeCommand extends Command {
     dm_permission: true,
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => this.mention();
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.MISC;
 

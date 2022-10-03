@@ -5,7 +5,12 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { lewds } from '../../services/lewds';
-import { ArrayUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import {
+  ArrayUtils,
+  ClientUtils,
+  EmbedUtils,
+  InteractionUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class LewdsCommand extends Command {
@@ -26,8 +31,9 @@ export class LewdsCommand extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => `this.mention() \`5\``;
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.NSFW;
 

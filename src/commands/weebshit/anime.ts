@@ -11,7 +11,12 @@ import { AniListSearchItem } from '../../models/anilist';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import { aniList } from '../../services/anilist';
-import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
+import {
+  ClientUtils,
+  EmbedUtils,
+  InteractionUtils,
+  StringUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class AnimeCommand extends Command {
@@ -44,6 +49,8 @@ export class AnimeCommand extends Command {
   // cooldown?: RateLimiter;
   public usage = () => `${this.mention('schedule')}
   ${this.mention('search')} \`attack on titan\``;
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.WEEBSHIT;
 

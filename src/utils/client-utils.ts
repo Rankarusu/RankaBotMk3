@@ -1,5 +1,7 @@
 import { Client, Message, Snowflake, TextChannel } from 'discord.js';
+import { RateLimiter } from 'discord.js-rate-limiter';
 
+const Config = require('../../config/config.json');
 export class ClientUtils {
   static async getChannel(
     client: Client,
@@ -31,5 +33,19 @@ export class ClientUtils {
       //filtering maybe
       throw error;
     }
+  }
+
+  public static APICallCommandRateLimiter() {
+    return new RateLimiter(
+      Config.cooldowns.apiCallCommands.amount,
+      Config.cooldowns.apiCallCommands.interval * 1000
+    );
+  }
+
+  public static DbCommandRateLimiter() {
+    return new RateLimiter(
+      Config.cooldowns.dbCommands.amount,
+      Config.cooldowns.dbCommands.interval * 1000
+    );
   }
 }

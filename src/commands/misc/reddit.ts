@@ -5,7 +5,12 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { RedditListing } from '../../models/reddit';
-import { ArrayUtils, InteractionUtils, RedditUtils } from '../../utils';
+import {
+  ArrayUtils,
+  ClientUtils,
+  InteractionUtils,
+  RedditUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
@@ -67,8 +72,9 @@ export class RedditCommand extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => `${this.mention()} \`unixporn\` \`5\` \`top\``;
+
+  public cooldown = ClientUtils.APICallCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.MISC;
 

@@ -6,7 +6,12 @@ import {
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { StickerListSelectEmbed } from '../../models/pagination-embed';
-import { DbUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import {
+  ClientUtils,
+  DbUtils,
+  EmbedUtils,
+  InteractionUtils,
+} from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const allowedTypes = [
@@ -64,10 +69,11 @@ export class StickerCommand extends Command {
     ],
   };
 
-  // cooldown?: RateLimiter;
   public usage = () => `${this.mention('add')} \`seiba\` \`<uploaded file>\`
   ${this.mention('list')}
   ${this.mention('post')} \`seiba\``;
+
+  public cooldown = ClientUtils.DbCommandRateLimiter();
 
   public category: CommandCategory = CommandCategory.MISC;
 

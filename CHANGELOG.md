@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Rankarusu/RankaBotMk3/compare/v1.2.0...v1.3.0) (2022-10-03)
+
+
+### Features
+
+* **commands:** add rate limiter for commands that call an api or query the db ([cb6dcdb](https://github.com/Rankarusu/RankaBotMk3/commit/cb6dcdb750d35a77648ccb27e2c206cc5054c470))
+
+
+### Bug Fixes
+
+* **reddit:** fix handling of API-Errors ([c2b2dcd](https://github.com/Rankarusu/RankaBotMk3/commit/c2b2dcdf5b2a4fed4bde6bbbcce19e94bdf4e854))
+
 ## [1.2.0](https://github.com/Rankarusu/RankaBotMk3/compare/v1.1.0...v1.2.0) (2022-10-02)
 
 

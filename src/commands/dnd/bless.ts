@@ -1,16 +1,10 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import {
-  AttachmentBuilder,
-  ChatInputCommandInteraction,
-  PermissionsString,
-} from 'discord.js';
-import path from 'path';
+import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-const pathToImages = path.resolve(__dirname, '../../static/images/');
-const blessImage = 'bless.png';
+const blessImage = 'https://imgur.com/j6S4CLe.png';
 
 export class BlessCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -38,7 +32,6 @@ export class BlessCommand extends Command {
       "Alright, I'm gonna ping you once a minute for 5 minutes so you don't forget to add your D4 to your Attack Rolls and Saving Throws",
       'Bless'
     );
-    const image = new AttachmentBuilder(`${pathToImages}/${blessImage}`);
 
     const followUpEmbed = EmbedUtils.infoEmbed(
       "You have **Bless** up, don't forget to add a **D4** to your **Attack Rolls** and **Saving Throws**."
@@ -48,11 +41,7 @@ export class BlessCommand extends Command {
       setTimeout(() => {
         InteractionUtils.send(
           interaction,
-          followUpEmbed
-            .setTitle(`Bless ${i}/5`)
-            .setThumbnail(`attachment://${blessImage}`),
-          undefined,
-          [image]
+          followUpEmbed.setTitle(`Bless ${i}/5`).setThumbnail(blessImage)
         );
       }, 60 * 1000 * i); // we schedule all times at once but with a minute in between. An alternative would be to use recursion.
     }

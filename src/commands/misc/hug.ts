@@ -3,19 +3,16 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
-  AttachmentBuilder,
   ChatInputCommandInteraction,
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import fs from 'fs';
-import path from 'path';
 import { EventData } from '../../models/event-data';
+import { hugs } from '../../static/hugs.json';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const Config = require('../../../config/config.json');
-const pathToImages = path.resolve(__dirname, '../../static/images/hugs/');
 
 export class HugCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -46,24 +43,14 @@ export class HugCommand extends Command {
     data: EventData
   ): Promise<void> {
     const user = interaction.options.getMember('user');
-    const { embed, file } = this.createHugEmbed(
+    const embed = this.createHugEmbed(
       interaction.member as GuildMember,
       user as GuildMember
     );
-    InteractionUtils.send(interaction, embed, undefined, [file]);
-  }
-
-  private getRandomHug() {
-    const files = fs.readdirSync(pathToImages);
-
-    const randomFile = files[Math.floor(Math.random() * files.length)];
-    return randomFile;
+    InteractionUtils.send(interaction, embed);
   }
 
   private createHugEmbed(hugger: GuildMember, hugged: GuildMember) {
-    const filename = this.getRandomHug();
-    const file = new AttachmentBuilder(`${pathToImages}/${filename}`);
-
     let message: string;
 
     if (hugger.id === hugged.id) {
@@ -76,9 +63,9 @@ export class HugCommand extends Command {
       message = `${hugged.user}, you have been hugged by ${hugger.displayName}!`;
     }
 
-    const embed = EmbedUtils.memberEmbed(hugger, message);
-    embed.setImage(`attachment://${filename}`);
+    const gif = hugs[Math.floor(Math.random() * hugs.length)];
+    const embed = EmbedUtils.memberEmbed(hugger, message).setImage(gif);
 
-    return { embed, file };
+    return embed;
   }
 }

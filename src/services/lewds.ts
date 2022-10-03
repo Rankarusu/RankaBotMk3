@@ -1,7 +1,7 @@
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
 import { RedditPostData } from '../models/reddit';
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 import { RedditUtils } from '../utils';
 
 interface GuildCounter {

@@ -64,7 +64,7 @@ import {
 import { aniList } from './services/anilist';
 import { lewds } from './services/lewds';
 import { ReminderScheduler } from './services/reminder';
-import LogMessages from './static/logs/logs.json';
+import LogMessages from './static/logs.json';
 import {
   AyyTrigger,
   BeckonTrigger,

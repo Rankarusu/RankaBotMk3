@@ -37,8 +37,8 @@
       "name": "The Fool",
       "rank": 0,
       "suit": "major",
-      "img": "m00.jpg",
-      "imgReverse": "m00-r.jpg"
+      "img": "https://imgur.com/c5W91AN.jpg",
+      "imgReverse": "https://imgur.com/774ZT40.jpg"
     },
     {
       "fortune_telling": [
@@ -71,8 +71,8 @@
       "name": "The Magician",
       "rank": 1,
       "suit": "major",
-      "img": "m01.jpg",
-      "imgReverse": "m01-r.jpg"
+      "img": "https://imgur.com/L6UXFmN.jpg",
+      "imgReverse": "https://imgur.com/Wasf6PK.jpg"
     },
     {
       "fortune_telling": [
@@ -108,8 +108,8 @@
       "name": "The Papess/High Priestess",
       "rank": 2,
       "suit": "major",
-      "img": "m02.jpg",
-      "imgReverse": "m02-r.jpg"
+      "img": "https://imgur.com/6h3KppY.jpg",
+      "imgReverse": "https://imgur.com/dedHr36.jpg"
     },
     {
       "fortune_telling": [
@@ -146,8 +146,8 @@
       "name": "The Empress",
       "rank": 3,
       "suit": "major",
-      "img": "m03.jpg",
-      "imgReverse": "m03-r.jpg"
+      "img": "https://imgur.com/xaeeoL5.jpg",
+      "imgReverse": "https://imgur.com/MYFv6oi.jpg.jpg"
     },
     {
       "fortune_telling": [
@@ -181,8 +181,8 @@
       "name": "The Emperor",
       "rank": 4,
       "suit": "major",
-      "img": "m04.jpg",
-      "imgReverse": "m04-r.jpg"
+      "img": "https://imgur.com/kZ6GBRd.jpg",
+      "imgReverse": "https://imgur.com/EUob829.jpg"
     },
     {
       "fortune_telling": [
@@ -218,8 +218,8 @@
       "name": "The Pope/Hierophant",
       "rank": 5,
       "suit": "major",
-      "img": "m05.jpg",
-      "imgReverse": "m05-r.jpg"
+      "img": "https://imgur.com/DdrQd8H.jpg",
+      "imgReverse": "https://imgur.com/93ifwVz.jpg"
     },
     {
       "fortune_telling": [
@@ -253,8 +253,8 @@
       "name": "The Lovers",
       "rank": 6,
       "suit": "major",
-      "img": "m06.jpg",
-      "imgReverse": "m06-r.jpg"
+      "img": "https://imgur.com/hykbfTg.jpg",
+      "imgReverse": "https://imgur.com/e5eFpM9.jpg"
     },
     {
       "fortune_telling": [
@@ -287,8 +287,8 @@
       "name": "The Chariot",
       "rank": 7,
       "suit": "major",
-      "img": "m07.jpg",
-      "imgReverse": "m07-r.jpg"
+      "img": "https://imgur.com/jebu3Cp.jpg",
+      "imgReverse": "https://imgur.com/mBerXYm.jpg"
     },
     {
       "fortune_telling": [
@@ -320,8 +320,8 @@
       "name": "Strength",
       "rank": 8,
       "suit": "major",
-      "img": "m08.jpg",
-      "imgReverse": "m08-r.jpg"
+      "img": "https://imgur.com/jKrAHYD.jpg",
+      "imgReverse": "https://imgur.com/Bw9arAi.jpg"
     },
     {
       "fortune_telling": [
@@ -354,8 +354,8 @@
       "name": "The Hermit",
       "rank": 9,
       "suit": "major",
-      "img": "m09.jpg",
-      "imgReverse": "m09-r.jpg"
+      "img": "https://imgur.com/AfyOFxc.jpg",
+      "imgReverse": "https://imgur.com/VSXLpiY.jpg"
     },
     {
       "fortune_telling": [
@@ -386,11 +386,11 @@
           "Fighting the natural course of events"
         ]
       },
-      "name": "The Wheel",
+      "name": "The Wheel of Fortune",
       "rank": 10,
       "suit": "major",
-      "img": "m10.jpg",
-      "imgReverse": "m10-r.jpg"
+      "img": "https://imgur.com/KYnD5EI.jpg",
+      "imgReverse": "https://imgur.com/EC7UVEW.jpg"
     },
     {
       "fortune_telling": [
@@ -424,8 +424,8 @@
       "name": "Justice",
       "rank": 11,
       "suit": "major",
-      "img": "m11.jpg",
-      "imgReverse": "m11-r.jpg"
+      "img": "https://imgur.com/kzQndqm.jpg",
+      "imgReverse": "https://imgur.com/sRcanBB.jpg"
     },
     {
       "fortune_telling": [
@@ -459,8 +459,8 @@
       "name": "The Hanged Man",
       "rank": 12,
       "suit": "major",
-      "img": "m12.jpg",
-      "imgReverse": "m12-r.jpg"
+      "img": "https://imgur.com/DCHqXej.jpg",
+      "imgReverse": "https://imgur.com/PKL5Ehc.jpg"
     },
     {
       "fortune_telling": [
@@ -494,8 +494,8 @@
       "name": "Death",
       "rank": 13,
       "suit": "major",
-      "img": "m13.jpg",
-      "imgReverse": "m13-r.jpg"
+      "img": "https://imgur.com/UAuiJoO.jpg",
+      "imgReverse": "https://imgur.com/hKc7uo3.jpg"
     },
     {
       "fortune_telling": [
@@ -531,8 +531,8 @@
       "name": "Temperance",
       "rank": 14,
       "suit": "major",
-      "img": "m14.jpg",
-      "imgReverse": "m14-r.jpg"
+      "img": "https://imgur.com/uswk4np.jpg",
+      "imgReverse": "https://imgur.com/TjWcnLV.jpg"
     },
     {
       "fortune_telling": [
@@ -567,8 +567,8 @@
       "name": "The Devil",
       "rank": 15,
       "suit": "major",
-      "img": "m15.jpg",
-      "imgReverse": "m15-r.jpg"
+      "img": "https://imgur.com/oa5EQr5.jpg",
+      "imgReverse": "https://imgur.com/1furJlh.jpg"
     },
     {
       "fortune_telling": [
@@ -604,8 +604,8 @@
       "name": "The Tower",
       "rank": 16,
       "suit": "major",
-      "img": "m16.jpg",
-      "imgReverse": "m16-r.jpg"
+      "img": "https://imgur.com/slw1CKK.jpg",
+      "imgReverse": "https://imgur.com/gviwh9K.jpg"
     },
     {
       "fortune_telling": [
@@ -642,8 +642,8 @@
       "name": "The Star",
       "rank": 17,
       "suit": "major",
-      "img": "m17.jpg",
-      "imgReverse": "m17-r.jpg"
+      "img": "https://imgur.com/EZ2k8ti.jpg",
+      "imgReverse": "https://imgur.com/ZhiR1Q3.jpg"
     },
     {
       "fortune_telling": [
@@ -677,8 +677,8 @@
       "name": "The Moon",
       "rank": 18,
       "suit": "major",
-      "img": "m18.jpg",
-      "imgReverse": "m18-r.jpg"
+      "img": "https://imgur.com/0AHTfuA.jpg",
+      "imgReverse": "https://imgur.com/RTGsCZQ.jpg"
     },
     {
       "fortune_telling": [
@@ -711,8 +711,8 @@
       "name": "The Sun",
       "rank": 19,
       "suit": "major",
-      "img": "m19.jpg",
-      "imgReverse": "m19-r.jpg"
+      "img": "https://imgur.com/kgtq47G.jpg",
+      "imgReverse": "https://imgur.com/YK1BA7r.jpg"
     },
     {
       "fortune_telling": [
@@ -747,8 +747,8 @@
       "name": "Judgement",
       "rank": 20,
       "suit": "major",
-      "img": "m20.jpg",
-      "imgReverse": "m20-r.jpg"
+      "img": "https://imgur.com/Da0qKs1.jpg",
+      "imgReverse": "https://imgur.com/5raqARu.jpg"
     },
     {
       "fortune_telling": [
@@ -782,8 +782,8 @@
       "name": "The World",
       "rank": 21,
       "suit": "major",
-      "img": "m21.jpg",
-      "imgReverse": "m21-r.jpg"
+      "img": "https://imgur.com/M0ueyXs.jpg",
+      "imgReverse": "https://imgur.com/c4j7UUp.jpg"
     },
     {
       "fortune_telling": [
@@ -820,8 +820,8 @@
       "name": "ace of wands",
       "rank": 1,
       "suit": "wands",
-      "img": "w01.jpg",
-      "imgReverse": "w01-r.jpg"
+      "img": "https://imgur.com/rfosXfm.jpg",
+      "imgReverse": "https://imgur.com/K2BmZSl.jpg"
     },
     {
       "fortune_telling": [
@@ -854,8 +854,8 @@
       "name": "two of wands",
       "rank": 2,
       "suit": "wands",
-      "img": "w02.jpg",
-      "imgReverse": "w02-r.jpg"
+      "img": "https://imgur.com/rVDXSjy.jpg",
+      "imgReverse": "https://imgur.com/O2CdzTW.jpg"
     },
     {
       "fortune_telling": [
@@ -888,8 +888,8 @@
       "name": "three of wands",
       "rank": 3,
       "suit": "wands",
-      "img": "w03.jpg",
-      "imgReverse": "w03-r.jpg"
+      "img": "https://imgur.com/pRafprB.jpg",
+      "imgReverse": "https://imgur.com/ojLgNQd.jpg"
     },
     {
       "fortune_telling": [
@@ -922,8 +922,8 @@
       "name": "four of wands",
       "rank": 4,
       "suit": "wands",
-      "img": "w04.jpg",
-      "imgReverse": "w04-r.jpg"
+      "img": "https://imgur.com/C4llvxr.jpg",
+      "imgReverse": "https://imgur.com/JGT3Pje.jpg"
     },
     {
       "fortune_telling": [
@@ -955,8 +955,8 @@
       "name": "five of wands",
       "rank": 5,
       "suit": "wands",
-      "img": "w05.jpg",
-      "imgReverse": "w05-r.jpg"
+      "img": "https://imgur.com/rgys9dr.jpg",
+      "imgReverse": "https://imgur.com/z304EQm.jpg"
     },
     {
       "fortune_telling": [
@@ -992,8 +992,8 @@
       "name": "six of wands",
       "rank": 6,
       "suit": "wands",
-      "img": "w06.jpg",
-      "imgReverse": "w06-r.jpg"
+      "img": "https://imgur.com/o51diRO.jpg",
+      "imgReverse": "https://imgur.com/6QIgM0J.jpg"
     },
     {
       "fortune_telling": [
@@ -1025,8 +1025,8 @@
       "name": "seven of wands",
       "rank": 7,
       "suit": "wands",
-      "img": "w07.jpg",
-      "imgReverse": "w07-r.jpg"
+      "img": "https://imgur.com/3qtuMcy.jpg",
+      "imgReverse": "https://imgur.com/luOJ4UG.jpg"
     },
     {
       "fortune_telling": [
@@ -1061,8 +1061,8 @@
       "name": "eight of wands",
       "rank": 8,
       "suit": "wands",
-      "img": "w08.jpg",
-      "imgReverse": "w08-r.jpg"
+      "img": "https://imgur.com/igxxbz3.jpg",
+      "imgReverse": "https://imgur.com/0PSayVr.jpg"
     },
     {
       "fortune_telling": [
@@ -1099,8 +1099,8 @@
       "name": "nine of wands",
       "rank": 9,
       "suit": "wands",
-      "img": "w09.jpg",
-      "imgReverse": "w09-r.jpg"
+      "img": "https://imgur.com/Rf3WWpK.jpg",
+      "imgReverse": "https://imgur.com/gAjQ8K9.jpg"
     },
     {
       "fortune_telling": [
@@ -1132,8 +1132,8 @@
       "name": "ten of wands",
       "rank": 10,
       "suit": "wands",
-      "img": "w10.jpg",
-      "imgReverse": "w10-r.jpg"
+      "img": "https://imgur.com/mv2Qgow.jpg",
+      "imgReverse": "https://imgur.com/cZO5kGM.jpg"
     },
     {
       "fortune_telling": [
@@ -1165,8 +1165,8 @@
       "name": "page of wands",
       "rank": "page",
       "suit": "wands",
-      "img": "w11.jpg",
-      "imgReverse": "w11-r.jpg"
+      "img": "https://imgur.com/iGgTJz1.jpg",
+      "imgReverse": "https://imgur.com/ueguxXe.jpg"
     },
     {
       "fortune_telling": [
@@ -1200,8 +1200,8 @@
       "name": "knight of wands",
       "rank": "knight",
       "suit": "wands",
-      "img": "w12.jpg",
-      "imgReverse": "w12-r.jpg"
+      "img": "https://imgur.com/jfi4fjc.jpg",
+      "imgReverse": "https://imgur.com/KiMhvei.jpg"
     },
     {
       "fortune_telling": [
@@ -1231,8 +1231,8 @@
       "name": "queen of wands",
       "rank": "queen",
       "suit": "wands",
-      "img": "w13.jpg",
-      "imgReverse": "w13-r.jpg"
+      "img": "https://imgur.com/TScvdcw.jpg",
+      "imgReverse": "https://imgur.com/O76KggK.jpg"
     },
     {
       "fortune_telling": [
@@ -1262,8 +1262,8 @@
       "name": "king of wands",
       "rank": "king",
       "suit": "wands",
-      "img": "w14.jpg",
-      "imgReverse": "w14-r.jpg"
+      "img": "https://imgur.com/Kxs7GIV.jpg",
+      "imgReverse": "https://imgur.com/ZFxpQze.jpg"
     },
     {
       "fortune_telling": [
@@ -1298,8 +1298,8 @@
       "name": "ace of cups",
       "rank": 1,
       "suit": "cups",
-      "img": "c01.jpg",
-      "imgReverse": "c01-r.jpg"
+      "img": "https://imgur.com/xvKI5MD.jpg",
+      "imgReverse": "https://imgur.com/9XIzjmm.jpg"
     },
     {
       "fortune_telling": [
@@ -1335,8 +1335,8 @@
       "name": "two of cups",
       "rank": 2,
       "suit": "cups",
-      "img": "c02.jpg",
-      "imgReverse": "c02-r.jpg"
+      "img": "https://imgur.com/tqmC0Ti.jpg",
+      "imgReverse": "https://imgur.com/8rB80He.jpg"
     },
     {
       "fortune_telling": [
@@ -1367,8 +1367,8 @@
       "name": "three of cups",
       "rank": 3,
       "suit": "cups",
-      "img": "c03.jpg",
-      "imgReverse": "c03-r.jpg"
+      "img": "https://imgur.com/8xOKWyV.jpg",
+      "imgReverse": "https://imgur.com/4Chfaae.jpg"
     },
     {
       "fortune_telling": [
@@ -1402,8 +1402,8 @@
       "name": "four of cups",
       "rank": 4,
       "suit": "cups",
-      "img": "c04.jpg",
-      "imgReverse": "c04-r.jpg"
+      "img": "https://imgur.com/bIl4ZVb.jpg",
+      "imgReverse": "https://imgur.com/Yux5520.jpg"
     },
     {
       "fortune_telling": [
@@ -1441,8 +1441,8 @@
       "name": "five of cups",
       "rank": 5,
       "suit": "cups",
-      "img": "c05.jpg",
-      "imgReverse": "c05-r.jpg"
+      "img": "https://imgur.com/7iKaxHk.jpg",
+      "imgReverse": "https://imgur.com/2zDZpSx.jpg"
     },
     {
       "fortune_telling": [
@@ -1476,8 +1476,8 @@
       "name": "six of cups",
       "rank": 6,
       "suit": "cups",
-      "img": "c06.jpg",
-      "imgReverse": "c06-r.jpg"
+      "img": "https://imgur.com/aNotLxM.jpg",
+      "imgReverse": "https://imgur.com/6qt3mfE.jpg"
     },
     {
       "fortune_telling": [
@@ -1509,8 +1509,8 @@
       "name": "seven of cups",
       "rank": 7,
       "suit": "cups",
-      "img": "c07.jpg",
-      "imgReverse": "c07-r.jpg"
+      "img": "https://imgur.com/a0SnArW.jpg",
+      "imgReverse": "https://imgur.com/zjKkmmN.jpg"
     },
     {
       "fortune_telling": [
@@ -1548,8 +1548,8 @@
       "name": "eight of cups",
       "rank": 8,
       "suit": "cups",
-      "img": "c08.jpg",
-      "imgReverse": "c08-r.jpg"
+      "img": "https://imgur.com/PfOltVv.jpg",
+      "imgReverse": "https://imgur.com/FNIulBQ.jpg"
     },
     {
       "fortune_telling": [
@@ -1583,8 +1583,8 @@
       "name": "nine of cups",
       "rank": 9,
       "suit": "cups",
-      "img": "c09.jpg",
-      "imgReverse": "c09-r.jpg"
+      "img": "https://imgur.com/byqfTpO.jpg",
+      "imgReverse": "https://imgur.com/6zejIae.jpg"
     },
     {
       "fortune_telling": [
@@ -1615,8 +1615,8 @@
       "name": "ten of cups",
       "rank": 10,
       "suit": "cups",
-      "img": "c10.jpg",
-      "imgReverse": "c10-r.jpg"
+      "img": "https://imgur.com/T3rPiE5.jpg",
+      "imgReverse": "https://imgur.com/g7labbR.jpg"
     },
     {
       "fortune_telling": [
@@ -1650,8 +1650,8 @@
       "name": "page of cups",
       "rank": "page",
       "suit": "cups",
-      "img": "c11.jpg",
-      "imgReverse": "c11-r.jpg"
+      "img": "https://imgur.com/Y3n6kwf.jpg",
+      "imgReverse": "https://imgur.com/l9BUw8Y.jpg"
     },
     {
       "fortune_telling": [
@@ -1683,8 +1683,8 @@
       "name": "knight of cups",
       "rank": "knight",
       "suit": "cups",
-      "img": "c12.jpg",
-      "imgReverse": "c12-r.jpg"
+      "img": "https://imgur.com/xXfD6rz.jpg",
+      "imgReverse": "https://imgur.com/uesbbws.jpg"
     },
     {
       "fortune_telling": [
@@ -1716,8 +1716,8 @@
       "name": "queen of cups",
       "rank": "queen",
       "suit": "cups",
-      "img": "c13.jpg",
-      "imgReverse": "c13-r.jpg"
+      "img": "https://imgur.com/QKGNd2F.jpg",
+      "imgReverse": "https://imgur.com/y7l5AfE.jpg"
     },
     {
       "fortune_telling": [
@@ -1748,8 +1748,8 @@
       "name": "king of cups",
       "rank": "king",
       "suit": "cups",
-      "img": "c14.jpg",
-      "imgReverse": "c14-r.jpg"
+      "img": "https://imgur.com/eB3bPCR.jpg",
+      "imgReverse": "https://imgur.com/l7CZVa7.jpg"
     },
     {
       "fortune_telling": [
@@ -1784,8 +1784,8 @@
       "name": "ace of swords",
       "rank": 1,
       "suit": "swords",
-      "img": "s01.jpg",
-      "imgReverse": "s01-r.jpg"
+      "img": "https://imgur.com/YKY7e0s.jpg",
+      "imgReverse": "https://imgur.com/U4RoquA.jpg"
     },
     {
       "fortune_telling": [
@@ -1818,8 +1818,8 @@
       "name": "two of swords",
       "rank": 2,
       "suit": "swords",
-      "img": "s02.jpg",
-      "imgReverse": "s02-r.jpg"
+      "img": "https://imgur.com/abwjMPk.jpg",
+      "imgReverse": "https://imgur.com/aXRmh8P.jpg"
     },
     {
       "fortune_telling": [
@@ -1852,8 +1852,8 @@
       "name": "three of swords",
       "rank": 3,
       "suit": "swords",
-      "img": "s03.jpg",
-      "imgReverse": "s03-r.jpg"
+      "img": "https://imgur.com/fRYS4ey.jpg",
+      "imgReverse": "https://imgur.com/oGdafdf.jpg"
     },
     {
       "fortune_telling": [
@@ -1884,8 +1884,8 @@
       "name": "four of swords",
       "rank": 4,
       "suit": "swords",
-      "img": "s04.jpg",
-      "imgReverse": "s04-r.jpg"
+      "img": "https://imgur.com/g4YtART.jpg",
+      "imgReverse": "https://imgur.com/hgPfMpl.jpg"
     },
     {
       "fortune_telling": [
@@ -1921,8 +1921,8 @@
       "name": "five of swords",
       "rank": 5,
       "suit": "swords",
-      "img": "s05.jpg",
-      "imgReverse": "s05-r.jpg"
+      "img": "https://imgur.com/z4QFgMc.jpg",
+      "imgReverse": "https://imgur.com/tRHqJIP.jpg"
     },
     {
       "fortune_telling": [
@@ -1956,8 +1956,8 @@
       "name": "six of swords",
       "rank": 6,
       "suit": "swords",
-      "img": "s06.jpg",
-      "imgReverse": "s06-r.jpg"
+      "img": "https://imgur.com/ewzWTs3.jpg",
+      "imgReverse": "https://imgur.com/TMVS7Wo.jpg"
     },
     {
       "fortune_telling": [
@@ -1989,8 +1989,8 @@
       "name": "seven of swords",
       "rank": 7,
       "suit": "swords",
-      "img": "s07.jpg",
-      "imgReverse": "s07-r.jpg"
+      "img": "https://imgur.com/IEe0jl0.jpg",
+      "imgReverse": "https://imgur.com/1doHtk5.jpg"
     },
     {
       "fortune_telling": [
@@ -2027,8 +2027,8 @@
       "name": "eight of swords",
       "rank": 8,
       "suit": "swords",
-      "img": "s08.jpg",
-      "imgReverse": "s08-r.jpg"
+      "img": "https://imgur.com/UiRsxBr.jpg",
+      "imgReverse": "https://imgur.com/fycqdA0.jpg"
     },
     {
       "fortune_telling": [
@@ -2063,8 +2063,8 @@
       "name": "nine of swords",
       "rank": 9,
       "suit": "swords",
-      "img": "s09.jpg",
-      "imgReverse": "s09-r.jpg"
+      "img": "https://imgur.com/zvWmNif.jpg",
+      "imgReverse": "https://imgur.com/bfXWLwX.jpg"
     },
     {
       "fortune_telling": [
@@ -2100,8 +2100,8 @@
       "name": "ten of swords",
       "rank": 10,
       "suit": "swords",
-      "img": "s10.jpg",
-      "imgReverse": "s10-r.jpg"
+      "img": "https://imgur.com/HzEIluW.jpg",
+      "imgReverse": "https://imgur.com/iFEv2qL.jpg"
     },
     {
       "fortune_telling": [
@@ -2135,8 +2135,8 @@
       "name": "page of swords",
       "rank": "page",
       "suit": "swords",
-      "img": "s11.jpg",
-      "imgReverse": "s11-r.jpg"
+      "img": "https://imgur.com/dE8ROYy.jpg",
+      "imgReverse": "https://imgur.com/RaNnRJI.jpg"
     },
     {
       "fortune_telling": [
@@ -2175,8 +2175,8 @@
       "name": "knight of swords",
       "rank": "knight",
       "suit": "swords",
-      "img": "s12.jpg",
-      "imgReverse": "s12-r.jpg"
+      "img": "https://imgur.com/JIKzBvm.jpg",
+      "imgReverse": "https://imgur.com/zHisuVD.jpg"
     },
     {
       "fortune_telling": [
@@ -2214,8 +2214,8 @@
       "name": "queen of swords",
       "rank": "queen",
       "suit": "swords",
-      "img": "s13.jpg",
-      "imgReverse": "s13-r.jpg"
+      "img": "https://imgur.com/1hiuGzj.jpg",
+      "imgReverse": "https://imgur.com/jfY444O.jpg"
     },
     {
       "fortune_telling": [
@@ -2249,8 +2249,8 @@
       "name": "king of swords",
       "rank": "king",
       "suit": "swords",
-      "img": "s14.jpg",
-      "imgReverse": "s14-r.jpg"
+      "img": "https://imgur.com/oqkNSbe.jpg",
+      "imgReverse": "https://imgur.com/RIESLNo.jpg"
     },
     {
       "fortune_telling": [
@@ -2283,8 +2283,8 @@
       "name": "ace of pentacles",
       "rank": 1,
       "suit": "pentacles",
-      "img": "p01.jpg",
-      "imgReverse": "p01-r.jpg"
+      "img": "https://imgur.com/nAaY7ZS.jpg",
+      "imgReverse": "https://imgur.com/vPsINUD.jpg"
     },
     {
       "fortune_telling": [
@@ -2318,8 +2318,8 @@
       "name": "two of pentacles",
       "rank": 2,
       "suit": "pentacles",
-      "img": "p02.jpg",
-      "imgReverse": "p02-r.jpg"
+      "img": "https://imgur.com/dRNFH7t.jpg",
+      "imgReverse": "https://imgur.com/kCxwHn0.jpg"
     },
     {
       "fortune_telling": [
@@ -2354,8 +2354,8 @@
       "name": "three of pentacles",
       "rank": 3,
       "suit": "pentacles",
-      "img": "p03.jpg",
-      "imgReverse": "p03-r.jpg"
+      "img": "https://imgur.com/f6M21aJ.jpg",
+      "imgReverse": "https://imgur.com/oLNkg9a.jpg"
     },
     {
       "fortune_telling": [
@@ -2389,8 +2389,8 @@
       "name": "four of pentacles",
       "rank": 4,
       "suit": "pentacles",
-      "img": "p04.jpg",
-      "imgReverse": "p04-r.jpg"
+      "img": "https://imgur.com/lsadrug.jpg",
+      "imgReverse": "https://imgur.com/hcZtTGd.jpg"
     },
     {
       "fortune_telling": [
@@ -2425,8 +2425,8 @@
       "name": "five of pentacles",
       "rank": 5,
       "suit": "pentacles",
-      "img": "p05.jpg",
-      "imgReverse": "p05-r.jpg"
+      "img": "https://imgur.com/aVPegdd.jpg",
+      "imgReverse": "https://imgur.com/t58vJex.jpg"
     },
     {
       "fortune_telling": [
@@ -2461,8 +2461,8 @@
       "name": "six of pentacles",
       "rank": 6,
       "suit": "pentacles",
-      "img": "p06.jpg",
-      "imgReverse": "p06-r.jpg"
+      "img": "https://imgur.com/FQa1RnK.jpg",
+      "imgReverse": "https://imgur.com/8o1pedu.jpg"
     },
     {
       "fortune_telling": [
@@ -2496,8 +2496,8 @@
       "name": "seven of pentacles",
       "rank": 7,
       "suit": "pentacles",
-      "img": "p07.jpg",
-      "imgReverse": "p07-r.jpg"
+      "img": "https://imgur.com/tQoLCIG.jpg",
+      "imgReverse": "https://imgur.com/fyCFtRe.jpg"
     },
     {
       "fortune_telling": [
@@ -2533,8 +2533,8 @@
       "name": "eight of pentacles",
       "rank": 8,
       "suit": "pentacles",
-      "img": "p08.jpg",
-      "imgReverse": "p08-r.jpg"
+      "img": "https://imgur.com/lNwRGuq.jpg",
+      "imgReverse": "https://imgur.com/x7okdvB.jpg"
     },
     {
       "fortune_telling": [
@@ -2566,8 +2566,8 @@
       "name": "nine of pentacles",
       "rank": 9,
       "suit": "pentacles",
-      "img": "p09.jpg",
-      "imgReverse": "p09-r.jpg"
+      "img": "https://imgur.com/nxLIRlQ.jpg",
+      "imgReverse": "https://imgur.com/gdbymFC.jpg"
     },
     {
       "fortune_telling": [
@@ -2600,8 +2600,8 @@
       "name": "ten of pentacles",
       "rank": 10,
       "suit": "pentacles",
-      "img": "p10.jpg",
-      "imgReverse": "p10-r.jpg"
+      "img": "https://imgur.com/lNjDCuV.jpg",
+      "imgReverse": "phttps://imgur.com/sYR0LgR.jpg"
     },
     {
       "fortune_telling": [
@@ -2635,8 +2635,8 @@
       "name": "page of pentacles",
       "rank": "page",
       "suit": "pentacles",
-      "img": "p11.jpg",
-      "imgReverse": "p11-r.jpg"
+      "img": "https://imgur.com/97yEUpr.jpg",
+      "imgReverse": "https://imgur.com/IfHEj9p.jpg"
     },
     {
       "fortune_telling": [
@@ -2673,8 +2673,8 @@
       "name": "knight of pentacles",
       "rank": "knight",
       "suit": "pentacles",
-      "img": "p12.jpg",
-      "imgReverse": "p12-r.jpg"
+      "img": "https://imgur.com/DWrkuOt.jpg",
+      "imgReverse": "https://imgur.com/1MVQev7.jpg"
     },
     {
       "fortune_telling": [
@@ -2707,8 +2707,8 @@
       "name": "queen of pentacles",
       "rank": "queen",
       "suit": "pentacles",
-      "img": "p13.jpg",
-      "imgReverse": "p13-r.jpg"
+      "img": "https://imgur.com/woQUWL4.jpg",
+      "imgReverse": "https://imgur.com/8UpgGAy.jpg"
     },
     {
       "fortune_telling": [
@@ -2742,8 +2742,8 @@
       "name": "king of pentacles",
       "rank": "king",
       "suit": "pentacles",
-      "img": "p14.jpg",
-      "imgReverse": "p14-r.jpg"
+      "img": "https://imgur.com/1pgBtSK.jpg",
+      "imgReverse": "https://imgur.com/1XSxoKN.jpg"
     }
   ]
 }

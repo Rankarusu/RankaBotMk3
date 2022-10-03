@@ -11,7 +11,7 @@ import {
 } from 'discord.js';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { bot } from '../..';
+import { bot } from '../../autocompletes';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import {

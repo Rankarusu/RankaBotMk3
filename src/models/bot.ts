@@ -12,7 +12,7 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 import { Command } from '../commands';
 import {
   AutoCompleteHandler,

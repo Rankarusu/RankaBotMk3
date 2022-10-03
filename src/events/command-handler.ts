@@ -1,5 +1,4 @@
 import {
-  AttachmentBuilder,
   ChatInputCommandInteraction,
   CommandInteraction,
   NewsChannel,
@@ -7,18 +6,16 @@ import {
   ThreadChannel,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import LogMessages from '../static/logs/logs.json';
 import { Command, CommandDeferType } from '../commands';
 import { EventData } from '../models/event-data';
 import { Logger } from '../services';
+import LogMessages from '../static/logs.json';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 import { EventHandler } from './event-handler';
-import path from 'path';
 
 const Config = require('../../config/config.json');
 
-const pathToImages = path.resolve(__dirname, '../static/images/');
-const nsfwimage = 'nsfw.png';
+const nsfwimage = 'https://imgur.com/73eRGtC.png';
 
 export class CommandHandler implements EventHandler {
   private rateLimiter = new RateLimiter(
@@ -122,9 +119,8 @@ export class CommandHandler implements EventHandler {
       if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
         data.description = 'lewd.';
         const embed = EmbedUtils.warnEmbed(data);
-        const image = new AttachmentBuilder(`${pathToImages}/${nsfwimage}`);
-        embed.setImage(`attachment://${nsfwimage}`);
-        await InteractionUtils.send(interaction, embed, undefined, [image]);
+        embed.setImage(nsfwimage);
+        await InteractionUtils.send(interaction, embed);
         return;
       }
 

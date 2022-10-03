@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Logger } from '.';
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 import { LogEvent } from '../models/prisma-events';
 
 const Config = require('../../config/config.json');

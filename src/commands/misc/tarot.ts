@@ -3,7 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
-  AttachmentBuilder,
   ChatInputCommandInteraction,
   EmbedField,
   PermissionsString,
@@ -157,16 +156,16 @@ export class TarotCommand extends Command {
         const noReverse = interaction.options.getBoolean('no-reverse') || false;
         const reverseChance = noReverse ? 0 : 0.5;
         const card: TarotCardDraw = this.deck.drawCard(reverseChance);
-        const { embed, file } = this.createCardEmbed(card.card, card.reverse);
-        InteractionUtils.send(interaction, embed, undefined, [file]);
+        const embed = this.createCardEmbed(card.card, card.reverse);
+        InteractionUtils.send(interaction, embed, undefined);
         break;
       }
       case 'major-arcana': {
         const num = interaction.options.getNumber('card');
         const reverse = interaction.options.getBoolean('reverse');
         const card = this.deck.getMajorArcana(num);
-        const { embed, file } = this.createCardEmbed(card, reverse);
-        InteractionUtils.send(interaction, embed, undefined, [file]);
+        const embed = this.createCardEmbed(card, reverse);
+        InteractionUtils.send(interaction, embed, undefined);
         break;
       }
       case 'minor-arcana': {
@@ -175,8 +174,8 @@ export class TarotCommand extends Command {
         const maybeIntRank = parseInt(rank, 10) || rank;
         const reverse = interaction.options.getBoolean('reverse');
         const card = this.deck.getMinorArcana(suit, maybeIntRank);
-        const { embed, file } = this.createCardEmbed(card, reverse);
-        InteractionUtils.send(interaction, embed, undefined, [file]);
+        const embed = this.createCardEmbed(card, reverse);
+        InteractionUtils.send(interaction, embed, undefined);
       }
     }
   }
@@ -203,10 +202,8 @@ export class TarotCommand extends Command {
       reverse ? `${title} (reversed)` : title,
       fields
     );
-    const file = new AttachmentBuilder(
-      `${this.deck.pathToImages}/${reverse ? card.imgReverse : card.img}`
-    );
-    embed.setImage(`attachment://${reverse ? card.imgReverse : card.img}`);
-    return { embed, file };
+
+    embed.setImage(reverse ? card.imgReverse : card.img);
+    return embed;
   }
 }

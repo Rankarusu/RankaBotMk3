@@ -1,7 +1,7 @@
 import { Client } from 'discord.js';
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 import { DbUtils } from '../utils';
 
 export class ExpScheduler implements Scheduler {

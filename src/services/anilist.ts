@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 import {
   AniListAiringScheduleItem,
   AniListSearchItem,

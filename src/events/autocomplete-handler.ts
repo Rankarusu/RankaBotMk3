@@ -3,7 +3,7 @@ import { Autocomplete } from '../autocompletes';
 import { Logger } from '../services';
 import { EventHandler } from './event-handler';
 
-import LogMessages from '../static/logs/logs.json';
+import LogMessages from '../static/logs.json';
 
 export class AutoCompleteHandler implements EventHandler {
   constructor(public autocompletes: Autocomplete[]) {}

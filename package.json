@@ -6,12 +6,9 @@
   "engines": {
     "node": ">=16.9.0"
   },
-  "files": [
-    "src/public/config.json"
-  ],
   "scripts": {
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}'",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prisma:gen": "npx prisma generate",
     "prisma:pull": "npx prisma db pull",
@@ -26,8 +23,6 @@
     "prod:db": "npx prisma migrate deploy && npm run prod",
     "watch": "tsc --watch",
     "postinstall": "patch-package",
-    "copy-static-assets": "ts-node copy-static-assets.ts",
-    "postbuild": "npm run copy-static-assets",
     "commit": "cz",
     "release": "standard-version --no-verify"
   },

@@ -1,6 +1,5 @@
-import tarotCards from '../static/data/tarot.json';
+import tarotCards from '../static/tarot.json';
 import { TarotCard, TarotCardDraw } from '../models/tarot-card';
-import path from 'path';
 
 export class Tarot {
   private deck = tarotCards.tarot_interpretations;
@@ -8,11 +7,6 @@ export class Tarot {
   private majorArcana = this.deck.filter((c) => c.suit === 'major');
 
   private minorArcana = this.deck.filter((c) => c.suit !== 'major');
-
-  public pathToImages = path.resolve(
-    __dirname,
-    '../static/images/tarot-cards/'
-  );
 
   public drawCard(reverseChance = 0.5): TarotCardDraw {
     const card = this.deck[Math.floor(Math.random() * this.deck.length)];

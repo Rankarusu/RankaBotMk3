@@ -28,7 +28,7 @@ export class RollCommand extends Command {
 
   public category: CommandCategory = CommandCategory.DND;
 
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.NONE;
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 

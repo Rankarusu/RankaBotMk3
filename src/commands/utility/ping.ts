@@ -16,7 +16,7 @@ export class PingCommand extends Command {
 
   public category: CommandCategory = CommandCategory.UTILITY;
 
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.NONE;
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 

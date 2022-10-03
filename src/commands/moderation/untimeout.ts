@@ -31,7 +31,7 @@ export class UntimeoutCommand extends Command {
 
   public category: CommandCategory = CommandCategory.MODERATION;
 
-  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
+  public deferType: CommandDeferType = CommandDeferType.NONE;
 
   public requireClientPerms: PermissionsString[] = ['ModerateMembers'];
 

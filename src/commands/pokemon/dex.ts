@@ -251,7 +251,7 @@ export class DexCommand extends Command {
 
   public category: CommandCategory = CommandCategory.POKEMON;
 
-  public deferType: CommandDeferType = CommandDeferType.NONE;
+  public deferType: CommandDeferType = CommandDeferType.PUBLIC;
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 

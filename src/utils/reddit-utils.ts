@@ -5,24 +5,22 @@ const validPostHints = ['link', 'image', 'hosted:video'];
 
 export class RedditUtils {
   public static async fetchPosts(url: string, after?: string, limit = 100) {
-    let data;
-    try {
-      data = await axios
-        .get<RedditListing>(url, {
-          headers: {
-            Accept: 'application/json',
-            'User-Agent': 'axios',
-          },
-          params: {
-            limit: limit,
-            count: limit,
-            after: after,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        });
-    } catch (error) {}
+    const data = await axios
+      .get<RedditListing>(url, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'axios',
+        },
+        params: {
+          limit: limit,
+          count: limit,
+          after: after,
+        },
+      })
+      .then((res) => {
+        return res.data;
+      });
+
     return data;
   }
 

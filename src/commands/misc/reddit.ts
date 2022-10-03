@@ -4,6 +4,7 @@ import {
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
+import { RedditListing } from '../../models/reddit';
 import { ArrayUtils, InteractionUtils, RedditUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -92,9 +93,23 @@ export class RedditCommand extends Command {
     }
 
     const url = `${baseUrl}/r/${subreddit}/${listing}.json`;
-    const posts = RedditUtils.getPostList(
-      await RedditUtils.fetchPosts(url, null, amount + stickyLimit) // reddit has a sticky post limit of 2. we generally do not want to send those.
-    );
+    let response: RedditListing;
+    try {
+      response = await RedditUtils.fetchPosts(url, null, amount + stickyLimit); // reddit has a sticky post limit of 2. we generally do not want to send those.
+    } catch (error) {
+      if (error.response.status === 403) {
+        InteractionUtils.sendError(
+          data,
+          'It looks like this community is private.'
+        );
+      }
+      InteractionUtils.sendError(
+        data,
+        'An error occurred while communicating with the API'
+      );
+    }
+
+    const posts = RedditUtils.getPostList(response);
 
     const links: string[] = [];
 

@@ -34,6 +34,7 @@
     "databaseConnect": "An error occurred while connecting to the database.",
     "prismaError": "[Prisma] {TEXT}",
     "selectMenu": "An error occurred while processing a select menu.",
-    "autoComplete": "An error occurred while processing an auto completion."
+    "autoComplete": "An error occurred while processing an auto completion.",
+    "autocompleteNotFound": "[{INTERACTION_ID}] An autocomplete with the name '{OPTION_NAME}' could not be found."
   }
 }

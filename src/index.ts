@@ -5,6 +5,11 @@ import {
 } from 'discord-api-types/v10';
 import { Client, GatewayIntentsString, Partials } from 'discord.js';
 import {
+  Autocomplete,
+  CommandAutocomplete,
+  PokemonAutocomplete,
+} from './autocompletes';
+import {
   AnimeCommand,
   BanCommand,
   BlessCommand,
@@ -145,13 +150,19 @@ async function start(): Promise<void> {
   // Select Menus
   const menus: SelectMenu[] = [];
 
+  // Autocompletes
+  const autocompletes: Autocomplete[] = [
+    new CommandAutocomplete(),
+    new PokemonAutocomplete(),
+  ];
+
   // Event Handlers
   const commandHandler = new CommandHandler(commands);
   const triggerHandler = new TriggerHandler(triggers);
   const messageHandler = new MessageHandler(triggerHandler);
   const reactionHandler = new ReactionHandler(reactions);
   const selectMenuHandler = new SelectMenuHandler(menus);
-  const autoCompleteHandler = new AutoCompleteHandler();
+  const autoCompleteHandler = new AutoCompleteHandler(autocompletes);
 
   // Bot
   bot = new Bot(

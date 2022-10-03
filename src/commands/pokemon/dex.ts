@@ -123,7 +123,7 @@ export class DexCommand extends Command {
         description: 'search for a pokemon',
         options: [
           {
-            name: 'name',
+            name: 'pokemon-name',
             type: ApplicationCommandOptionType.String,
             description: 'the name or ID of a pokemon to search for',
             required: true,
@@ -266,7 +266,9 @@ export class DexCommand extends Command {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'pokemon': {
-        const name = interaction.options.getString('name').toLowerCase();
+        const name = interaction.options
+          .getString('pokemon-name')
+          .toLowerCase();
         let pokemon: Pokemon;
         let species: PokemonSpecies;
         let abilities: Ability[];

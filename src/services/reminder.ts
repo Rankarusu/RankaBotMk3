@@ -21,30 +21,20 @@ export class ReminderScheduler implements Scheduler {
     const now = new Date();
     reminders.forEach(async (reminder) => {
       if (reminder.parsedTime < now) {
-        //fetch message object
+        const embed = EmbedUtils.infoEmbed(`${reminder.message}`, 'Reminder');
 
-        const embed = EmbedUtils.infoEmbed(
-          `<@${reminder.userId}>, ${reminder.message}`,
-          'Reminder'
+        //The messages are ephemeral and will most likely never be available, so we just send a message in the channel.
+        const channel = await ClientUtils.getChannel(
+          this.client,
+          reminder.channelId
         );
-        try {
-          //send message as reply
-          const msg = await ClientUtils.getMessage(
-            this.client,
-            reminder.channelId,
-            reminder.messageId
-          );
-          await MessageUtils.reply(msg, embed);
-        } catch (DiscordAPIError) {
-          //in case message was deleted, just send message to channel
-          const channel = await ClientUtils.getChannel(
-            this.client,
-            reminder.channelId
-          );
-          await MessageUtils.send(channel, embed);
-        }
 
-        // delete from db
+        await MessageUtils.send(channel, {
+          //mentions inside embeds do not provoke a ping, therefore we put the mention in the message itself.
+          content: `<@${reminder.userId}>`,
+          embeds: [embed],
+        });
+
         await DbUtils.deleteReminderById(reminder.interactionId);
       }
     });

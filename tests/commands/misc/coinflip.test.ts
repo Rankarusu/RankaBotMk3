@@ -4,7 +4,6 @@ import { DiscordMock } from '../../discordMock';
 import { EventData } from '../../../src/models/event-data';
 import { InteractionUtils } from '../../../src/utils';
 import { ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { runInThisContext } from 'vm';
 
 describe('Coinflip', () => {
   const discordMock = new DiscordMock();

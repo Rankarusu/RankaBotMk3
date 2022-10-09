@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { BofhCommand } from '../../../src/commands';
 import { DiscordMock } from '../../discordMock';
 
@@ -24,5 +25,10 @@ describe('Bofh', () => {
     expect(
       instance.execute(commandInteraction, new EventData())
     ).resolves.not.toThrowError();
+  });
+
+  it('returns string', () => {
+    const excuse = instance['getExcuse']();
+    expect(excuse).toBeDefined();
   });
 });

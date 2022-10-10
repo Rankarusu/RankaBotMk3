@@ -33,7 +33,10 @@ export class BlessCommand extends Command {
       'Bless'
     );
     await InteractionUtils.send(interaction, initialEmbed);
+    this.scheduleMessages(interaction);
+  }
 
+  private scheduleMessages(interaction: ChatInputCommandInteraction) {
     for (let i = 1; i <= iterations; i++) {
       const embed = EmbedUtils.blessEmbed(i, iterations);
       setTimeout(() => {

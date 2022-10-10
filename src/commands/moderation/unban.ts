@@ -46,7 +46,7 @@ export class UnbanCommand extends Command {
     data: EventData
   ): Promise<void> {
     const memberId = interaction.options.getString('user-id');
-    console.log(`memberId: ${memberId}`);
+    const reason = interaction.options.getString('reason');
 
     let bannedUser: User;
     try {
@@ -56,10 +56,6 @@ export class UnbanCommand extends Command {
       return;
     }
 
-    const reason = interaction.options.getString('reason');
-
-    console.log(memberId, bannedUser);
-
     try {
       interaction.guild.bans.remove(bannedUser);
     } catch (error) {
@@ -67,12 +63,16 @@ export class UnbanCommand extends Command {
       return;
     }
 
-    const embed = EmbedUtils.memberEmbed(
+    const embed = this.createUnbanEmbed(bannedUser, reason);
+
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private createUnbanEmbed(bannedUser: User, reason: string) {
+    return EmbedUtils.memberEmbed(
       bannedUser,
       `${bannedUser}'s ban has been lifted.`,
       reason
     );
-
-    InteractionUtils.send(interaction, embed);
   }
 }

@@ -57,11 +57,7 @@ export class KickCommand extends Command {
       return InteractionUtils.sendError(data, 'You cannot kick this user.');
     }
 
-    const embed = EmbedUtils.memberEmbed(
-      member,
-      `🦶 ${member.user} has been kicked from this server.`,
-      reason
-    );
+    const embed = this.createKickEmbed(member, reason);
     if (member.kickable) {
       member.kick(reason);
       InteractionUtils.send(interaction, embed);
@@ -71,5 +67,13 @@ export class KickCommand extends Command {
         "I cannot kick this user. Make sure my role is above the user's role."
       );
     }
+  }
+
+  private createKickEmbed(member: GuildMember, reason: string) {
+    return EmbedUtils.memberEmbed(
+      member,
+      `🦶 ${member.user} has been kicked from this server.`,
+      reason
+    );
   }
 }

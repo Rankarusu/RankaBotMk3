@@ -42,10 +42,11 @@ export class UntimeoutCommand extends Command {
     const member = interaction.options.get('user').member as GuildMember;
 
     if (!member.isCommunicationDisabled()) {
-      data.description = 'This user is not timed out.';
-      const embed = EmbedUtils.warnEmbed(data);
-      InteractionUtils.send(interaction, embed);
-      return;
+      InteractionUtils.sendWarning(
+        interaction,
+        data,
+        'This user is not timed out.'
+      );
     }
 
     member.disableCommunicationUntil(null);

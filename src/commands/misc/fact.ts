@@ -5,6 +5,7 @@ import { EventData } from '../../models/event-data';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
+const url = 'https://www.thefact.space/random';
 export class FactCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'fact',
@@ -35,7 +36,7 @@ export class FactCommand extends Command {
   private async getFact(data: EventData): Promise<string> {
     let response: AxiosResponse;
     try {
-      response = await axios.get('https://www.thefact.space/random', {
+      response = await axios.get(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',

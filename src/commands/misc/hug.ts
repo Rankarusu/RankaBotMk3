@@ -51,6 +51,14 @@ export class HugCommand extends Command {
   }
 
   private createHugEmbed(hugger: GuildMember, hugged: GuildMember) {
+    const message: string = this.getEmbedDescription(hugger, hugged);
+    const gif = hugs[Math.floor(Math.random() * hugs.length)];
+    const embed = EmbedUtils.memberEmbed(hugger, message).setImage(gif);
+
+    return embed;
+  }
+
+  private getEmbedDescription(hugger: GuildMember, hugged: GuildMember) {
     let message: string;
 
     if (hugger.id === hugged.id) {
@@ -62,10 +70,6 @@ export class HugCommand extends Command {
     } else {
       message = `${hugged.user}, you have been hugged by ${hugger.displayName}!`;
     }
-
-    const gif = hugs[Math.floor(Math.random() * hugs.length)];
-    const embed = EmbedUtils.memberEmbed(hugger, message).setImage(gif);
-
-    return embed;
+    return message;
   }
 }

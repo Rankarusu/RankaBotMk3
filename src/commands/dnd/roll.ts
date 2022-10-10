@@ -44,18 +44,18 @@ export class RollCommand extends Command {
       );
     }
 
-    const dicearr = dice
+    const dicearr = this.cleanInput(dice);
+
+    const output = this.evaluate(dicearr);
+    const embed = this.createRollEmbed(dicearr, output);
+    await InteractionUtils.send(interaction, embed);
+  }
+
+  private cleanInput(dice: string) {
+    return dice
       .replaceAll(/\s/g, '')
       .split(/([+-])/)
       .filter((e) => e); //to get rid of empty array items. the split above leaves multiple signs in a row with an empty string in between
-
-    const output = this.evaluate(dicearr);
-    const embed = EmbedUtils.infoEmbed(
-      `\`${StringUtils.truncate(output.resultstr, 2048)}\`
-      **= ${output.result}**`,
-      `🎲 ${dicearr.join(' ')}`
-    );
-    await InteractionUtils.send(interaction, embed);
   }
 
   private rollDice(str: string): { result: number; resultstr: string } {
@@ -123,5 +123,17 @@ export class RollCommand extends Command {
     });
 
     return { result, resultstr: resultstr.join(' ') };
+  }
+
+  private createRollEmbed(
+    dicearr: string[],
+    output: { result: number; resultstr: string }
+  ) {
+    const embed = EmbedUtils.infoEmbed(
+      `\`${StringUtils.truncate(output.resultstr, 2048)}\`
+      **= ${output.result}**`,
+      `🎲 ${dicearr.join(' ')}`
+    );
+    return embed;
   }
 }

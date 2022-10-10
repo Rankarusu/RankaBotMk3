@@ -28,12 +28,16 @@ export class BofhCommand extends Command {
     data: EventData
   ): Promise<void> {
     const excuse = this.getExcuse();
-    const embed = EmbedUtils.infoEmbed(
+    const embed = this.createBofhEmbed(excuse);
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private createBofhEmbed(excuse: string) {
+    return EmbedUtils.infoEmbed(
       `The cause of your problem is:
       **${excuse}**`,
       'Bastard Operator From Hell Excuse Server'
     );
-    InteractionUtils.send(interaction, embed);
   }
 
   private getExcuse(): string {

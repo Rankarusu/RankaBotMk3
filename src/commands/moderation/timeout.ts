@@ -79,12 +79,13 @@ export class TimeoutCommand extends Command {
     if (member.isCommunicationDisabled()) {
       const timeout = member.communicationDisabledUntil;
       if (timeout > parsedTime) {
-        data.description = `${
-          member.user.tag
-        } is already muted until <t:${DateUtils.getUnixTime(timeout)}:f>`;
-        //idk, but the communicationDisabledUntilTimestamp translates to wrong time.
-        const embed = EmbedUtils.warnEmbed(data);
-        await InteractionUtils.send(interaction, embed);
+        InteractionUtils.sendWarning(
+          interaction,
+          data,
+          `${member.user.tag} is already muted until <t:${DateUtils.getUnixTime(
+            timeout
+          )}:f>`
+        );
         return;
       }
     }

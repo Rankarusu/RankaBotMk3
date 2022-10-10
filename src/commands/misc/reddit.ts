@@ -4,7 +4,7 @@ import {
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { EventData } from '../../models/event-data';
-import { RedditListing } from '../../models/reddit';
+import { RedditListing, RedditPostData } from '../../models/reddit';
 import {
   ArrayUtils,
   ClientUtils,
@@ -116,20 +116,24 @@ export class RedditCommand extends Command {
     }
 
     const posts = RedditUtils.getPostList(response);
-
-    const links: string[] = [];
-
-    posts.forEach((post) => {
-      //using id for shorter links
-      if (!post.stickied && links.length < amount) {
-        links.push(`${baseUrl}/r/${post.subreddit}/${post.id}`);
-      }
-    });
-
-    const partitionedLinks = ArrayUtils.partition(links, 5);
+    const partitionedLinks = this.splitPosts(posts, 5);
 
     partitionedLinks.forEach(async (chunk) => {
       await InteractionUtils.send(interaction, chunk.join('\n'));
     });
+  }
+
+  private splitPosts(posts: RedditPostData[], chunkSize: number) {
+    const links: string[] = [];
+
+    posts.forEach((post) => {
+      //using id for shorter links
+      if (!post.stickied && links.length < chunkSize) {
+        links.push(`${baseUrl}/r/${post.subreddit}/${post.id}`);
+      }
+    });
+
+    const partitionedLinks = ArrayUtils.partition(links, chunkSize);
+    return partitionedLinks;
   }
 }

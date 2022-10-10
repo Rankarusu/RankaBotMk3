@@ -98,21 +98,25 @@ export class UwuifyCommand extends Command {
     text = this.replaceLetters(text);
     text = this.replaceExclamations(text);
     text = this.addActions(text, 0.05);
-    console.log(text);
+
+    const textChunks = this.splitText(text); //we split the text in case it gets too large for one message
+
+    textChunks.forEach(async (chunk) => {
+      await InteractionUtils.send(interaction, chunk);
+    });
+  }
+
+  private splitText(text: string) {
     const textChunks = [];
     let i = 0;
-    let j = discordCharLimit; //discord char limit;
+    let j = discordCharLimit;
     while (i < text.length) {
       textChunks.push(text.slice(i, j));
 
       i = j;
       j += discordCharLimit;
     }
-    console.log(i, j);
-    console.log(textChunks.length);
-    textChunks.forEach(async (chunk) => {
-      await InteractionUtils.send(interaction, chunk);
-    });
+    return textChunks;
   }
 
   private replaceLetters(text: string) {

@@ -68,7 +68,24 @@ export class BanCommand extends Command {
       return InteractionUtils.sendError(data, 'You cannot ban this user.');
     }
 
-    const embed = EmbedUtils.memberEmbed(
+    if (member.bannable) {
+      const embed = this.createdBanEmbed(member, deleteMessageDays, reason);
+      member.ban({ deleteMessageDays, reason });
+      InteractionUtils.send(interaction, embed);
+    } else {
+      InteractionUtils.sendError(
+        data,
+        "I cannot ban this user. Make sure my role is above the user's role."
+      );
+    }
+  }
+
+  private createdBanEmbed(
+    member: GuildMember,
+    deleteMessageDays: number,
+    reason: string
+  ) {
+    return EmbedUtils.memberEmbed(
       member,
       `🔨 ${member.user} has been banned from this server.
       ${
@@ -78,14 +95,5 @@ export class BanCommand extends Command {
       }`,
       reason
     );
-    if (member.bannable) {
-      member.ban({ deleteMessageDays, reason });
-      InteractionUtils.send(interaction, embed);
-    } else {
-      InteractionUtils.sendError(
-        data,
-        "I cannot ban this user. Make sure my role is above the user's role."
-      );
-    }
   }
 }

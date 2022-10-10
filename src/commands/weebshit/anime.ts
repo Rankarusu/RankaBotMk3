@@ -82,48 +82,7 @@ export class AnimeCommand extends Command {
           );
         }
 
-        const fields: EmbedField[] = [
-          {
-            name: 'Genres',
-            value: media.genres.join('\n'),
-            inline: true,
-          },
-          {
-            name: 'Released',
-            value: `${StringUtils.toTitleCase(media.season)} ${
-              media.seasonYear
-            }`,
-            inline: true,
-          },
-          {
-            name: 'Rating',
-            value: `Average: ${media.averageScore}%
-            Mean: ${media.meanScore}%`,
-            inline: true,
-          },
-          {
-            name: 'View Details',
-            value: `[AniList](${media.siteUrl}) | [MAL](https://myanimelist.net/anime/${media.idMal})`,
-            inline: false,
-          },
-        ];
-        if (media.nextAiringEpisode) {
-          fields.push({
-            name: 'Next airing',
-            value: `<t:${media.nextAiringEpisode.airingAt}>`,
-            inline: true,
-          });
-        }
-        const embed = EmbedUtils.infoEmbed(
-          //string html tags
-          media.description.replaceAll(/<\/*\w+\/*>/g, ''),
-          media.title.romaji,
-          fields
-        );
-        embed
-          .setThumbnail(media.coverImage.medium)
-          .setURL(media.siteUrl)
-          .setFooter({ text: 'Powered by anilist.co' });
+        const embed = this.createAniListSearchEmbed(media);
 
         InteractionUtils.send(interaction, embed);
         break;
@@ -140,6 +99,50 @@ export class AnimeCommand extends Command {
         paginatedEmbed.start();
       }
     }
+  }
+
+  private createAniListSearchEmbed(media: AniListSearchItem) {
+    const fields: EmbedField[] = [
+      {
+        name: 'Genres',
+        value: media.genres.join('\n'),
+        inline: true,
+      },
+      {
+        name: 'Released',
+        value: `${StringUtils.toTitleCase(media.season)} ${media.seasonYear}`,
+        inline: true,
+      },
+      {
+        name: 'Rating',
+        value: `Average: ${media.averageScore}%
+            Mean: ${media.meanScore}%`,
+        inline: true,
+      },
+      {
+        name: 'View Details',
+        value: `[AniList](${media.siteUrl}) | [MAL](https://myanimelist.net/anime/${media.idMal})`,
+        inline: false,
+      },
+    ];
+    if (media.nextAiringEpisode) {
+      fields.push({
+        name: 'Next airing',
+        value: `<t:${media.nextAiringEpisode.airingAt}>`,
+        inline: true,
+      });
+    }
+    const embed = EmbedUtils.infoEmbed(
+      //string html tags
+      media.description.replaceAll(/<\/*\w+\/*>/g, ''),
+      media.title.romaji,
+      fields
+    );
+    embed
+      .setThumbnail(media.coverImage.medium)
+      .setURL(media.siteUrl)
+      .setFooter({ text: 'Powered by anilist.co' });
+    return embed;
   }
 
   private createPages() {

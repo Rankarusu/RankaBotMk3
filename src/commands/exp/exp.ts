@@ -1,8 +1,10 @@
+import { Exp } from '@prisma/client';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
+  CacheType,
   ChatInputCommandInteraction,
   EmbedField,
   GuildMember,
@@ -71,9 +73,7 @@ export class ExpCommand extends Command {
       case 'user': {
         const userId =
           interaction.options.getUser('user')?.id || interaction.user.id;
-
         const guildId = interaction.guildId;
-        const joinedAt = (interaction.member as GuildMember).joinedAt;
         const user = await DbUtils.getExpByUser(guildId, userId);
 
         if (!user) {
@@ -85,24 +85,22 @@ export class ExpCommand extends Command {
           return;
         }
 
-        const { xp, level } = user;
-
         const list = await DbUtils.getExpByGuild(guildId);
         const index = list.findIndex((item) => (item.userId = userId));
-        const embed = EmbedUtils.memberEmbed(
-          interaction.member as GuildMember,
-          `**EXP:** ${xp}
-          **LVL:** ${level}
-          Rank ${index + 1} of ${list.length}`
+        const embed = this.createMemberEmbed(
+          interaction,
+          user,
+          index,
+          list.length
         );
         await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'leaderboard': {
         const guildId = interaction.guildId;
-        const list = await DbUtils.getExpByGuild(guildId);
+        const expList = await DbUtils.getExpByGuild(guildId);
 
-        if (list.length === 0) {
+        if (expList.length === 0) {
           InteractionUtils.sendWarning(
             interaction,
             data,
@@ -110,25 +108,57 @@ export class ExpCommand extends Command {
           );
           return;
         }
-        const fields = list.map((item, index) => {
-          const name =
-            interaction.guild.members.cache.get(item.userId)?.displayName ||
-            'User not found';
-          return {
-            name: `${index + 1}. ${name}`,
-            value: `(EXP: ${item.xp} | LVL: ${item.level})`,
-          } as EmbedField;
-        });
 
-        const embed = EmbedUtils.infoEmbed(
-          undefined,
-          'EXP-Leaderboard',
-          fields
-        ).setThumbnail(interaction.guild.iconURL());
+        const fields = this.createLeaderboardFields(interaction, expList);
+        const embed = this.createLeaderboardEmbed(interaction, fields);
         const paginatedEmbed = new PaginationEmbed(interaction, data, embed);
         await paginatedEmbed.start();
         break;
       }
     }
+  }
+
+  private createMemberEmbed(
+    interaction: ChatInputCommandInteraction,
+    user: Exp,
+    index: number,
+    memberCount: number
+  ) {
+    const { xp, level } = user;
+    const embed = EmbedUtils.memberEmbed(
+      interaction.member as GuildMember,
+      `**EXP:** ${xp}
+      **LVL:** ${level}
+      Rank ${index + 1} of ${memberCount}`
+    );
+    return embed;
+  }
+
+  private createLeaderboardEmbed(
+    interaction: ChatInputCommandInteraction,
+    fields: EmbedField[]
+  ) {
+    const embed = EmbedUtils.infoEmbed(
+      undefined,
+      'EXP-Leaderboard',
+      fields
+    ).setThumbnail(interaction.guild.iconURL());
+    return embed;
+  }
+
+  private createLeaderboardFields(
+    interaction: ChatInputCommandInteraction,
+    expList: Exp[]
+  ) {
+    const fields = expList.map((item, index) => {
+      const name =
+        interaction.guild.members.cache.get(item.userId)?.displayName ||
+        'User not found';
+      return {
+        name: `${index + 1}. ${name}`,
+        value: `(EXP: ${item.xp} | LVL: ${item.level})`,
+      } as EmbedField;
+    });
+    return fields;
   }
 }

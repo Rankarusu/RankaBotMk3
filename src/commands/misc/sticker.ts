@@ -99,7 +99,7 @@ export class StickerCommand extends Command {
             InteractionUtils.sendError(data, `Sticker ${name} not found`);
           }
           const creator = await interaction.guild.members.fetch(sticker.userId);
-          const embed = await EmbedUtils.stickerEmbed(creator, sticker);
+          const embed = EmbedUtils.stickerEmbed(creator, sticker);
           InteractionUtils.send(interaction, embed);
         }
         break;
@@ -144,11 +144,7 @@ export class StickerCommand extends Command {
             );
           }
 
-          const embed = EmbedUtils.successEmbed(
-            `Added sticker \`${name}\``,
-            'Sticker'
-          );
-          embed.setImage(image.proxyURL);
+          const embed = this.createStickerAddSuccessEmbed(name, image);
           InteractionUtils.send(interaction, embed);
         }
         break;
@@ -161,5 +157,14 @@ export class StickerCommand extends Command {
         }
         break;
     }
+  }
+
+  private createStickerAddSuccessEmbed(name: string, image) {
+    const embed = EmbedUtils.successEmbed(
+      `Added sticker \`${name}\``,
+      'Sticker'
+    );
+    embed.setImage(image.proxyURL);
+    return embed;
   }
 }

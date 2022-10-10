@@ -62,11 +62,15 @@ export class EightballCommand extends Command {
   ): Promise<void> {
     const question = interaction.options.getString('question');
     const answer = answers[Math.floor(Math.random() * answers.length)];
-    const embed = EmbedUtils.infoEmbed(
+    const embed = this.create8ballEmbed(question, answer);
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private create8ballEmbed(question: string, answer: string) {
+    return EmbedUtils.infoEmbed(
       `${question ? `**Q:** ${question}` : ''}
     🎱 ${answer}`,
       'Magic 8 Ball'
     );
-    InteractionUtils.send(interaction, embed);
   }
 }

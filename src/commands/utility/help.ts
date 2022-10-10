@@ -5,6 +5,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
+  CacheType,
   ChatInputCommandInteraction,
   CommandInteraction,
   PermissionsString,
@@ -62,25 +63,13 @@ export class HelpCommand extends Command {
       const commands = bot.getCommands();
 
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
-      const embed = EmbedUtils.helpEmbed(
-        prettyCommands,
-        iconUrl,
-        this.mention()
-      );
+      const embed = this.createCommandListEmbed(prettyCommands, iconUrl);
       await new PaginationEmbed(interaction, data, embed, 20).start();
     } else {
       //specific command
-      const cmdhelp = bot
-        .getCommands()
-        .filter((command: Command) => {
-          return (
-            !command.developerOnly &&
-            InteractionUtils.canUse(command, interaction)
-          );
-        })
-        .find((command) => command.metadata.name === cmd.toLowerCase());
+      const requestedCommand = this.findCommand(interaction, cmd);
 
-      if (!cmdhelp) {
+      if (!requestedCommand) {
         InteractionUtils.sendError(
           data,
           `Command \`${cmd.toLowerCase()}\` not found or you may not use it`
@@ -88,25 +77,49 @@ export class HelpCommand extends Command {
         return;
       }
 
-      const desc = cmdhelp.metadata.description;
-      const usage = cmdhelp.usage;
-      const note = cmdhelp.note;
-      let prettySubCommands: string[];
-      if (cmdhelp.metadata.options) {
-        prettySubCommands = [this.getTree(cmdhelp)];
-      }
-
-      const embed = EmbedUtils.cmdHelpEmbed(
-        cmdhelp.mention(),
-        iconUrl,
-        desc,
-        usage(),
-        note,
-        prettySubCommands
-      );
+      const embed = this.createCommandHelpEmbed(requestedCommand, iconUrl);
 
       InteractionUtils.send(interaction, embed);
     }
+  }
+
+  private createCommandHelpEmbed(requestedCommand: Command, iconUrl: string) {
+    const desc = requestedCommand.metadata.description;
+    const usage = requestedCommand.usage;
+    const note = requestedCommand.note;
+    let prettySubCommands: string[];
+    if (requestedCommand.metadata.options) {
+      prettySubCommands = [this.getTree(requestedCommand)];
+    }
+
+    const embed = EmbedUtils.cmdHelpEmbed(
+      requestedCommand.mention(),
+      iconUrl,
+      desc,
+      usage(),
+      note,
+      prettySubCommands
+    );
+    return embed;
+  }
+
+  private findCommand(interaction: CommandInteraction, cmd: string) {
+    return bot
+      .getCommands()
+      .filter((command: Command) => {
+        return (
+          !command.developerOnly &&
+          InteractionUtils.canUse(command, interaction)
+        );
+      })
+      .find((command) => command.metadata.name === cmd.toLowerCase());
+  }
+
+  private createCommandListEmbed(
+    prettyCommands: { [key: string]: string[] },
+    iconUrl: string
+  ) {
+    return EmbedUtils.helpEmbed(prettyCommands, iconUrl, this.mention());
   }
 
   private getPrettyCommandList(
@@ -141,9 +154,9 @@ export class HelpCommand extends Command {
     return output;
   }
 
-  private getTree(cmdhelp: Command) {
-    const tree = new AsciiTree(`\`${cmdhelp.metadata.name}\``);
-    cmdhelp.metadata.options.forEach((option) => {
+  private getTree(requestedCommand: Command) {
+    const tree = new AsciiTree(`\`${requestedCommand.metadata.name}\``);
+    requestedCommand.metadata.options.forEach((option) => {
       tree.add(this.getBranch(option));
     });
     return tree.toString();

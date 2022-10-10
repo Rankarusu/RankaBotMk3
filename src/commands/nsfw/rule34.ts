@@ -115,12 +115,7 @@ export class Rule34Command extends Command {
 
     const post = posts[Math.floor(Math.random() * posts.length)];
 
-    const embed = EmbedUtils.infoEmbed(undefined, 'Rule34');
-    embed
-      .setFooter({ text: 'Powered by rule34.xxx' })
-      .setURL(`https://rule34.xxx/index.php?page=post&s=view&id=${post.id}`)
-      .setColor('#AAE5A4')
-      .setImage(post.file_url);
+    const embed = EmbedUtils.r34Embed(post);
 
     InteractionUtils.send(interaction, embed);
   }

@@ -4,7 +4,7 @@ import { EventData } from '../../models/event-data';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-const blessImage = 'https://imgur.com/j6S4CLe.png';
+const iterations = 5;
 
 export class BlessCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
@@ -32,17 +32,12 @@ export class BlessCommand extends Command {
       "Alright, I'm gonna ping you once a minute for 5 minutes so you don't forget to add your D4 to your Attack Rolls and Saving Throws",
       'Bless'
     );
-
-    const followUpEmbed = EmbedUtils.infoEmbed(
-      "You have **Bless** up, don't forget to add a **D4** to your **Attack Rolls** and **Saving Throws**."
-    ).setColor('#F9DC92');
     await InteractionUtils.send(interaction, initialEmbed);
-    for (let i = 1; i <= 5; i++) {
+
+    for (let i = 1; i <= iterations; i++) {
+      const embed = EmbedUtils.blessEmbed(i, iterations);
       setTimeout(() => {
-        InteractionUtils.send(
-          interaction,
-          followUpEmbed.setTitle(`Bless ${i}/5`).setThumbnail(blessImage)
-        );
+        InteractionUtils.send(interaction, embed);
       }, 60 * 1000 * i); // we schedule all times at once but with a minute in between. An alternative would be to use recursion.
     }
   }

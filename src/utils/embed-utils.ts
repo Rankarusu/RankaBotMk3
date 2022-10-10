@@ -7,8 +7,14 @@ import {
   User,
 } from 'discord.js';
 import { EventData } from '../models/event-data';
+import { RedditPostData } from '../models/reddit';
+import { Rule34Post } from '../models/rule34post';
 
 const Config = require('../../config/config.json');
+const blessImage = 'https://imgur.com/j6S4CLe.png';
+const r34green = '#AAE5A4';
+const danbooruBlue = '#0075f8';
+const blessYellow = '#F9DC92';
 
 export class EmbedUtils {
   public static errorEmbed(data: EventData) {
@@ -21,16 +27,6 @@ export class EmbedUtils {
     if (data.fields) {
       embed.addFields(data.fields);
     }
-    return embed;
-  }
-
-  public static warnEmbedNoFields(message: string) {
-    const embed = new EmbedBuilder()
-      .setTitle('Warning')
-      .setColor(Config.colors.warning as ColorResolvable)
-      .setDescription(message)
-      .setTimestamp();
-
     return embed;
   }
 
@@ -86,10 +82,19 @@ export class EmbedUtils {
   ) {
     const embed = new EmbedBuilder().setDescription(message).setTimestamp();
     if (member instanceof GuildMember) {
-      embed.setColor(member.displayHexColor as ColorResolvable).setAuthor({
-        name: member.user.tag,
-        iconURL: member.displayAvatarURL(),
-      });
+      embed
+        .setColor(member.displayHexColor as ColorResolvable)
+        .setAuthor({
+          name: member.user.tag,
+          iconURL: member.displayAvatarURL(),
+        })
+        .setFooter({
+          text: `joined ${member.joinedAt.toLocaleDateString('de-DE', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })}`,
+        });
     } else {
       embed.setAuthor({
         name: member.tag,
@@ -175,7 +180,7 @@ export class EmbedUtils {
     return embed;
   }
 
-  public static async stickerEmbed(member: GuildMember, sticker: Sticker) {
+  public static stickerEmbed(member: GuildMember, sticker: Sticker) {
     const time = sticker.invokeTime.toLocaleDateString();
     const embed = new EmbedBuilder()
       .setTitle(sticker.stickerName)
@@ -185,6 +190,49 @@ export class EmbedUtils {
         text: `added ${member ? `by ${member.displayName}` : ''} at ${time}`,
         iconURL: member ? member.displayAvatarURL() : '',
       })
+      .setTimestamp();
+    return embed;
+  }
+
+  public static r34Embed(post: Rule34Post) {
+    const embed = new EmbedBuilder()
+      .setTitle('Rule34')
+      .setFooter({ text: 'Powered by rule34.xxx' })
+      .setURL(`https://rule34.xxx/index.php?page=post&s=view&id=${post.id}`)
+      .setColor(r34green)
+      .setImage(post.file_url)
+      .setTimestamp();
+    return embed;
+  }
+
+  public static danbooruEmbed(post: DanbooruPost) {
+    const embed = new EmbedBuilder()
+      .setTitle('Danbooru')
+      .setFooter({ text: 'Powered by danbooru.donmai.us' })
+      .setURL(`https://danbooru.donmai.us/posts/${post.id}`)
+      .setColor('#0075f8')
+      .setImage(post.file_url)
+      .setTimestamp();
+    return embed;
+  }
+
+  public static lewdEmbed(post: RedditPostData) {
+    const embed = this.infoEmbed()
+      .setTitle(post.title)
+      .setURL(`https://reddit.com${post.permalink}`)
+      .setImage(post.url)
+      .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
+    return embed;
+  }
+
+  public static blessEmbed(number: number, limit: number) {
+    const embed = new EmbedBuilder()
+      .setColor(blessYellow)
+      .setTitle(`Bless ${number}/${limit}`)
+      .setDescription(
+        "You have **Bless** up, don't forget to add a **D4** to your **Attack Rolls** and **Saving Throws**."
+      )
+      .setThumbnail(blessImage)
       .setTimestamp();
     return embed;
   }

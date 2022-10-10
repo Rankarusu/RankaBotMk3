@@ -181,7 +181,7 @@ export class InteractionUtils {
   }
 
   public static sendWarning(
-    interaction: CommandInteraction,
+    interaction: CommandInteraction | MessageComponentInteraction,
     data: EventData,
     message: string
   ) {

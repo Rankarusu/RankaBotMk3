@@ -58,6 +58,7 @@
     // "no-shadow": "off",
     // "no-useless-constructor": "off",
     "node/no-unsupported-features/es-syntax": "off",
+    "node/no-unpublished-require": "off",
     // "lines-between-class-members": "off",
     // "import/prefer-default-export": "off",
     // "import/named": "off",

@@ -154,7 +154,7 @@ export class StickerCommand extends Command {
         break;
       case 'list':
         {
-          const paginatedEmbed = new StickerListSelectEmbed(interaction);
+          const paginatedEmbed = new StickerListSelectEmbed(interaction, data);
           await paginatedEmbed.start();
           //merge list and remove into one as we did with remind.
           //rewrite remind pagination embed to fit poll style. waaaaay cleaner

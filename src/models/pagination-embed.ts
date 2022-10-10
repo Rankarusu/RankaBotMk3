@@ -22,6 +22,11 @@ import {
   InteractionUtils,
   MessageUtils,
 } from '../utils';
+import { EventData } from './event-data';
+
+const noReminderWarning = `You have no reminders set at the moment. Use \`/remind set\` to set one.`;
+const noStickerWarning =
+  'There are currently no stickers available on this server. Use `/sticker add` to add one.';
 
 export class PaginationEmbed {
   interaction: CommandInteraction | MessageComponentInteraction;
@@ -31,6 +36,8 @@ export class PaginationEmbed {
   message: Message;
 
   pages: EmbedBuilder[];
+
+  protected data: EventData;
 
   protected timeout?: number;
 
@@ -69,6 +76,7 @@ export class PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
+    data: EventData,
     pages?: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
     timeout?: number
@@ -82,6 +90,7 @@ export class PaginationEmbed {
     }
     this.author = interaction.user;
     this.timeout = timeout ? timeout : 60000;
+    this.data = data;
   }
 
   public async start(): Promise<void> {
@@ -287,12 +296,13 @@ export class ExtendedPaginationEmbed extends PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
+    data: EventData,
     pages?: EmbedBuilder[] | EmbedBuilder,
     additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     limit?: number,
     timeout?: number
   ) {
-    super(interaction, pages, limit, timeout);
+    super(interaction, data, pages, limit, timeout);
     this.additionalRows = additionalRows || [];
   }
 
@@ -336,10 +346,6 @@ export class ExtendedPaginationEmbed extends PaginationEmbed {
 }
 
 export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
-  private warnEmbed = EmbedUtils.warnEmbedNoFields(
-    'You have no reminders set at the moment. Use `/remind set` to set one.'
-  );
-
   protected limit = 10;
 
   public async start(): Promise<void> {
@@ -348,7 +354,11 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (reminders.length === 0) {
-      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      await InteractionUtils.sendWarning(
+        this.interaction,
+        this.data,
+        noReminderWarning
+      );
       return;
     }
 
@@ -369,7 +379,11 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (reminders.length === 0) {
-      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      await InteractionUtils.sendWarning(
+        this.interaction,
+        this.data,
+        noReminderWarning
+      );
       return;
     }
     this.createAdditionalRows(reminders);
@@ -462,10 +476,6 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
 }
 
 export class StickerListSelectEmbed extends PaginatedSelectEmbed {
-  private warnEmbed = EmbedUtils.warnEmbedNoFields(
-    'There are currently no stickers available on this server. Use `/sticker add` to add one.'
-  );
-
   protected limit = 10;
 
   public async start(): Promise<void> {
@@ -474,7 +484,11 @@ export class StickerListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (stickers.length === 0) {
-      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      await InteractionUtils.sendWarning(
+        this.interaction,
+        this.data,
+        noStickerWarning
+      );
       return;
     }
 
@@ -495,7 +509,11 @@ export class StickerListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (stickers.length === 0) {
-      await InteractionUtils.send(this.interaction, this.warnEmbed);
+      await InteractionUtils.sendWarning(
+        this.interaction,
+        this.data,
+        noStickerWarning
+      );
       return;
     }
     this.createAdditionalRows(stickers);

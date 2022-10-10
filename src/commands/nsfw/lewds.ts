@@ -61,10 +61,7 @@ export class LewdsCommand extends Command {
     }
     //even though embeds of videos do not work, we use our own embeds here just so we circumvent the "over 18?"-embed.
     const embeds = posts.map((post) => {
-      return EmbedUtils.infoEmbed(undefined, post.title)
-        .setURL(`https://reddit.com${post.permalink}`)
-        .setImage(post.url)
-        .setFooter({ text: `Powered by reddit.com/r/${post.subreddit}` });
+      return EmbedUtils.lewdEmbed(post);
     });
 
     const partitionedEmbeds = ArrayUtils.partition(embeds, 5);

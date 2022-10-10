@@ -131,7 +131,12 @@ export class AnimeCommand extends Command {
       case 'schedule': {
         const pages = this.createPages();
 
-        const paginatedEmbed = new PaginationEmbed(interaction, pages, 20);
+        const paginatedEmbed = new PaginationEmbed(
+          interaction,
+          data,
+          pages,
+          20
+        );
         paginatedEmbed.start();
       }
     }

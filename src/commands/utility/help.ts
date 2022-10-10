@@ -11,7 +11,7 @@ import {
 } from 'discord.js';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { bot } from '../../autocompletes';
+import { bot } from '../..';
 import { EventData } from '../../models/event-data';
 import { PaginationEmbed } from '../../models/pagination-embed';
 import {
@@ -67,7 +67,7 @@ export class HelpCommand extends Command {
         iconUrl,
         this.mention()
       );
-      await new PaginationEmbed(interaction, embed, 20).start();
+      await new PaginationEmbed(interaction, data, embed, 20).start();
     } else {
       //specific command
       const cmdhelp = bot

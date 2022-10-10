@@ -6,6 +6,7 @@ import { EventData } from '../../models/event-data';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
+const url = 'https://icanhazdadjoke.com/';
 export class DadJokeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dadjoke',
@@ -28,15 +29,20 @@ export class DadJokeCommand extends Command {
     data: EventData
   ): Promise<void> {
     const joke = await this.getJoke(data);
+    const embed = this.createEmbed(joke);
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private createEmbed(joke: string) {
     const embed = EmbedUtils.infoEmbed(joke, 'Dad Joke');
     embed.setFooter({ text: 'Powered by icanhazdadjoke.com' });
-    InteractionUtils.send(interaction, embed);
+    return embed;
   }
 
   private async getJoke(data: EventData): Promise<string> {
     let response: AxiosResponse;
     try {
-      response = await axios.get('https://icanhazdadjoke.com/', {
+      response = await axios.get(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',

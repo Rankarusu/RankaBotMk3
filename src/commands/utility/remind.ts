@@ -73,7 +73,7 @@ export class RemindCommand extends Command {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'list': {
-        const paginatedEmbed = new ReminderListSelectEmbed(interaction);
+        const paginatedEmbed = new ReminderListSelectEmbed(interaction, data);
         await paginatedEmbed.start();
         break;
       }

@@ -332,9 +332,12 @@ export class DexCommand extends Command {
 
         const actionRow = this.createActionRow(pokemon.species.name);
 
-        const paginatedEmbed = new ExtendedPaginationEmbed(interaction, pages, [
-          actionRow,
-        ]);
+        const paginatedEmbed = new ExtendedPaginationEmbed(
+          interaction,
+          data,
+          pages,
+          [actionRow]
+        );
 
         paginatedEmbed.start();
         break;

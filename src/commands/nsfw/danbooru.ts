@@ -67,12 +67,7 @@ export class DanbooruCommand extends Command {
 
     const post = posts[Math.floor(Math.random() * posts.length)];
 
-    const embed = EmbedUtils.infoEmbed(undefined, 'Danbooru');
-    embed
-      .setFooter({ text: 'Powered by danbooru.donmai.us' })
-      .setURL(`https://danbooru.donmai.us/posts/${post.id}`)
-      .setColor('#0075f8')
-      .setImage(post.file_url);
+    const embed = EmbedUtils.danbooruEmbed(post);
 
     InteractionUtils.send(interaction, embed);
   }

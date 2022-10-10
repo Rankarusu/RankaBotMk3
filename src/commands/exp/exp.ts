@@ -94,13 +94,7 @@ export class ExpCommand extends Command {
           `**EXP:** ${xp}
           **LVL:** ${level}
           Rank ${index + 1} of ${list.length}`
-        ).setFooter({
-          text: `joined ${joinedAt.toLocaleDateString('de-DE', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          })}`,
-        });
+        );
         await InteractionUtils.send(interaction, embed);
         break;
       }
@@ -131,7 +125,7 @@ export class ExpCommand extends Command {
           'EXP-Leaderboard',
           fields
         ).setThumbnail(interaction.guild.iconURL());
-        const paginatedEmbed = new PaginationEmbed(interaction, embed);
+        const paginatedEmbed = new PaginationEmbed(interaction, data, embed);
         await paginatedEmbed.start();
         break;
       }

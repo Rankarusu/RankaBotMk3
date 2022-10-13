@@ -1,34 +1,40 @@
 /* eslint-disable @typescript-eslint/dot-notation */
+import { EmbedBuilder } from 'discord.js';
 import { BofhCommand } from '../../../src/commands';
+import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
-
-import { EventData } from '../../../src/models/event-data';
 
 describe('Bofh', () => {
   const discordMock = new DiscordMock();
   let instance: BofhCommand;
   const commandInteraction = discordMock.getMockCommandInteraction();
+  InteractionUtils.send = jest.fn();
+
   beforeEach(() => {
     instance = new BofhCommand();
   });
 
-  it('should send an embed', () => {
-    instance.execute(commandInteraction, new EventData());
-    expect(commandInteraction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({
-        embeds: [expect.anything()],
-      })
-    );
-  });
-
   it('should not throw an error', () => {
-    expect(
-      instance.execute(commandInteraction, new EventData())
-    ).resolves.not.toThrowError();
+    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
   });
 
-  it('returns string', () => {
-    const excuse = instance['getExcuse']();
-    expect(excuse).toBeDefined();
+  it('should call InteractionUtils.send', async () => {
+    await instance.execute(commandInteraction);
+    expect(InteractionUtils.send).toHaveBeenCalled();
+  });
+
+  describe('getExcuse', () => {
+    it('should return a string', () => {
+      const excuse = instance['getExcuse']();
+      //we cannot use instance of for literals such as strings.
+      expect(typeof excuse).toEqual('string');
+    });
+  });
+
+  describe('createBofhEmbed', () => {
+    it('should return an Embed', () => {
+      const embed = instance['createBofhEmbed']('test');
+      expect(embed).toBeInstanceOf(EmbedBuilder);
+    });
   });
 });

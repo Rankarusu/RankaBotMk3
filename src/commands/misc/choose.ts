@@ -47,6 +47,7 @@ export class ChooseCommand extends Command {
         data,
         'Something went wrong while parsing your options, please try again'
       );
+      return;
     }
 
     if (optionsArr.includes('')) {
@@ -54,6 +55,7 @@ export class ChooseCommand extends Command {
         data,
         'Something went wrong while parsing your options, please try again'
       );
+      return;
     }
 
     if (optionsArr.length < 2) {

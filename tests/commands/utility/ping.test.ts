@@ -1,38 +1,52 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { PingCommand } from '../../../src/commands';
+import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
-
-import { EventData } from '../../../src/models/event-data';
 
 describe('Ping', () => {
   const discordMock = new DiscordMock();
   let instance: PingCommand;
   const commandInteraction = discordMock.getMockCommandInteraction();
-  const pongLine = new RegExp(/🏓 Pong! \d+ ms/);
-  const apiLatencyLine = new RegExp(/🏸 API Latency: \d+ ms/);
+  InteractionUtils.send = jest.fn();
+
   beforeEach(() => {
     instance = new PingCommand();
   });
 
-  it('should return a number as latency', () => {
-    Object.defineProperty(commandInteraction.client.ws, 'ping', { value: 118 });
-    Object.defineProperty(commandInteraction, 'createdTimestamp', {
-      value: new Date(),
+  it('should not throw an error', () => {
+    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+  });
+
+  it('should call InteractionUtils.send', async () => {
+    await instance.execute(commandInteraction);
+    expect(InteractionUtils.send).toHaveBeenCalled();
+  });
+
+  describe('calculateLatency', () => {
+    const timestamp = 0;
+
+    it('should not return NaN', () => {
+      const time = instance['calculateLatency'](timestamp);
+      expect(time).not.toBeNaN();
     });
-    instance.execute(commandInteraction, new EventData());
-    expect(commandInteraction.reply).toHaveBeenCalledWith({
-      components: undefined,
-      content:
-        expect.stringMatching(pongLine) &&
-        expect.stringMatching(apiLatencyLine),
-      ephemeral: false,
-      fetchReply: true,
-      files: undefined,
+
+    it('should return an integer', () => {
+      const time = instance['calculateLatency'](timestamp);
+      expect(Number.isInteger(time)).toEqual(true);
     });
   });
 
-  it('should not throw an error', () => {
-    expect(
-      instance.execute(commandInteraction, new EventData())
-    ).resolves.not.toThrowError();
+  describe('getApiLatency', () => {
+    const latency = 120;
+
+    it('should not return NaN', () => {
+      const ping = instance['getApiLatency'](latency);
+      expect(ping).not.toBeNaN();
+    });
+
+    it('should return an integer', () => {
+      const ping = instance['getApiLatency'](latency);
+      expect(Number.isInteger(ping)).toEqual(true);
+    });
   });
 });

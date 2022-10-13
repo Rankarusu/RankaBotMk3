@@ -5,3 +5,4 @@ config/config.json
 docker-compose.yml
 src/public/config/config.json
 rankabot-config
+coverage

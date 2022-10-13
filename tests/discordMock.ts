@@ -102,10 +102,12 @@ export class DiscordMock {
     Object.defineProperty(this.mockedCommandInteraction, 'client', {
       value: this.getMockClient(),
     });
+
     this.mockedCommandInteraction.options.getString = jest.fn((option) => {
-      return this.mockedCommandInteraction.options.data
-        .find((x) => x.name === option)
-        .value.toString();
+      const requestedOption = this.mockedCommandInteraction.options.data.find(
+        (x) => x.name === option
+      )?.value;
+      return requestedOption?.toString() || '';
     });
   }
 

@@ -24,9 +24,19 @@ export class PingCommand extends Command {
   ): Promise<void> {
     await InteractionUtils.send(
       interaction,
-      `🏓 Pong! ${
-        Date.now() - interaction.createdTimestamp
-      } ms \n 🏸 API Latency: ${Math.round(interaction.client.ws.ping)} ms`
+      `🏓 Pong! ${this.calculateLatency(
+        interaction.createdTimestamp
+      )} ms \n 🏸 API Latency: ${this.getApiLatency(
+        interaction.client.ws.ping
+      )} ms`
     );
+  }
+
+  private calculateLatency(createdTimestamp: number) {
+    return Date.now() - createdTimestamp;
+  }
+
+  private getApiLatency(ping: number) {
+    return Math.round(ping);
   }
 }

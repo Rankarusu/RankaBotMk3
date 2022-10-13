@@ -4,6 +4,8 @@ import { Response } from 'node-fetch';
 import pino from 'pino';
 
 const logger = pino({
+  //jest automatically sets the environment to test. We dont want pino there, as it spams errors for unknow reasons
+  enabled: process.env.NODE_ENV !== 'test',
   formatters: {
     level: (label) => {
       //by default pino uses numbers as log level, but labels are more readable

@@ -4,4 +4,6 @@ export class EventData {
   public description: string;
 
   public fields: EmbedField;
+
+  public imageUrl: string;
 }

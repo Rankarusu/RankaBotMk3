@@ -1,4 +1,4 @@
-import { AutocompleteInteraction } from 'discord.js';
+import { AutocompleteFocusedOption, AutocompleteInteraction } from 'discord.js';
 import { Autocomplete } from '../autocompletes';
 import { Logger } from '../services';
 import { EventHandler } from './event-handler';
@@ -17,9 +17,7 @@ export class AutoCompleteHandler implements EventHandler {
     const focusedValue = intr.options.getFocused(true);
 
     // Try to find the autocomplete the user wants
-    const autocomplete = this.autocompletes.find(
-      (ac) => ac.name === focusedValue.name
-    );
+    const autocomplete = this.findAutocomplete(focusedValue);
     if (!autocomplete) {
       Logger.error(
         LogMessages.error.autocompleteNotFound
@@ -36,5 +34,11 @@ export class AutoCompleteHandler implements EventHandler {
     } catch (error) {
       Logger.error(LogMessages.error.autoComplete);
     }
+  }
+
+  private findAutocomplete(focusedValue: AutocompleteFocusedOption) {
+    return this.autocompletes.find(
+      (autoComplete) => autoComplete.name === focusedValue.name
+    );
   }
 }

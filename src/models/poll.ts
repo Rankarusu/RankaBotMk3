@@ -7,6 +7,8 @@ import {
 } from 'discord.js';
 import { EmbedUtils, InteractionUtils, MessageUtils } from '../utils';
 
+const numbers = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+
 export class PollOption {
   embedField: EmbedField;
 
@@ -16,19 +18,6 @@ export class PollOption {
 }
 
 export class Poll {
-  private numbers = [
-    '1️⃣',
-    '2️⃣',
-    '3️⃣',
-    '4️⃣',
-    '5️⃣',
-    '6️⃣',
-    '7️⃣',
-    '8️⃣',
-    '9️⃣',
-    '🔟',
-  ];
-
   private question: string;
 
   private message: Message;
@@ -76,11 +65,11 @@ export class Poll {
     this.options = options.map((option, index) => {
       return {
         embedField: {
-          name: `${this.numbers[index]} - ${option.value}`,
+          name: `${numbers[index]} - ${option.value}`,
           value: '\u200B',
           inline: true,
         },
-        emoji: this.numbers[index],
+        emoji: numbers[index],
         votes: 0,
       };
     });

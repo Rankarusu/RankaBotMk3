@@ -21,7 +21,19 @@ export class TriggerHandler implements EventHandler {
       return;
     }
 
-    const triggers = this.triggers.filter((trigger) => {
+    const triggers = this.findTriggers(msg);
+
+    if (triggers.length === 0) {
+      return;
+    }
+
+    const data = new EventData();
+
+    triggers.forEach((trigger) => trigger.execute(msg, data));
+  }
+
+  private findTriggers(msg: Message<boolean>) {
+    return this.triggers.filter((trigger) => {
       if (trigger.requireGuild && !msg.guild) {
         return false;
       }
@@ -32,13 +44,5 @@ export class TriggerHandler implements EventHandler {
 
       return true;
     });
-
-    if (triggers.length === 0) {
-      return;
-    }
-
-    const data = new EventData();
-
-    triggers.forEach((trigger) => trigger.execute(msg, data));
   }
 }

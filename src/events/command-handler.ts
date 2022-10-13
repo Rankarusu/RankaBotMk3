@@ -1,4 +1,5 @@
 import {
+  CacheType,
   ChatInputCommandInteraction,
   CommandInteraction,
   NewsChannel,
@@ -68,9 +69,7 @@ export class CommandHandler implements EventHandler {
             .replaceAll('{USER_ID}', interaction.user.id)
     );
     // find the command that the user watch executed
-    const command = this.commands.find(
-      (cmd) => cmd.metadata.name === interaction.commandName
-    );
+    const command = this.findCommand(interaction);
     if (!command) {
       Logger.error(
         LogMessages.error.commandNotFound
@@ -103,24 +102,21 @@ export class CommandHandler implements EventHandler {
           !InteractionUtils.isDeveloper(interaction.user)) ||
         !InteractionUtils.canUse(command, interaction)
       ) {
-        data.description = "You don't have permission to use this command";
-        const embed = EmbedUtils.warnEmbed(data);
-        await InteractionUtils.send(interaction, embed);
+        InteractionUtils.sendWarning(
+          interaction,
+          data,
+          "You don't have permission to use this command"
+        );
         return;
       }
       //check if command is on cooldown
       if (InteractionUtils.isOnCooldown(interaction, command)) {
-        data.description = 'Chill';
-        const embed = EmbedUtils.warnEmbed(data);
-        await InteractionUtils.send(interaction, embed);
+        InteractionUtils.sendWarning(interaction, data, 'Chill.');
         return;
       }
 
       if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
-        data.description = 'lewd.';
-        const embed = EmbedUtils.warnEmbed(data);
-        embed.setImage(nsfwimage);
-        await InteractionUtils.send(interaction, embed);
+        InteractionUtils.sendWarning(interaction, data, 'lewd.', nsfwimage);
         return;
       }
 
@@ -151,6 +147,12 @@ export class CommandHandler implements EventHandler {
       }
       await this.sendError(interaction, data);
     }
+  }
+
+  private findCommand(interaction: ChatInputCommandInteraction) {
+    return this.commands.find(
+      (cmd) => cmd.metadata.name === interaction.commandName
+    );
   }
 
   private async sendError(

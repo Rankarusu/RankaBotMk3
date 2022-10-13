@@ -3,8 +3,8 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
+import { RedditListingWrapper, RedditPost } from '../../models';
 import { EventData } from '../../models/event-data';
-import { RedditListing, RedditPostData } from '../../models/reddit';
 import {
   ArrayUtils,
   ClientUtils,
@@ -99,7 +99,7 @@ export class RedditCommand extends Command {
     }
 
     const url = `${baseUrl}/r/${subreddit}/${listing}.json`;
-    let response: RedditListing;
+    let response: RedditListingWrapper;
     try {
       response = await RedditUtils.fetchPosts(url, null, amount + stickyLimit); // reddit has a sticky post limit of 2. we generally do not want to send those.
     } catch (error) {
@@ -115,7 +115,8 @@ export class RedditCommand extends Command {
       );
     }
 
-    const posts = RedditUtils.getPostList(response);
+    const posts = RedditUtils.getPostList(response, amount);
+    console.log(posts.length);
     const partitionedLinks = this.splitPosts(posts, 5);
 
     partitionedLinks.forEach(async (chunk) => {
@@ -123,7 +124,7 @@ export class RedditCommand extends Command {
     });
   }
 
-  private splitPosts(posts: RedditPostData[], chunkSize: number) {
+  private splitPosts(posts: RedditPost[], chunkSize: number) {
     const links: string[] = [];
 
     posts.forEach((post) => {

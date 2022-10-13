@@ -1,6 +1,6 @@
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
-import { RedditPostData } from '../models/reddit';
+import { RedditPost } from '../models/reddit';
 import LogMessages from '../static/logs.json';
 import { RedditUtils } from '../utils';
 
@@ -13,7 +13,7 @@ const limit = 100;
 class Lewds implements Scheduler {
   //implementing a Singleton that automatically gets new data from a MultiReddit.
 
-  private lewds: RedditPostData[] = [];
+  private lewds: RedditPost[] = [];
 
   private next = '';
 
@@ -35,6 +35,7 @@ class Lewds implements Scheduler {
       //try again in 30 seconds
     }
 
+    // run every 15 minutes
     cron.schedule('0,15,30,45 * * * *', async () => {
       if (this.lewds.length >= 10000) {
         this.lewds = [];
@@ -54,11 +55,11 @@ class Lewds implements Scheduler {
     return this._instance || (this._instance = new this());
   }
 
-  public getLewdsFromStash(amount: number, guildId: string): RedditPostData[] {
+  public getLewdsFromStash(amount: number, guildId: string): RedditPost[] {
     //get point in lewds array where guild left off or make them start from the beginning.
     let pos = guildId in this.guildCounters ? this.guildCounters[guildId] : 0;
 
-    const res: RedditPostData[] = [];
+    const res: RedditPost[] = [];
 
     const lastPos =
       pos + amount > this.lewds.length ? this.lewds.length : pos + amount;

@@ -1,9 +1,21 @@
-export interface RedditPost {
+export interface RedditListingWrapper {
   kind: string;
-  data: RedditPostData;
+  data: RedditListing;
 }
 
-export interface RedditPostData {
+export interface RedditListing {
+  after?: string;
+  dist: number;
+  before?: string;
+  children: RedditPostWrapper[];
+}
+
+export interface RedditPostWrapper {
+  kind: string;
+  data: RedditPost;
+}
+
+export interface RedditPost {
   subreddit: string;
   title: string;
   name: string;
@@ -21,16 +33,4 @@ export interface RedditPostData {
       fallback_url: string;
     };
   };
-}
-
-export interface RedditListing {
-  kind: string;
-  data: RedditListingData;
-}
-
-export interface RedditListingData {
-  after?: string;
-  dist: number;
-  before?: string;
-  children: RedditPost[];
 }

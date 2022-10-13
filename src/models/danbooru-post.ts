@@ -1,4 +1,4 @@
-interface DanbooruPost {
+export interface DanbooruPost {
   id: number;
   created_at: string;
   uploader_id: number;

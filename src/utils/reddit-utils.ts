@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { RedditListing, RedditPostData } from '../models/reddit';
+import { RedditListingWrapper, RedditPost } from '../models/reddit';
 
 const validPostHints = ['link', 'image', 'hosted:video'];
 
 export class RedditUtils {
   public static async fetchPosts(url: string, after?: string, limit = 100) {
     const data = await axios
-      .get<RedditListing>(url, {
+      .get<RedditListingWrapper>(url, {
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
@@ -24,10 +24,14 @@ export class RedditUtils {
     return data;
   }
 
-  public static getPostList(listing: RedditListing, filterByPostHints = false) {
-    const posts: RedditPostData[] = [];
+  public static getPostList(
+    listing: RedditListingWrapper,
+    limit = 100,
+    filterByPostHints = false
+  ) {
+    const posts: RedditPost[] = [];
 
-    listing.data.children.forEach((child) => {
+    for (const child of listing.data.children) {
       if (
         (filterByPostHints && validPostHints.includes(child.data.post_hint)) ||
         !filterByPostHints
@@ -39,9 +43,13 @@ export class RedditUtils {
           url: child.data.url,
           stickied: child.data.stickied,
           permalink: child.data.permalink,
-        } as RedditPostData);
+        } as RedditPost);
       }
-    });
+      if (posts.length >= limit) {
+        // because we usually fetch more posts than we need to ignore stickies, we use this to make sure we get the amount of posts the user requested.
+        break;
+      }
+    }
     return posts;
   }
 }

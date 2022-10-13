@@ -28,11 +28,11 @@ export class DadJokeCommand extends Command {
     data: EventData
   ): Promise<void> {
     const joke = await this.getJoke(data);
-    const embed = this.createEmbed(joke);
+    const embed = this.createDadJokeEmbed(joke);
     await InteractionUtils.send(interaction, embed);
   }
 
-  private createEmbed(joke: string) {
+  private createDadJokeEmbed(joke: string) {
     const embed = EmbedUtils.infoEmbed(joke, 'Dad Joke');
     embed.setFooter({ text: 'Powered by icanhazdadjoke.com' });
     return embed;
@@ -52,6 +52,7 @@ export class DadJokeCommand extends Command {
         data,
         'An error occurred while communicating with the API'
       );
+      return;
     }
     const joke = response.data.joke;
     return joke;

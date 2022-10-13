@@ -6,7 +6,7 @@ import {
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { EventData } from '../../models/event-data';
+import { EventData } from '../../models';
 import { InteractionUtils } from '../../utils';
 
 export class TestCommand extends Command {

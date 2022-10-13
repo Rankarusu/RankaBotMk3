@@ -1,6 +1,6 @@
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
-import { RedditPost } from '../models/reddit';
+import { RedditPost } from '../models';
 import LogMessages from '../static/logs.json';
 import { RedditUtils } from '../utils';
 
@@ -30,7 +30,7 @@ class Lewds implements Scheduler {
       //get data once and then in intervals.
       const lewds = await RedditUtils.fetchPosts(url, this.next, limit);
       this.next = lewds.data.after;
-      this.lewds.push(...RedditUtils.getPostList(lewds, true));
+      this.lewds.push(...RedditUtils.getPostList(lewds, limit, true));
     } catch (error) {
       //try again in 30 seconds
     }

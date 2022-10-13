@@ -3,8 +3,8 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
-import { lewds } from '../../services/lewds';
+import { EventData } from '../../models';
+import { lewds } from '../../services';
 import {
   ArrayUtils,
   ClientUtils,

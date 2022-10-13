@@ -27,7 +27,12 @@ import {
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
-import { EventData } from '../../models/event-data';
+import {
+  EventData,
+  ExtendedPaginationEmbed,
+  PokemonDamageRelations,
+} from '../../models';
+import { types } from '../../static/pokemonDamageRelations.json';
 import {
   ClientUtils,
   EmbedUtils,
@@ -35,9 +40,6 @@ import {
   StringUtils,
 } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
-import { ExtendedPaginationEmbed } from '../../models/pagination-embed';
-import { PokemonDamageRelations } from '../../models/pokemon';
-import { types } from '../../static/pokemonDamageRelations.json';
 
 const typeEmoji = {
   normal: '<:GO_Normal:741995847222296649>',

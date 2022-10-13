@@ -1,8 +1,8 @@
 import { Message, SelectMenuInteraction } from 'discord.js';
+import { EventHandler } from '.';
 import { SelectMenu, SelectMenuDeferType } from '../menus';
-import { EventData } from '../models/event-data';
+import { EventData } from '../models';
 import { InteractionUtils } from '../utils';
-import { EventHandler } from './event-handler';
 
 export class SelectMenuHandler implements EventHandler {
   constructor(public menus: SelectMenu[]) {}

@@ -9,7 +9,7 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models/event-data';
+import { EventData } from '../../models';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

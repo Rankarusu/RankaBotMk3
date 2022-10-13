@@ -15,6 +15,7 @@ import {
   User,
   UserResolvable,
 } from 'discord.js';
+import { EventData } from '.';
 import {
   DateUtils,
   DbUtils,
@@ -22,7 +23,6 @@ import {
   InteractionUtils,
   MessageUtils,
 } from '../utils';
-import { EventData } from './event-data';
 
 const noReminderWarning = `You have no reminders set at the moment. Use \`/remind set\` to set one.`;
 const noStickerWarning =

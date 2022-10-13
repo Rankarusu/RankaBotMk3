@@ -51,19 +51,18 @@ import {
   SelectMenuHandler,
   TriggerHandler,
 } from './events';
-import { SelectMenu } from './menus/select-menu';
-import { Bot } from './models/bot';
-import { Reaction } from './models/reaction';
+import { SelectMenu } from './menus';
+import { Bot, Reaction } from './models';
 import {
   ActivityScheduler,
+  aniList,
   Db,
   ExpScheduler,
+  lewds,
   Logger,
+  ReminderScheduler,
   Scheduler,
 } from './services';
-import { aniList } from './services/anilist';
-import { lewds } from './services/lewds';
-import { ReminderScheduler } from './services/reminder';
 import LogMessages from './static/logs.json';
 import {
   AyyTrigger,

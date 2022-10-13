@@ -1,7 +1,7 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import { EventData } from '../models/event-data';
+import { EventData } from '../models';
 
 export abstract class Command {
   id?: string;

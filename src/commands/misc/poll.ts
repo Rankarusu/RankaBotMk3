@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { Poll } from '../../models/poll';
+import { Poll } from '../../models';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 export class PollCommand extends Command {

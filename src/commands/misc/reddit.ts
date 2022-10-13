@@ -3,8 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { RedditListingWrapper, RedditPost } from '../../models';
-import { EventData } from '../../models/event-data';
+import { EventData, RedditListingWrapper, RedditPost } from '../../models';
 import {
   ArrayUtils,
   ClientUtils,

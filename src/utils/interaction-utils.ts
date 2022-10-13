@@ -17,9 +17,9 @@ import {
   ThreadChannel,
   User,
 } from 'discord.js';
+import { EmbedUtils } from '.';
 import { Command } from '../commands';
-import { EventData } from '../models/event-data';
-import { EmbedUtils } from './embed-utils';
+import { EventData } from '../models';
 
 const Config = require('../../config/config.json');
 

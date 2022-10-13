@@ -6,12 +6,12 @@ import {
   ThreadChannel,
 } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
+import { EventHandler } from '.';
 import { Command, CommandDeferType } from '../commands';
-import { EventData } from '../models/event-data';
+import { EventData } from '../models';
 import { Logger } from '../services';
 import LogMessages from '../static/logs.json';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
-import { EventHandler } from './event-handler';
 
 const Config = require('../../config/config.json');
 

@@ -1,7 +1,6 @@
 import { Message, MessageReaction, User } from 'discord.js';
-import { EventData } from '../models/event-data';
-import { Reaction } from '../models/reaction';
-import { EventHandler } from './event-handler';
+import { EventHandler } from '.';
+import { EventData, Reaction } from '../models';
 export class ReactionHandler implements EventHandler {
   constructor(private reactions: Reaction[]) {}
 

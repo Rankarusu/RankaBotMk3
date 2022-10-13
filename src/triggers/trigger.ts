@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { EventData } from '../models/event-data';
+import { EventData } from '../models';
 
 export interface Trigger {
   requireGuild: boolean;

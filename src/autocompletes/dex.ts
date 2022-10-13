@@ -2,8 +2,8 @@ import {
   ApplicationCommandOptionChoiceData,
   AutocompleteFocusedOption,
 } from 'discord.js';
+import { Autocomplete } from '.';
 import pokemon from '../static/pokemon.json';
-import { Autocomplete } from './autocomplete';
 
 export class PokemonAutocomplete implements Autocomplete {
   public name = 'pokemon-name';

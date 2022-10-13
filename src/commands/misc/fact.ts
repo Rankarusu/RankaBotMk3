@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
+import { EventData } from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

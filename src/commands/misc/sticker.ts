@@ -4,8 +4,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
-import { StickerListSelectEmbed } from '../../models/pagination-embed';
+import { EventData, StickerListSelectEmbed } from '../../models';
 import {
   ClientUtils,
   DbUtils,

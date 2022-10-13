@@ -5,8 +5,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
-import { ReminderListSelectEmbed } from '../../models/pagination-embed';
+import { EventData, ReminderListSelectEmbed } from '../../models';
 import {
   ClientUtils,
   DateUtils,

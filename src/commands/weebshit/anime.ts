@@ -7,10 +7,8 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-import { AniListSearchItem } from '../../models/anilist';
-import { EventData } from '../../models/event-data';
-import { PaginationEmbed } from '../../models/pagination-embed';
-import { aniList } from '../../services/anilist';
+import { AniListSearchItem, EventData, PaginationEmbed } from '../../models';
+import { aniList } from '../../services';
 import {
   ClientUtils,
   EmbedUtils,

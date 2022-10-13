@@ -1,7 +1,7 @@
 import { AutocompleteFocusedOption, AutocompleteInteraction } from 'discord.js';
+import { EventHandler } from '.';
 import { Autocomplete } from '../autocompletes';
 import { Logger } from '../services';
-import { EventHandler } from './event-handler';
 
 import LogMessages from '../static/logs.json';
 

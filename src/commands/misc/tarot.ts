@@ -7,8 +7,8 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-import { TarotCard, TarotCardDraw } from '../../models/tarot-card';
-import { Tarot } from '../../services/tarot';
+import { TarotCard, TarotCardDraw } from '../../models';
+import { Tarot } from '../../services';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

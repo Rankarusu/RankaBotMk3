@@ -2,8 +2,8 @@ import {
   ApplicationCommandOptionChoiceData,
   AutocompleteFocusedOption,
 } from 'discord.js';
+import { Autocomplete } from '.';
 import { bot } from '..';
-import { Autocomplete } from './autocomplete';
 
 export class CommandAutocomplete implements Autocomplete {
   public name = 'command';

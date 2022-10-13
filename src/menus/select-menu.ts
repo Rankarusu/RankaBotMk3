@@ -1,5 +1,5 @@
 import { Message, SelectMenuInteraction } from 'discord.js';
-import { EventData } from '../models/event-data';
+import { EventData } from '../models';
 
 export interface SelectMenu {
   ids: string[];

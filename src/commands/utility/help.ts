@@ -12,8 +12,7 @@ import {
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
-import { EventData } from '../../models/event-data';
-import { PaginationEmbed } from '../../models/pagination-embed';
+import { EventData, PaginationEmbed } from '../../models';
 import {
   ArrayUtils,
   EmbedUtils,

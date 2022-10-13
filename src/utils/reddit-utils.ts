@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RedditListingWrapper, RedditPost } from '../models/reddit';
+import { RedditListingWrapper, RedditPost } from '../models';
 
 const validPostHints = ['link', 'image', 'hosted:video'];
 

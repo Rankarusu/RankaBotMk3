@@ -1,13 +1,13 @@
 import axios from 'axios';
 import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
-import LogMessages from '../static/logs.json';
 import {
   AniListAiringScheduleItem,
   AniListSearchItem,
   MediaFormat,
   MediaType,
-} from '../models/anilist';
+} from '../models';
+import LogMessages from '../static/logs.json';
 
 const url = 'https://graphql.anilist.co';
 

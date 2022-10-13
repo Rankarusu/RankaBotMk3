@@ -1,5 +1,5 @@
+import { TarotCard, TarotCardDraw } from '../models';
 import tarotCards from '../static/tarot.json';
-import { TarotCard, TarotCardDraw } from '../models/tarot-card';
 
 export class Tarot {
   private deck = tarotCards.tarot_interpretations;

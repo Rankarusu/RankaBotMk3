@@ -69,7 +69,7 @@ export class DanbooruCommand extends Command {
 
     const embed = EmbedUtils.danbooruEmbed(post);
 
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private async getPost(

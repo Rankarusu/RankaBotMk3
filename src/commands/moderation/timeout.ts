@@ -67,13 +67,11 @@ export class TimeoutCommand extends Command {
       );
     } catch (e) {
       InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-      return;
     }
 
     if (!parsedTime) {
       // parsed time is null if parse is unsuccessful
       InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-      return;
     }
 
     if (member.isCommunicationDisabled()) {

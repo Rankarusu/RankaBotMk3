@@ -32,7 +32,7 @@ export abstract class Command {
 
   abstract execute(
     interaction: ChatInputCommandInteraction,
-    data: EventData
+    data?: EventData
   ): Promise<void>;
 }
 

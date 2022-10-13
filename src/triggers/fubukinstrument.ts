@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 export class FubukinstrumentTrigger implements Trigger {
@@ -11,7 +10,7 @@ export class FubukinstrumentTrigger implements Trigger {
     return content.includes('fubuki') && content.includes('instrument');
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     await MessageUtils.reply(msg, 'Yes, Fubuki is an instrument.');
   }
 }

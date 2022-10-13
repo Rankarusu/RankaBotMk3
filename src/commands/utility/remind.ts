@@ -150,7 +150,7 @@ export class RemindCommand extends Command {
           confirmation.delete();
           InteractionUtils.sendError(data, 'Could not create reminder');
         }
-        InteractionUtils.editReply(interaction, successEmbed);
+        await InteractionUtils.editReply(interaction, successEmbed);
         break;
       }
     }

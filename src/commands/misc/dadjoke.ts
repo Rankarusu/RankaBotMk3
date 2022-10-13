@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { RateLimiter } from 'discord.js-rate-limiter';
-import { EventData } from '../../models/event-data';
+import { EventData } from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -30,7 +29,7 @@ export class DadJokeCommand extends Command {
   ): Promise<void> {
     const joke = await this.getJoke(data);
     const embed = this.createEmbed(joke);
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private createEmbed(joke: string) {

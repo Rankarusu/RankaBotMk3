@@ -8,5 +8,7 @@ export interface Autocomplete {
   // we could put a minimum required length here.
   execute(
     focusedValue: AutocompleteFocusedOption
-  ): Promise<ApplicationCommandOptionChoiceData[]>;
+  ):
+    | ApplicationCommandOptionChoiceData[]
+    | Promise<ApplicationCommandOptionChoiceData[]>;
 }

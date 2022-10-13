@@ -65,13 +65,13 @@ export class BanCommand extends Command {
       Config.client.id === member.user.id
     ) {
       // don't kick the bot or the developer
-      return InteractionUtils.sendError(data, 'You cannot ban this user.');
+      InteractionUtils.sendError(data, 'You cannot ban this user.');
     }
 
     if (member.bannable) {
       const embed = this.createdBanEmbed(member, deleteMessageDays, reason);
       member.ban({ deleteMessageDays, reason });
-      InteractionUtils.send(interaction, embed);
+      await InteractionUtils.send(interaction, embed);
     } else {
       InteractionUtils.sendError(
         data,

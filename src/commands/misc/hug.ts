@@ -7,7 +7,6 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models/event-data';
 import { hugs } from '../../static/hugs.json';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -39,15 +38,14 @@ export class HugCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const user = interaction.options.getMember('user');
     const embed = this.createHugEmbed(
       interaction.member as GuildMember,
       user as GuildMember
     );
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private createHugEmbed(hugger: GuildMember, hugged: GuildMember) {

@@ -8,7 +8,7 @@ import { Autocomplete } from './autocomplete';
 export class CommandAutocomplete implements Autocomplete {
   public name = 'command';
 
-  public async execute(focusedValue: AutocompleteFocusedOption) {
+  public execute(focusedValue: AutocompleteFocusedOption) {
     const commands = bot.getCommands();
 
     const filtered: ApplicationCommandOptionChoiceData[] = [];

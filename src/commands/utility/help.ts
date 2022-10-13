@@ -5,7 +5,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
-  CacheType,
   ChatInputCommandInteraction,
   CommandInteraction,
   PermissionsString,
@@ -79,7 +78,7 @@ export class HelpCommand extends Command {
 
       const embed = this.createCommandHelpEmbed(requestedCommand, iconUrl);
 
-      InteractionUtils.send(interaction, embed);
+      await InteractionUtils.send(interaction, embed);
     }
   }
 

@@ -54,13 +54,13 @@ export class KickCommand extends Command {
       Config.client.id === member.user.id
     ) {
       // don't kick the bot or the developer
-      return InteractionUtils.sendError(data, 'You cannot kick this user.');
+      InteractionUtils.sendError(data, 'You cannot kick this user.');
     }
 
     const embed = this.createKickEmbed(member, reason);
     if (member.kickable) {
       member.kick(reason);
-      InteractionUtils.send(interaction, embed);
+      await InteractionUtils.send(interaction, embed);
     } else {
       InteractionUtils.sendError(
         data,

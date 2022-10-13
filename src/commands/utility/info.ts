@@ -5,7 +5,6 @@ import {
   PermissionsString,
 } from 'discord.js';
 import os from 'os';
-import { EventData } from '../../models/event-data';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -26,8 +25,7 @@ export class InfoCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const stats: EmbedField[] = [
       {
@@ -76,6 +74,6 @@ export class InfoCommand extends Command {
       stats
     );
     embed.setThumbnail(interaction.client.user.avatarURL());
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 }

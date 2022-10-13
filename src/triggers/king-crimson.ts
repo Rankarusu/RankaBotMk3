@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 const link = 'https://www.youtube.com/watch?v=Jm2D7ohWos0';
@@ -16,7 +15,7 @@ export class KingCrimsonTrigger implements Trigger {
     );
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     await MessageUtils.reply(msg, link);
   }
 }

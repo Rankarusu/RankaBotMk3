@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 export class AyyTrigger implements Trigger {
@@ -12,7 +11,7 @@ export class AyyTrigger implements Trigger {
     return content === 'ayy';
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     await MessageUtils.reply(msg, 'lmao');
   }
 }

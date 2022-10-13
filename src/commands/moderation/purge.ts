@@ -50,7 +50,7 @@ export class PurgeCommand extends Command {
         );
         InteractionUtils.send(interaction, embed);
       })
-      .catch((error) =>
+      .catch(() =>
         InteractionUtils.sendError(
           data,
           'An error ocurred while deleting messages.'

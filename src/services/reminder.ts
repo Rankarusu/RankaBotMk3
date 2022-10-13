@@ -40,10 +40,10 @@ export class ReminderScheduler implements Scheduler {
     });
   }
 
-  public async start() {
+  public start() {
     // run every 20 seconds
-    cron.schedule('0,20,40 * * * * *', () => {
-      this.remind();
+    cron.schedule('0,20,40 * * * * *', async () => {
+      await this.remind();
     });
     Logger.info(
       LogMessages.info.cronInfo.replaceAll(

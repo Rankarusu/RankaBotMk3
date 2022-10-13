@@ -84,7 +84,7 @@ export class AnimeCommand extends Command {
 
         const embed = this.createAniListSearchEmbed(media);
 
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'schedule': {
@@ -96,7 +96,7 @@ export class AnimeCommand extends Command {
           pages,
           20
         );
-        paginatedEmbed.start();
+        await paginatedEmbed.start();
       }
     }
   }

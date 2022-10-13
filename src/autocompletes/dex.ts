@@ -8,7 +8,7 @@ import { Autocomplete } from './autocomplete';
 export class PokemonAutocomplete implements Autocomplete {
   public name = 'pokemon-name';
 
-  public async execute(focusedValue: AutocompleteFocusedOption) {
+  public execute(focusedValue: AutocompleteFocusedOption) {
     const filtered: ApplicationCommandOptionChoiceData[] = [];
     let limit = 0;
     for (const choice of pokemon) {

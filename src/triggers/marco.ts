@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 export class MarcoTrigger implements Trigger {
@@ -12,7 +11,7 @@ export class MarcoTrigger implements Trigger {
     return content === 'marco';
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     await MessageUtils.reply(msg, 'Polo');
   }
 }

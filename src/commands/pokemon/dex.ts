@@ -359,7 +359,7 @@ export class DexCommand extends Command {
         }
 
         const embed = this.createAbilityEmbed(ability);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'berry': {
@@ -381,7 +381,7 @@ export class DexCommand extends Command {
           );
         }
         const embed = this.createBerryEmbed(berry, berryItem);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'item': {
@@ -400,7 +400,7 @@ export class DexCommand extends Command {
           );
         }
         const embed = this.createItemEmbed(item);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'move': {
@@ -419,7 +419,7 @@ export class DexCommand extends Command {
           );
         }
         const embed = this.createMoveEmbed(move);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'nature': {
@@ -434,7 +434,7 @@ export class DexCommand extends Command {
           );
         }
         const embed = this.createNatureEmbed(nature);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
       case 'pdr': {
@@ -442,7 +442,7 @@ export class DexCommand extends Command {
         const type2 = interaction.options.getString('type-2');
         const pdr = this.getDamageRelations([type1, type2]);
         const embed = this.createPDREmbed(pdr);
-        InteractionUtils.send(interaction, embed);
+        await InteractionUtils.send(interaction, embed);
         break;
       }
     }

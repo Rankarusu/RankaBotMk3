@@ -45,6 +45,7 @@ export class LewdsCommand extends Command {
 
   //TODO: put a rate limiter here.
 
+  // eslint-disable-next-line require-await
   public async execute(
     interaction: ChatInputCommandInteraction,
     data: EventData
@@ -59,7 +60,7 @@ export class LewdsCommand extends Command {
         'There are currently no more lewds available, please try again in a few minutes.'
       );
     }
-    //even though embeds of videos do not work, we use our own embeds here just so we circumvent the "over 18?"-embed.
+    //even though embeds of videos do not work, we use our own embeds here just to circumvent the "over 18?"-embed.
     const embeds = posts.map((post) => {
       return EmbedUtils.lewdEmbed(post);
     });

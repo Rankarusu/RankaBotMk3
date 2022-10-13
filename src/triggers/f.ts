@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 export class FTrigger implements Trigger {
@@ -12,7 +11,7 @@ export class FTrigger implements Trigger {
     return content === 'f';
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     const channel = msg.channel;
     await MessageUtils.send(channel, 'F');
   }

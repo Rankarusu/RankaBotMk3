@@ -4,14 +4,12 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import {
-  CacheType,
   ChatInputCommandInteraction,
   EmbedField,
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models/event-data';
-import { PaginationEmbed } from '../../models/pagination-embed';
+import { EventData, PaginationEmbed } from '../../models';
 import {
   ClientUtils,
   DbUtils,

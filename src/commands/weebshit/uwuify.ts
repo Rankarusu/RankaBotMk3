@@ -3,7 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
 import { InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -90,9 +89,9 @@ export class UwuifyCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
+  // eslint-disable-next-line require-await
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     let text = interaction.options.getString('text');
     text = this.replaceLetters(text);

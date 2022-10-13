@@ -7,7 +7,6 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models/event-data';
 import { TarotCard, TarotCardDraw } from '../../models/tarot-card';
 import { Tarot } from '../../services/tarot';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
@@ -146,8 +145,7 @@ export class TarotCommand extends Command {
   private deck = new Tarot();
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
 

@@ -1,5 +1,4 @@
 import {
-  CacheType,
   ChatInputCommandInteraction,
   CommandInteraction,
   NewsChannel,

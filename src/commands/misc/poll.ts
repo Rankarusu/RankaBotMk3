@@ -3,7 +3,6 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models/event-data';
 import { Poll } from '../../models/poll';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -110,8 +109,7 @@ export class PollCommand extends Command {
   ];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const question = interaction.options.getString('question');
     const options = interaction.options.data.filter((option) =>
@@ -121,6 +119,6 @@ export class PollCommand extends Command {
     const onlyOneVote = interaction.options.getBoolean('only-one-vote');
 
     const poll = new Poll(question, options, timeLimit, onlyOneVote);
-    poll.start(interaction);
+    await poll.start(interaction);
   }
 }

@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { Trigger } from '.';
-import { EventData } from '../models/event-data';
 import { MessageUtils } from '../utils';
 
 export class NoUTrigger implements Trigger {
@@ -10,7 +9,7 @@ export class NoUTrigger implements Trigger {
     return msg.content.toLowerCase().includes('traps are gay');
   }
 
-  async execute(msg: Message, data: EventData) {
+  async execute(msg: Message) {
     await MessageUtils.reply(msg, 'no *u*');
   }
 }

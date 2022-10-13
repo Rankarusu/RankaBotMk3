@@ -12,7 +12,6 @@ import {
   PartialUser,
   User,
 } from 'discord.js';
-import LogMessages from '../static/logs.json';
 import { Command } from '../commands';
 import {
   AutoCompleteHandler,
@@ -22,6 +21,7 @@ import {
   SelectMenuHandler,
 } from '../events';
 import { Logger } from '../services';
+import LogMessages from '../static/logs.json';
 import { PartialUtils } from '../utils';
 
 const Config = require('../../config/config.json');
@@ -171,7 +171,7 @@ export class Bot {
     return this.commandHandler.commands;
   }
 
-  private async registerGuildCommands() {
+  private registerGuildCommands() {
     //TODO: find a better place to put this.
     const rest = new REST().setToken(Config.client.token);
     rest.put(
@@ -185,12 +185,12 @@ export class Bot {
     const commandsJson = commands.map((command) => command.metadata);
     // const guildIds = this.client.guilds.cache.map((guild) => guild.id);
 
-    const guildIds = Config.devServers;
+    const guildIds: string[] = Config.devServers;
     //if we register all commands globally and locally, we will see them twice on every server.
     //we just register them on the dev servers so we get feedback immediately.
 
     try {
-      guildIds.forEach(async (guildId) => {
+      guildIds.forEach(async (guildId: string) => {
         await rest.put(
           Routes.applicationGuildCommands(Config.client.id, guildId),
           { body: commandsJson }

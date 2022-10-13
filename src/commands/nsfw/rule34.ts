@@ -117,7 +117,7 @@ export class Rule34Command extends Command {
 
     const embed = EmbedUtils.r34Embed(post);
 
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private async getPost(

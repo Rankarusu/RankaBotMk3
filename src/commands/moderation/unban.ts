@@ -65,7 +65,7 @@ export class UnbanCommand extends Command {
 
     const embed = this.createUnbanEmbed(bannedUser, reason);
 
-    InteractionUtils.send(interaction, embed);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private createUnbanEmbed(bannedUser: User, reason: string) {

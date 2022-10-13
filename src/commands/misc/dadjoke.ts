@@ -6,6 +6,7 @@ import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const url = 'https://icanhazdadjoke.com/';
+
 export class DadJokeCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'dadjoke',

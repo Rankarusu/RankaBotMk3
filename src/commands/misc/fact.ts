@@ -6,6 +6,7 @@ import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const url = 'https://www.thefact.space/random';
+
 export class FactCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {
     name: 'fact',
@@ -28,9 +29,14 @@ export class FactCommand extends Command {
     data: EventData
   ): Promise<void> {
     const fact = await this.getFact(data);
+    const embed = this.createFactEmbed(fact);
+    InteractionUtils.send(interaction, embed);
+  }
+
+  private createFactEmbed(fact: string) {
     const embed = EmbedUtils.infoEmbed(fact, 'Random Fact');
     embed.setFooter({ text: 'Powered by www.thefact.space' });
-    InteractionUtils.send(interaction, embed);
+    return embed;
   }
 
   private async getFact(data: EventData): Promise<string> {
@@ -47,6 +53,7 @@ export class FactCommand extends Command {
         data,
         'An error occurred while communicating with the API'
       );
+      return;
     }
     const text = response.data.text;
     return text;

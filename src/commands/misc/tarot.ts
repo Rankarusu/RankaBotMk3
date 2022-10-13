@@ -157,7 +157,7 @@ export class TarotCommand extends Command {
         const reverseChance = noReverse ? 0 : 0.5;
         const card: TarotCardDraw = this.deck.drawCard(reverseChance);
         const embed = this.createCardEmbed(card.card, card.reverse);
-        InteractionUtils.send(interaction, embed, undefined);
+        await InteractionUtils.send(interaction, embed, undefined);
         break;
       }
       case 'major-arcana': {
@@ -165,7 +165,7 @@ export class TarotCommand extends Command {
         const reverse = interaction.options.getBoolean('reverse');
         const card = this.deck.getMajorArcana(num);
         const embed = this.createCardEmbed(card, reverse);
-        InteractionUtils.send(interaction, embed, undefined);
+        await InteractionUtils.send(interaction, embed, undefined);
         break;
       }
       case 'minor-arcana': {
@@ -175,7 +175,7 @@ export class TarotCommand extends Command {
         const reverse = interaction.options.getBoolean('reverse');
         const card = this.deck.getMinorArcana(suit, maybeIntRank);
         const embed = this.createCardEmbed(card, reverse);
-        InteractionUtils.send(interaction, embed, undefined);
+        await InteractionUtils.send(interaction, embed, undefined);
       }
     }
   }

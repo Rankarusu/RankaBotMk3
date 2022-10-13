@@ -1,3 +1,3 @@
 export interface Scheduler {
-  start(): Promise<void>;
+  start(): void | Promise<void>;
 }

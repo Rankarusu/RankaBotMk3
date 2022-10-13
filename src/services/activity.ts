@@ -25,12 +25,12 @@ export class ActivityScheduler implements Scheduler {
     this.client = client;
   }
 
-  private async changeActivity() {
+  private changeActivity() {
     const activity = activities[Math.floor(Math.random() * activities.length)];
     this.client.user.setActivity(activity);
   }
 
-  public async start() {
+  public start() {
     cron.schedule('0 * * * *', () => {
       this.changeActivity();
     });

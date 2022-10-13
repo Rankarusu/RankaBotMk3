@@ -27,7 +27,7 @@ export class ExpScheduler implements Scheduler {
     });
   }
 
-  public async start() {
+  public start() {
     // run once a day at 00:00
     cron.schedule('0 0 * * *', () => {
       this.cleanOrphanedUsers();

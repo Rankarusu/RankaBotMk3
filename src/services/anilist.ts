@@ -65,6 +65,7 @@ query ($search: String, $format: MediaFormat) {
   }
 }
 `;
+
 class AniList implements Scheduler {
   //implementing a Singleton that automatically gets new data from AniList.
   private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
@@ -78,7 +79,7 @@ class AniList implements Scheduler {
   public async start() {
     //get data once and then in intervals.
     try {
-      this.updateSchedule(this.getTimestamps());
+      await this.updateSchedule(this.getTimestamps());
     } catch (error) {
       //try again in 30 seconds
       setTimeout(() => {
@@ -118,9 +119,8 @@ class AniList implements Scheduler {
     return data;
   }
 
-  private getTimestamps() {
+  private getTimestamps(): { start: number; end: number }[] {
     const timestamps = [];
-    // timestamps.push(time / 1000);
     let end: number;
     for (let i = 0; i < 7; i++) {
       if (i === 0) {

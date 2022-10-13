@@ -6,9 +6,7 @@ import {
   GuildMember,
   User,
 } from 'discord.js';
-import { EventData } from '../models/event-data';
-import { RedditPostData } from '../models/reddit';
-import { Rule34Post } from '../models/rule34post';
+import { DanbooruPost, EventData, RedditPost, Rule34Post } from '../models';
 
 const Config = require('../../config/config.json');
 const blessImage = 'https://imgur.com/j6S4CLe.png';
@@ -39,6 +37,9 @@ export class EmbedUtils {
 
     if (data.fields) {
       embed.addFields(data.fields);
+    }
+    if (data.imageUrl) {
+      embed.setImage(data.imageUrl);
     }
     return embed;
   }
@@ -210,13 +211,13 @@ export class EmbedUtils {
       .setTitle('Danbooru')
       .setFooter({ text: 'Powered by danbooru.donmai.us' })
       .setURL(`https://danbooru.donmai.us/posts/${post.id}`)
-      .setColor('#0075f8')
+      .setColor(danbooruBlue)
       .setImage(post.file_url)
       .setTimestamp();
     return embed;
   }
 
-  public static lewdEmbed(post: RedditPostData) {
+  public static lewdEmbed(post: RedditPost) {
     const embed = this.infoEmbed()
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)

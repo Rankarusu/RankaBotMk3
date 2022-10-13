@@ -91,6 +91,12 @@ export class DiscordMock {
     this.mockedUser.id = '12';
     this.mockedUser.username = 'test';
     this.mockedUser.bot = false;
+    Object.defineProperty(this.mockedUser, 'tag', {
+      value: 'RankaBot Mk III#7533',
+    });
+    this.mockedUser.displayAvatarURL = jest.fn(() => {
+      return 'www.a.bc';
+    });
   }
 
   private mockCommand() {
@@ -99,6 +105,7 @@ export class DiscordMock {
     this.mockedCommandInteraction.options = mockedOptions;
     this.mockedCommandInteraction.guildId = DiscordMock.GUILDID;
     this.mockedCommandInteraction.user = this.mockedUser;
+    this.mockedCommandInteraction.member = this.newMockGuildMember(12);
     Object.defineProperty(this.mockedCommandInteraction, 'client', {
       value: this.getMockClient(),
     });
@@ -108,6 +115,13 @@ export class DiscordMock {
         (x) => x.name === option
       )?.value;
       return requestedOption?.toString() || '';
+    });
+
+    this.mockedCommandInteraction.options.getMember = jest.fn((option) => {
+      const requestedOption = this.mockedCommandInteraction.options.data.find(
+        (x) => x.name === option
+      )?.member;
+      return requestedOption || null;
     });
   }
 
@@ -179,9 +193,19 @@ export class DiscordMock {
     return this.mockedOldVoiceState;
   }
 
-  public newMockGuildMember(): jest.Mocked<GuildMember> {
-    const guildMember = {} as jest.Mocked<GuildMember>;
+  public newMockGuildMember(
+    id: number | string = 12
+  ): jest.Mocked<GuildMember> {
+    const guildMember = {
+      id: id.toString(),
+    } as jest.Mocked<GuildMember>;
     guildMember.user = this.getMockUser();
+    Object.defineProperty(guildMember, 'tag', {
+      value: 'abc',
+    });
+    guildMember.displayAvatarURL = jest.fn(() => {
+      return 'https://cdn.discordapp.com/avatars/0/0.webp';
+    });
     return guildMember;
   }
 }

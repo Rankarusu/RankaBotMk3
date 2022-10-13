@@ -45,6 +45,7 @@ export class HugCommand extends Command {
       interaction.member as GuildMember,
       user as GuildMember
     );
+    // const embed = EmbedUtils.infoEmbed();
     await InteractionUtils.send(interaction, embed);
   }
 

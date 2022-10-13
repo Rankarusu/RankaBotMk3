@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.0...v1.3.1) (2022-10-13)
+
+
+### Bug Fixes
+
+* **reddit:** fix bug where reddit command sends wrong amount of posts, also rename interfaces ([ee36b64](https://github.com/Rankarusu/RankaBotMk3/commit/ee36b64fcc3193a39268b75ae1938b09b957e8ed))
+* **remind:** put reminder mention inside message instead of embed to actually ping ([0ff0d86](https://github.com/Rankarusu/RankaBotMk3/commit/0ff0d8695ff598212b1d3528791f5cfb1a4c51d7))
+
 ## [1.3.0](https://github.com/Rankarusu/RankaBotMk3/compare/v1.2.0...v1.3.0) (2022-10-03)
 
 

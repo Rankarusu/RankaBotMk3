@@ -7,6 +7,7 @@ export class RedditUtils {
   public static async fetchPosts(url: string, after?: string, limit = 100) {
     const data = await axios
       .get<RedditListingWrapper>(url, {
+        maxRedirects: 0, //when reddit does not find a subreddit, it redirects us to a search page.
         headers: {
           Accept: 'application/json',
           'User-Agent': 'axios',
@@ -26,7 +27,6 @@ export class RedditUtils {
 
   public static getPostList(
     listing: RedditListingWrapper,
-    limit = 100,
     filterByPostHints = false
   ) {
     const posts: RedditPost[] = [];
@@ -44,10 +44,6 @@ export class RedditUtils {
           stickied: child.data.stickied,
           permalink: child.data.permalink,
         } as RedditPost);
-      }
-      if (posts.length >= limit) {
-        // because we usually fetch more posts than we need to ignore stickies, we use this to make sure we get the amount of posts the user requested.
-        break;
       }
     }
     return posts;

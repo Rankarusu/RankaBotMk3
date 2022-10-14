@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { EmbedBuilder } from 'discord.js';
 import { HugCommand } from '../../../src/commands';
 import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
@@ -33,12 +32,5 @@ describe('Hug', () => {
   it('should call InteractionUtils.send', async () => {
     await instance.execute(commandInteraction);
     expect(InteractionUtils.send).toHaveBeenCalled();
-  });
-
-  describe('createHugEmbed', () => {
-    it('should return an Embed', () => {
-      const embed = instance['createHugEmbed'](member, member);
-      expect(embed).toBeInstanceOf(EmbedBuilder);
-    });
   });
 });

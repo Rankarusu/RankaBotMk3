@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import axios from 'axios';
-import { EmbedBuilder } from 'discord.js';
 import { DadJokeCommand } from '../../../src/commands';
 import { EventData } from '../../../src/models';
 import { InteractionUtils } from '../../../src/utils';
@@ -42,13 +41,6 @@ describe('DadJoke', () => {
       });
       await instance['getJoke'](data);
       expect(InteractionUtils.sendError).toHaveBeenCalled();
-    });
-  });
-
-  describe('createDadJokeEmbed', () => {
-    it('should return an Embed', () => {
-      const embed = instance['createDadJokeEmbed']('funny joke');
-      expect(embed).toBeInstanceOf(EmbedBuilder);
     });
   });
 });

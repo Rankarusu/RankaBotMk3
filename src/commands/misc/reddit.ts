@@ -12,7 +12,12 @@ import {
 } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-const subredditPattern = new RegExp(/[a-zA-Z0-9]{1}\w{0,20}/i);
+const subredditPattern = new RegExp(/^[a-zA-Z0-9]{1}\w{2,20}$/);
+/* 3 to 21 upper or lowercase Latin characters, digits, or underscores 
+(but the first character can't be an underscore). 
+No spaces.
+Note: \w matches underscore in js.
+*/
 const baseUrl = 'https://www.reddit.com';
 const stickyLimit = 2;
 
@@ -102,33 +107,33 @@ export class RedditCommand extends Command {
     try {
       response = await RedditUtils.fetchPosts(url, null, amount + stickyLimit); // reddit has a sticky post limit of 2. we generally do not want to send those.
     } catch (error) {
-      if (error.response.status === 403) {
+      if (error.response?.status === 403) {
         InteractionUtils.sendError(
           data,
           'It looks like this community is private.'
         );
+        return;
       }
       InteractionUtils.sendError(
         data,
         'An error occurred while communicating with the API'
       );
+      return;
     }
 
-    const posts = RedditUtils.getPostList(response, amount);
-    console.log(posts.length);
-    const partitionedLinks = this.splitPosts(posts, 5);
+    const posts = RedditUtils.getPostList(response);
+    const partitionedLinks = this.splitPosts(posts, 20, 5);
 
     partitionedLinks.forEach(async (chunk) => {
       await InteractionUtils.send(interaction, chunk.join('\n'));
     });
   }
 
-  private splitPosts(posts: RedditPost[], chunkSize: number) {
+  private splitPosts(posts: RedditPost[], amount: number, chunkSize: number) {
     const links: string[] = [];
-
     posts.forEach((post) => {
       //using id for shorter links
-      if (!post.stickied && links.length < chunkSize) {
+      if (!post.stickied && links.length < amount) {
         links.push(`${baseUrl}/r/${post.subreddit}/${post.id}`);
       }
     });

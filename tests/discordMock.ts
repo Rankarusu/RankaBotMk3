@@ -117,7 +117,41 @@ export class DiscordMock {
       )?.member;
       return requestedOption || null;
     });
+
+    this.mockedCommandInteraction.options.getBoolean = jest.fn((option) => {
+      const requestedOption = this.mockedCommandInteraction.options.data.find(
+        (x) => x.name === option
+      )?.value;
+
+      if (typeof requestedOption == 'boolean') {
+        return requestedOption;
+      }
+      return undefined;
+    });
+
+    this.mockedCommandInteraction.options.getNumber = jest.fn((option) => {
+      const requestedOption = this.mockedCommandInteraction.options.data.find(
+        (x) => x.name === option
+      )?.value;
+
+      if (typeof requestedOption == 'number') {
+        return requestedOption;
+      }
+      return undefined;
+    });
   }
+
+  a = {
+    _group: null,
+    _subcommand: null,
+    _hoistedOptions: [
+      { name: 'question', type: 3, value: 'a' },
+      { name: 'only-one-vote', type: 5, value: true },
+      { name: 'time-limit', type: 10, value: 30 },
+      { name: 'option-01', type: 3, value: 'a' },
+      { name: 'option-02', type: 3, value: 'b' },
+    ],
+  };
 
   private mockGuild() {
     this.mockedGuild = {} as jest.Mocked<Guild>;

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { EmbedBuilder } from 'discord.js';
 import { EightballCommand } from '../../../src/commands';
 import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
@@ -26,15 +25,5 @@ describe('Eightball', () => {
   it('should call InteractionUtils.send', async () => {
     await instance.execute(commandInteraction);
     expect(InteractionUtils.send).toHaveBeenCalled();
-  });
-
-  describe('create8ballEmbed', () => {
-    it('should return an Embed', () => {
-      const embed = instance['create8ballEmbed'](
-        'What is the meaning of life?',
-        '42'
-      );
-      expect(embed).toBeInstanceOf(EmbedBuilder);
-    });
   });
 });

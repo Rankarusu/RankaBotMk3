@@ -30,7 +30,7 @@ class Lewds implements Scheduler {
       //get data once and then in intervals.
       const lewds = await RedditUtils.fetchPosts(url, this.next, limit);
       this.next = lewds.data.after;
-      this.lewds.push(...RedditUtils.getPostList(lewds, limit, true));
+      this.lewds.push(...RedditUtils.getPostList(lewds, true));
     } catch (error) {
       //try again in 30 seconds
     }

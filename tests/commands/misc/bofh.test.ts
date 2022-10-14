@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { EmbedBuilder } from 'discord.js';
 import { BofhCommand } from '../../../src/commands';
 import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
@@ -28,13 +27,6 @@ describe('Bofh', () => {
       const excuse = instance['getExcuse']();
       //we cannot use instance of for literals such as strings.
       expect(typeof excuse).toEqual('string');
-    });
-  });
-
-  describe('createBofhEmbed', () => {
-    it('should return an Embed', () => {
-      const embed = instance['createBofhEmbed']('test');
-      expect(embed).toBeInstanceOf(EmbedBuilder);
     });
   });
 });

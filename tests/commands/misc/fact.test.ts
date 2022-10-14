@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import axios from 'axios';
-import { EmbedBuilder } from 'discord.js';
 import { FactCommand } from '../../../src/commands';
 import { EventData } from '../../../src/models';
 import { InteractionUtils } from '../../../src/utils';
@@ -42,13 +41,6 @@ describe('Fact', () => {
       });
       await instance['getFact'](data);
       expect(InteractionUtils.sendError).toHaveBeenCalled();
-    });
-  });
-
-  describe('createFactEmbed', () => {
-    it('should return an Embed', () => {
-      const embed = instance['createFactEmbed']('fun fact');
-      expect(embed).toBeInstanceOf(EmbedBuilder);
     });
   });
 });

@@ -81,9 +81,7 @@ export class DiscordMock {
 
     this.mockedClient = createMockInstance(Client);
     this.mockedClient.users = userManager;
-    Object.defineProperty(this.mockedClient, 'ws', {
-      value: this.getMockWebSocketManager(),
-    });
+    Reflect.set(this.mockedClient, 'ws', this.getMockWebSocketManager());
   }
 
   private mockUser() {
@@ -91,9 +89,7 @@ export class DiscordMock {
     this.mockedUser.id = '12';
     this.mockedUser.username = 'test';
     this.mockedUser.bot = false;
-    Object.defineProperty(this.mockedUser, 'tag', {
-      value: 'RankaBot Mk III#7533',
-    });
+    Reflect.set(this.mockedUser, 'tag', 'bot#0000');
     this.mockedUser.displayAvatarURL = jest.fn(() => {
       return 'www.a.bc';
     });
@@ -106,9 +102,7 @@ export class DiscordMock {
     this.mockedCommandInteraction.guildId = DiscordMock.GUILDID;
     this.mockedCommandInteraction.user = this.mockedUser;
     this.mockedCommandInteraction.member = this.newMockGuildMember(12);
-    Object.defineProperty(this.mockedCommandInteraction, 'client', {
-      value: this.getMockClient(),
-    });
+    Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
 
     this.mockedCommandInteraction.options.getString = jest.fn((option) => {
       const requestedOption = this.mockedCommandInteraction.options.data.find(
@@ -200,9 +194,7 @@ export class DiscordMock {
       id: id.toString(),
     } as jest.Mocked<GuildMember>;
     guildMember.user = this.getMockUser();
-    Object.defineProperty(guildMember, 'tag', {
-      value: 'abc',
-    });
+    Reflect.set(guildMember, 'tag', 'abc');
     guildMember.displayAvatarURL = jest.fn(() => {
       return 'https://cdn.discordapp.com/avatars/0/0.webp';
     });

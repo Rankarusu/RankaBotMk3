@@ -4,8 +4,6 @@ import { HugCommand } from '../../../src/commands';
 import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
 
-const Config = require('../../../config/config.json');
-
 describe('Hug', () => {
   const discordMock = new DiscordMock();
   const user = discordMock.getMockUser();
@@ -14,25 +12,22 @@ describe('Hug', () => {
   const commandInteraction = discordMock.getMockCommandInteraction();
   InteractionUtils.send = jest.fn();
 
-  Object.defineProperty(commandInteraction.options, 'data', {
-    value: [
-      {
-        name: 'user',
-        type: 6,
-        value: '12',
-        user,
-        member,
-      },
-    ],
-    configurable: true,
-  });
+  Reflect.set(commandInteraction.options, 'data', [
+    {
+      name: 'user',
+      type: 6,
+      value: '12',
+      user,
+      member,
+    },
+  ]);
 
   beforeEach(() => {
     instance = new HugCommand();
   });
 
   it('should not throw an error', () => {
-    // expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
   });
 
   it('should call InteractionUtils.send', async () => {

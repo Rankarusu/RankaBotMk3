@@ -18,38 +18,26 @@ describe('Choose', () => {
     instance = new ChooseCommand();
     jest.clearAllMocks();
     commandInteraction = discordMock.getMockCommandInteraction();
-    Object.defineProperty(commandInteraction.options, 'data', {
-      value: undefined,
-      configurable: true,
-    });
+    Reflect.set(commandInteraction.options, 'data', undefined);
   });
 
   const validInputs = [
-    {
-      value: [{ name: 'options', type: 3, value: '1,2,3,4,5,6,7,8,9,10' }],
-      configurable: true,
-    },
+    [[{ name: 'options', type: 3, value: '1,2,3,4,5,6,7,8,9,10' }]],
   ];
 
+  //yes, there is one bracket more than needed, but as jest tries to map these in the each() function we need another layer, since our input is and array as well.
   const invalidInputs = [
-    {
-      value: [{ name: 'options', type: 3, value: ',,,,' }],
-      configurable: true,
-    },
-    {
-      value: [{ name: 'options', type: 3, value: '' }],
-      configurable: true,
-    },
+    [
+      [{ name: 'options', type: 3, value: ',,,,' }],
+      [{ name: 'options', type: 3, value: '' }],
+    ],
   ];
 
-  const tooFewOptoions = {
-    value: [{ name: 'options', type: 3, value: '1' }],
-    configurable: true,
-  };
+  const tooFewOptoions = [{ name: 'options', type: 3, value: '1' }];
 
   describe.each(invalidInputs)('invalid inputs', (input) => {
     beforeEach(() => {
-      Object.defineProperty(commandInteraction.options, 'data', input);
+      Reflect.set(commandInteraction.options, 'data', input);
     });
 
     it('should send an error on bad input', async () => {
@@ -67,7 +55,7 @@ describe('Choose', () => {
 
   describe.each(validInputs)('valid inputs', (input) => {
     beforeEach(() => {
-      Object.defineProperty(commandInteraction.options, 'data', input);
+      Reflect.set(commandInteraction.options, 'data', input);
     });
 
     it('should not send an error with proper input', async () => {
@@ -84,7 +72,7 @@ describe('Choose', () => {
   });
 
   it('should issue a warning on too few options', async () => {
-    Object.defineProperty(commandInteraction.options, 'data', tooFewOptoions);
+    Reflect.set(commandInteraction.options, 'data', tooFewOptoions);
 
     await instance.execute(commandInteraction, new EventData());
 

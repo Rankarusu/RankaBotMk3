@@ -8,10 +8,9 @@ describe('Eightball', () => {
   const discordMock = new DiscordMock();
   let instance: EightballCommand;
   const commandInteraction = discordMock.getMockCommandInteraction();
-  Object.defineProperty(commandInteraction.options, 'data', {
-    value: [{ name: 'options', type: 3, value: 'What' }],
-    configurable: true,
-  });
+  Reflect.set(commandInteraction.options, 'data', [
+    { name: 'options', type: 3, value: 'What' },
+  ]);
 
   InteractionUtils.send = jest.fn();
   InteractionUtils.sendError = jest.fn();

@@ -13,7 +13,7 @@ describe('InteractionUtils', () => {
 
   describe('canUse', () => {
     it('should fetch DMChannel id interaction.channel === null', () => {
-      Object.defineProperty(commandInteraction, 'channel', { value: null });
+      Reflect.set(commandInteraction, 'channel', null);
       commandInteraction.user.createDM = jest.fn();
 
       InteractionUtils.canUse(new PingCommand(), commandInteraction);

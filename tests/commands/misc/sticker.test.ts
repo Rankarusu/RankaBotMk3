@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Sticker } from '@prisma/client';
+import { Attachment, CommandInteractionOption } from 'discord.js';
 import { StickerCommand } from '../../../src/commands';
-import { EventData, StickerListSelectEmbed } from '../../../src/models';
-import { DbUtils, InteractionUtils } from '../../../src/utils';
-import { DiscordMock } from '../../discordMock';
+import { StickerListSelectEmbed } from '../../../src/models';
+import { DbUtils } from '../../../src/utils';
+import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
 
-const validPostInput = [
+const validPostInput: CommandInteractionOption[] = [
   {
     name: 'post',
     type: 1,
@@ -14,7 +15,7 @@ const validPostInput = [
   },
 ];
 
-const invalidPostInput = [
+const invalidPostInput: CommandInteractionOption[] = [
   {
     name: 'post',
     type: 1,
@@ -22,7 +23,7 @@ const invalidPostInput = [
   },
 ];
 
-const addInput = [
+const addInput: CommandInteractionOption[] = [
   {
     name: 'add',
     type: 1,
@@ -46,13 +47,13 @@ const addInput = [
           contentType: 'image/gif',
           description: null,
           ephemeral: true,
-        },
+        } as Attachment,
       },
     ],
   },
 ];
 
-const addInputInvalidType = [
+const addInputInvalidType: CommandInteractionOption[] = [
   {
     name: 'add',
     type: 1,
@@ -76,13 +77,15 @@ const addInputInvalidType = [
           contentType: 'image/bmp',
           description: null,
           ephemeral: true,
-        },
+        } as Attachment,
       },
     ],
   },
 ];
 
-const listInput = [{ name: 'list', type: 1, options: [] }];
+const listInput: CommandInteractionOption[] = [
+  { name: 'list', type: 1, options: [] },
+];
 
 const dbSticker: Sticker = {
   interactionId: '0',
@@ -94,17 +97,10 @@ const dbSticker: Sticker = {
 };
 
 describe('Sticker', () => {
-  const discordMock = new DiscordMock();
-  let instance: StickerCommand;
-  let data: EventData;
-  const commandInteraction = discordMock.getMockCommandInteraction();
-  commandInteraction.guildId = 'abc';
-  InteractionUtils.send = jest.fn();
-  // InteractionUtils.sendError = jest.fn();
+  const helper = new CommandTestHelper(new StickerCommand());
 
   beforeEach(() => {
-    instance = new StickerCommand();
-    data = new EventData();
+    helper.resetInput();
     jest.restoreAllMocks();
   });
 
@@ -126,78 +122,65 @@ describe('Sticker', () => {
     });
 
     it('should throw an error if sticker was not found', async () => {
-      Reflect.set(commandInteraction.options, 'data', invalidPostInput);
+      helper.setInput(invalidPostInput);
 
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).rejects.toThrowError();
+      await helper.expectError();
     });
 
     it('should not throw an error on valid input', async () => {
-      Reflect.set(commandInteraction.options, 'data', validPostInput);
+      helper.setInput(validPostInput);
 
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).rejects.toThrowError();
+      await helper.expectError();
     });
 
     it('should call InteractionUtils.send on valid input', async () => {
-      Reflect.set(commandInteraction.options, 'data', validPostInput);
-      instance['createStickerEmbed'] = jest.fn();
-      await instance.execute(commandInteraction, data);
-      expect(InteractionUtils.send).toHaveBeenCalled();
+      helper.setInput(validPostInput);
+      helper.commandInstance['createStickerEmbed'] = jest.fn();
+      await helper.executeInstance();
+      helper.expectSend();
     });
   });
 
   describe('sticker add', () => {
     beforeEach(async () => {
-      Reflect.set(commandInteraction.options, 'data', undefined);
       await DbUtils.deleteStickersById(['0']); // deletemany does not throw an error if record does not exist
     });
 
     it('should throw an error if a sticker with that name already exists', async () => {
-      Reflect.set(commandInteraction.options, 'data', addInput);
+      helper.setInput(addInput);
       await DbUtils.createSticker(dbSticker);
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).rejects.toThrowError();
+      await helper.expectError();
     });
 
     it('should throw an error if the type is invalid', async () => {
-      Reflect.set(commandInteraction.options, 'data', addInputInvalidType);
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).rejects.toThrowError();
+      helper.setInput(addInputInvalidType);
+      await helper.expectError();
     });
 
     it('should throw an error if the database raises an error', async () => {
-      Reflect.set(commandInteraction.options, 'data', addInput);
+      helper.setInput(addInput);
       jest.spyOn(DbUtils, 'createSticker').mockImplementationOnce(() => {
         throw new Error();
       });
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).rejects.toThrowError();
+      await helper.expectError();
     });
 
     it('should not throw an error on valid input', async () => {
-      Reflect.set(commandInteraction.options, 'data', addInput);
-      await expect(
-        instance.execute(commandInteraction, data)
-      ).resolves.not.toThrowError();
+      helper.setInput(addInput);
+      await helper.expectNoError();
     });
 
     it('should call InteractionUtils.send on valid input', async () => {
-      Reflect.set(commandInteraction.options, 'data', addInput);
-      await instance.execute(commandInteraction, data);
-      expect(InteractionUtils.send).toHaveBeenCalled();
+      helper.setInput(addInput);
+      await helper.executeInstance();
+      helper.expectSend();
     });
   });
 
   describe('sticker list', () => {
     it('should call start', async () => {
-      Reflect.set(commandInteraction.options, 'data', listInput);
-      await instance.execute(commandInteraction, data);
+      helper.setInput(listInput);
+      await helper.executeInstance();
       expect(StickerListSelectEmbed.prototype.start).toHaveBeenCalled();
     });
   });

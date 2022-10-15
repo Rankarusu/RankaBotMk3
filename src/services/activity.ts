@@ -16,6 +16,9 @@ const activities = [
   'the smallest violin in the world',
   'a bunch of monsters in one turn',
   'with RankaBot and RankaBot2',
+  'with Jest',
+  'with Axios',
+  'with my own PokéDex',
 ];
 
 export class ActivityScheduler implements Scheduler {

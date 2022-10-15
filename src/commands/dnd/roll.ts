@@ -88,8 +88,6 @@ export class RollCommand extends Command {
     const resultstr = [];
     let sign: string;
 
-    console.log(dicearr);
-
     dicearr.forEach((item) => {
       if (item === '+' || item === '-') {
         //flip sign on double negatives.

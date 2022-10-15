@@ -1,8 +1,10 @@
 import {
+  CacheType,
   Channel,
   ChatInputCommandInteraction,
   Client,
   Collection,
+  CommandInteractionOption,
   CommandInteractionOptionResolver,
   Guild,
   GuildMember,
@@ -98,16 +100,28 @@ export class DiscordMock {
   private mockCommand() {
     this.mockedCommandInteraction = createMockInstance(MockCommandInteraction);
     const mockedOptions = {} as jest.Mocked<CommandInteractionOptionResolver>;
+    this.mockedCommandInteraction.id = '0';
     this.mockedCommandInteraction.options = mockedOptions;
     this.mockedCommandInteraction.guildId = DiscordMock.GUILDID;
     this.mockedCommandInteraction.user = this.mockedUser;
     this.mockedCommandInteraction.member = this.newMockGuildMember(12);
+    Reflect.set(this.mockedCommandInteraction, 'createdAt', new Date());
     Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
 
     this.mockedCommandInteraction.options.getString = jest.fn((option) => {
-      const requestedOption = this.mockedCommandInteraction.options.data.find(
-        (x) => x.name === option
-      )?.value;
+      const subCommand = this.mockedCommandInteraction.options.data.find(
+        (x) => x.type === 1
+      )?.name;
+
+      let location: readonly CommandInteractionOption<CacheType>[];
+
+      if (subCommand) {
+        location = this.mockedCommandInteraction.options.data[0].options;
+      } else {
+        location = this.mockedCommandInteraction.options.data;
+      }
+
+      const requestedOption = location.find((x) => x.name === option)?.value;
       return requestedOption?.toString() || '';
     });
 
@@ -139,19 +153,34 @@ export class DiscordMock {
       }
       return undefined;
     });
-  }
 
-  a = {
-    _group: null,
-    _subcommand: null,
-    _hoistedOptions: [
-      { name: 'question', type: 3, value: 'a' },
-      { name: 'only-one-vote', type: 5, value: true },
-      { name: 'time-limit', type: 10, value: 30 },
-      { name: 'option-01', type: 3, value: 'a' },
-      { name: 'option-02', type: 3, value: 'b' },
-    ],
-  };
+    this.mockedCommandInteraction.options.getSubcommand = jest.fn(() => {
+      const subCommand = this.mockedCommandInteraction.options.data.find(
+        (x) => x.type === 1
+      ).name;
+
+      return subCommand;
+    });
+
+    this.mockedCommandInteraction.options.getAttachment = jest.fn((option) => {
+      const subCommand = this.mockedCommandInteraction.options.data.find(
+        (x) => x.type === 1
+      ).name;
+
+      let location: readonly CommandInteractionOption<CacheType>[];
+
+      if (subCommand) {
+        location = this.mockedCommandInteraction.options.data[0].options;
+      } else {
+        location = this.mockedCommandInteraction.options.data;
+      }
+
+      const requestedOption = location.find(
+        (x) => x.name === option
+      )?.attachment;
+      return requestedOption;
+    });
+  }
 
   private mockGuild() {
     this.mockedGuild = {} as jest.Mocked<Guild>;

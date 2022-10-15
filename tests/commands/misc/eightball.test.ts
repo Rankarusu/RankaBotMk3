@@ -1,29 +1,27 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { EightballCommand } from '../../../src/commands';
-import { InteractionUtils } from '../../../src/utils';
-import { DiscordMock } from '../../discordMock';
+import { CommandTestHelper } from '../helper';
+
+const input = [{ name: 'options', type: 3, value: 'What' }];
 
 describe('Eightball', () => {
-  const discordMock = new DiscordMock();
-  let instance: EightballCommand;
-  const commandInteraction = discordMock.getMockCommandInteraction();
-  Reflect.set(commandInteraction.options, 'data', [
-    { name: 'options', type: 3, value: 'What' },
-  ]);
-
-  InteractionUtils.send = jest.fn();
-  InteractionUtils.sendError = jest.fn();
+  const helper = new CommandTestHelper(new EightballCommand());
 
   beforeEach(() => {
-    instance = new EightballCommand();
+    // helper.resetInput();
+    jest.restoreAllMocks();
   });
 
-  it('should not throw an error', () => {
-    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+  beforeAll(() => {
+    helper.setInput(input);
+  });
+
+  it('should not throw an error', async () => {
+    await helper.executeWithoutError();
   });
 
   it('should call InteractionUtils.send', async () => {
-    await instance.execute(commandInteraction);
-    expect(InteractionUtils.send).toHaveBeenCalled();
+    await helper.executeInstance();
+    helper.expectSend();
   });
 });

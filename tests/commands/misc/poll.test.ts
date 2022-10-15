@@ -1,43 +1,38 @@
-import { ChatInputCommandInteraction } from 'discord.js';
 import { PollCommand } from '../../../src/commands';
 import { Poll } from '../../../src/models';
-import { InteractionUtils } from '../../../src/utils';
-import { DiscordMock } from '../../discordMock';
+import { CommandTestHelper } from '../helper';
+jest.mock('../../../src/models');
+
+const input = [
+  { name: 'question', type: 3, value: 'what' },
+  { name: 'only-one-vote', type: 5, value: true },
+  { name: 'time-limit', type: 10, value: 10 },
+  { name: 'option-01', type: 3, value: '1' },
+  { name: 'option-02', type: 3, value: '2' },
+  { name: 'option-03', type: 3, value: '3' },
+  { name: 'option-04', type: 3, value: '4' },
+];
 
 describe('Poll', () => {
-  const discordMock = new DiscordMock();
-  let instance: PollCommand;
-  InteractionUtils.send = jest.fn();
-  InteractionUtils.sendError = jest.fn();
-  InteractionUtils.sendWarning = jest.fn();
-
-  const mockedStart = (Poll.prototype.start = jest.fn());
-
-  let commandInteraction: ChatInputCommandInteraction;
-
-  const validInput = [
-    { name: 'question', type: 3, value: 'what' },
-    { name: 'only-one-vote', type: 5, value: true },
-    { name: 'time-limit', type: 10, value: 10 },
-    { name: 'option-01', type: 3, value: '1' },
-    { name: 'option-02', type: 3, value: '2' },
-    { name: 'option-03', type: 3, value: '3' },
-    { name: 'option-04', type: 3, value: '4' },
-  ];
+  const helper = new CommandTestHelper(new PollCommand());
 
   beforeEach(() => {
-    instance = new PollCommand();
-    jest.clearAllMocks();
-    commandInteraction = discordMock.getMockCommandInteraction();
-    Reflect.set(commandInteraction.options, 'data', validInput);
+    // helper.resetInput();
+    jest.restoreAllMocks();
   });
 
-  it('should not throw an error', () => {
-    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+  beforeAll(() => {
+    helper.setInput(input);
+  });
+
+  it('should not throw an error', async () => {
+    await helper.executeWithoutError();
   });
 
   it('should call Poll.start', async () => {
-    await instance.execute(commandInteraction);
+    const mockedStart = jest.spyOn(Poll.prototype, 'start');
+
+    await helper.executeInstance();
     expect(mockedStart).toHaveBeenCalled();
   });
 });

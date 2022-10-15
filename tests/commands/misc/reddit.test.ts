@@ -1,24 +1,15 @@
 import { RedditCommand } from '../../../src/commands';
-import { DiscordMock } from '../../discordMock';
 
 import axios from 'axios';
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import { EventData } from '../../../src/models/event-data';
 import { InteractionUtils } from '../../../src/utils';
+import { CommandTestHelper } from '../helper';
 
 describe('Reddit', () => {
-  const discordMock = new DiscordMock();
-  let instance: RedditCommand;
-  InteractionUtils.send = jest.fn();
-  InteractionUtils.sendError = jest.fn();
-
-  let commandInteraction: ChatInputCommandInteraction<CacheType>;
+  const helper = new CommandTestHelper(new RedditCommand());
 
   beforeEach(() => {
-    instance = new RedditCommand();
-    jest.clearAllMocks();
-    commandInteraction = discordMock.getMockCommandInteraction();
-    Reflect.set(commandInteraction.options, 'data', undefined);
+    helper.resetInput();
+    jest.restoreAllMocks();
   });
 
   const validInputs = [
@@ -61,72 +52,73 @@ describe('Reddit', () => {
     { name: 'amount', type: 10, value: 1 },
   ];
 
-  const twentyPosts = [
-    { name: 'subreddit', type: 3, value: 'birdsarentreal' },
-    { name: 'amount', type: 10, value: 20 },
-    { name: 'listings', type: 3, value: 'random' },
+  const varyingPostNumbers = [
+    [
+      [
+        { name: 'subreddit', type: 3, value: 'birdsarentreal' },
+        { name: 'amount', type: 10, value: 4 },
+        { name: 'listings', type: 3, value: 'random' },
+      ],
+      [
+        { name: 'subreddit', type: 3, value: 'birdsarentreal' },
+        { name: 'amount', type: 10, value: 12 },
+        { name: 'listings', type: 3, value: 'random' },
+      ],
+      [
+        { name: 'subreddit', type: 3, value: 'birdsarentreal' },
+        { name: 'amount', type: 10, value: 20 },
+        { name: 'listings', type: 3, value: 'random' },
+      ],
+    ],
   ];
 
   describe.each(invalidSubredditNames)('invalid subreddit names', (input) => {
     beforeEach(() => {
-      Reflect.set(commandInteraction.options, 'data', input);
+      helper.setInput(input);
     });
 
     it('should send an error', async () => {
-      await instance.execute(commandInteraction, new EventData());
-
-      expect(InteractionUtils.sendError).toHaveBeenCalled();
-    });
-
-    it('should not call InteractionUtils.send', async () => {
-      await instance.execute(commandInteraction, new EventData());
-
-      expect(InteractionUtils.send).not.toHaveBeenCalled();
+      await helper.executeWithError();
     });
   });
 
   describe.each(validInputs)('valid inputs', (input) => {
     beforeEach(() => {
-      Reflect.set(commandInteraction.options, 'data', input);
+      helper.setInput(input);
     });
 
     it('should not send an error with proper input', async () => {
-      await instance.execute(commandInteraction, new EventData());
-
-      expect(InteractionUtils.sendError).not.toHaveBeenCalled();
+      await helper.executeWithoutError();
     });
 
     it('should call InteractionUtils.send on proper input', async () => {
-      await instance.execute(commandInteraction, new EventData());
-
-      expect(InteractionUtils.send).toHaveBeenCalled();
+      await helper.executeInstance();
+      helper.expectSend();
     });
   });
 
   it('should throw an error when the subreddit was not found', async () => {
-    Reflect.set(commandInteraction.options, 'data', inexistantSubReddit);
-    await instance.execute(commandInteraction, new EventData());
-    expect(InteractionUtils.sendError).toHaveBeenCalled();
+    helper.setInput(inexistantSubReddit);
+    await helper.executeWithError();
   });
 
-  it('should group messages and send them in bulk', async () => {
-    Reflect.set(commandInteraction.options, 'data', twentyPosts);
-
-    await instance.execute(commandInteraction, new EventData());
-    expect(InteractionUtils.send).toHaveBeenCalledTimes(
-      (twentyPosts[1].value as number) / 5
-    );
-  });
+  it.each(varyingPostNumbers)(
+    'should group messages and send them in bulk',
+    async (input) => {
+      helper.setInput(input);
+      await helper.executeInstance();
+      expect(InteractionUtils.send).toHaveBeenCalledTimes(
+        Math.ceil((input[1].value as number) / 5)
+      );
+    }
+  );
 
   it('should throw an error when axios throws', async () => {
-    Reflect.set(commandInteraction.options, 'data', twentyPosts);
+    helper.setInput(validInputs[0][0]);
 
-    const fakeGet = jest.spyOn(axios, 'get').mockImplementationOnce(() => {
+    jest.spyOn(axios, 'get').mockImplementationOnce(() => {
       throw new Error();
     });
-    await instance.execute(commandInteraction, new EventData());
-    expect(InteractionUtils.sendError).toHaveBeenCalled();
-
-    fakeGet.mockRestore();
+    await helper.executeWithError();
   });
 });

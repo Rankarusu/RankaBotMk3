@@ -122,7 +122,7 @@ export class RedditCommand extends Command {
     }
 
     const posts = RedditUtils.getPostList(response);
-    const partitionedLinks = this.splitPosts(posts, 20, 5);
+    const partitionedLinks = this.splitPosts(posts, amount, 5);
 
     partitionedLinks.forEach(async (chunk) => {
       await InteractionUtils.send(interaction, chunk.join('\n'));

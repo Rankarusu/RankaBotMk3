@@ -19,6 +19,7 @@ export class CommandTestHelper {
     this.commandInstance = instance;
 
     InteractionUtils.send = jest.fn();
+    InteractionUtils.sendWarning = jest.fn();
   }
 
   public async executeInstance() {
@@ -29,19 +30,19 @@ export class CommandTestHelper {
     expect(InteractionUtils.send).toHaveBeenCalled();
   }
 
-  public async expectError() {
+  public async executeWithError() {
     await expect(
       this.commandInstance.execute(this.interaction, new EventData())
     ).rejects.toThrowError();
   }
 
-  public async expectNoError() {
+  public async executeWithoutError() {
     await expect(
       this.commandInstance.execute(this.interaction, new EventData())
     ).resolves.not.toThrowError();
   }
 
-  public async expectWarning() {
+  public async executeWithWarning() {
     await this.commandInstance.execute(this.interaction, new EventData());
 
     expect(InteractionUtils.sendWarning).toHaveBeenCalled();

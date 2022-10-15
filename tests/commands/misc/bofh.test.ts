@@ -1,32 +1,21 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { BofhCommand } from '../../../src/commands';
-import { InteractionUtils } from '../../../src/utils';
-import { DiscordMock } from '../../discordMock';
+import { CommandTestHelper } from '../helper';
 
 describe('Bofh', () => {
-  const discordMock = new DiscordMock();
-  let instance: BofhCommand;
-  const commandInteraction = discordMock.getMockCommandInteraction();
-  InteractionUtils.send = jest.fn();
+  const helper = new CommandTestHelper(new BofhCommand());
 
   beforeEach(() => {
-    instance = new BofhCommand();
+    helper.setInput(undefined);
+    jest.restoreAllMocks();
   });
 
-  it('should not throw an error', () => {
-    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+  it('should not throw an error', async () => {
+    await helper.executeWithoutError();
   });
 
   it('should call InteractionUtils.send', async () => {
-    await instance.execute(commandInteraction);
-    expect(InteractionUtils.send).toHaveBeenCalled();
-  });
-
-  describe('getExcuse', () => {
-    it('should return a string', () => {
-      const excuse = instance['getExcuse']();
-      //we cannot use instance of for literals such as strings.
-      expect(typeof excuse).toEqual('string');
-    });
+    await helper.executeInstance();
+    helper.expectSend();
   });
 });

@@ -1,36 +1,39 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { HugCommand } from '../../../src/commands';
-import { InteractionUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
+import { CommandTestHelper } from '../helper';
+
+const discordMock = new DiscordMock();
+const user = discordMock.getMockUser();
+const member = discordMock.newMockGuildMember(12);
+const input = [
+  {
+    name: 'user',
+    type: 6,
+    value: '12',
+    user,
+    member,
+  },
+];
 
 describe('Hug', () => {
-  const discordMock = new DiscordMock();
-  const user = discordMock.getMockUser();
-  const member = discordMock.newMockGuildMember(12);
-  let instance: HugCommand;
-  const commandInteraction = discordMock.getMockCommandInteraction();
-  InteractionUtils.send = jest.fn();
-
-  Reflect.set(commandInteraction.options, 'data', [
-    {
-      name: 'user',
-      type: 6,
-      value: '12',
-      user,
-      member,
-    },
-  ]);
+  const helper = new CommandTestHelper(new HugCommand());
 
   beforeEach(() => {
-    instance = new HugCommand();
+    // helper.resetInput();
+    jest.restoreAllMocks();
   });
 
-  it('should not throw an error', () => {
-    expect(instance.execute(commandInteraction)).resolves.not.toThrowError();
+  beforeAll(() => {
+    helper.setInput(input);
+  });
+
+  it('should not throw an error', async () => {
+    await helper.executeWithoutError();
   });
 
   it('should call InteractionUtils.send', async () => {
-    await instance.execute(commandInteraction);
-    expect(InteractionUtils.send).toHaveBeenCalled();
+    await helper.executeInstance();
+    helper.expectSend();
   });
 });

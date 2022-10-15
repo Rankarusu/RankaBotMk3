@@ -124,13 +124,13 @@ describe('Sticker', () => {
     it('should throw an error if sticker was not found', async () => {
       helper.setInput(invalidPostInput);
 
-      await helper.expectError();
+      await helper.executeWithError();
     });
 
     it('should not throw an error on valid input', async () => {
       helper.setInput(validPostInput);
 
-      await helper.expectError();
+      await helper.executeWithError();
     });
 
     it('should call InteractionUtils.send on valid input', async () => {
@@ -149,12 +149,12 @@ describe('Sticker', () => {
     it('should throw an error if a sticker with that name already exists', async () => {
       helper.setInput(addInput);
       await DbUtils.createSticker(dbSticker);
-      await helper.expectError();
+      await helper.executeWithError();
     });
 
     it('should throw an error if the type is invalid', async () => {
       helper.setInput(addInputInvalidType);
-      await helper.expectError();
+      await helper.executeWithError();
     });
 
     it('should throw an error if the database raises an error', async () => {
@@ -162,12 +162,12 @@ describe('Sticker', () => {
       jest.spyOn(DbUtils, 'createSticker').mockImplementationOnce(() => {
         throw new Error();
       });
-      await helper.expectError();
+      await helper.executeWithError();
     });
 
     it('should not throw an error on valid input', async () => {
       helper.setInput(addInput);
-      await helper.expectNoError();
+      await helper.executeWithoutError();
     });
 
     it('should call InteractionUtils.send on valid input', async () => {

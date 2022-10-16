@@ -60,12 +60,11 @@ export class InfoCommand extends Command {
       },
       {
         name: 'Users',
-        value: `${
-          interaction.client.users.cache.filter((user) => !user.bot).size
-        }`,
+        value: `${this.getKnownUsers(interaction)}`,
         inline: true,
       },
     ];
+    console.log(JSON.stringify(stats));
 
     const embed = EmbedUtils.infoEmbed(
       `Here is some general information about me.
@@ -75,5 +74,9 @@ export class InfoCommand extends Command {
     );
     embed.setThumbnail(interaction.client.user.avatarURL());
     await InteractionUtils.send(interaction, embed);
+  }
+
+  private getKnownUsers(interaction: ChatInputCommandInteraction) {
+    return interaction.client.users.cache.filter((user) => !user.bot).size;
   }
 }

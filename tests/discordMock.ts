@@ -3,10 +3,12 @@ import {
   Channel,
   ChatInputCommandInteraction,
   Client,
+  ClientUser,
   Collection,
   CommandInteractionOption,
   CommandInteractionOptionResolver,
   Guild,
+  GuildManager,
   GuildMember,
   Message,
   Snowflake,
@@ -76,6 +78,13 @@ export class DiscordMock {
 
   private mockClient() {
     const userManager = {} as jest.Mocked<UserManager>;
+    const guildManager = {} as jest.Mocked<GuildManager>;
+    const clientUser = {} as jest.Mocked<ClientUser>;
+
+    clientUser.avatarURL = jest.fn(() => {
+      return 'https://cdn.discordapp.com/avatars/0/0.webp';
+    });
+
     //Mock by default the method fetch to return a user
     userManager.fetch = jest
       .fn()
@@ -83,6 +92,10 @@ export class DiscordMock {
 
     this.mockedClient = createMockInstance(Client);
     this.mockedClient.users = userManager;
+    this.mockedClient.guilds = guildManager;
+    this.mockedClient.user = clientUser;
+    Reflect.set(this.mockedClient, 'uptime', 1024);
+    Reflect.set(this.mockedClient.guilds, 'cache', { size: 1024 });
     Reflect.set(this.mockedClient, 'ws', this.getMockWebSocketManager());
   }
 
@@ -93,7 +106,7 @@ export class DiscordMock {
     this.mockedUser.bot = false;
     Reflect.set(this.mockedUser, 'tag', 'bot#0000');
     this.mockedUser.displayAvatarURL = jest.fn(() => {
-      return 'www.a.bc';
+      return 'https://cdn.discordapp.com/avatars/0/0.webp';
     });
   }
 

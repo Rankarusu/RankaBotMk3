@@ -75,7 +75,7 @@ export class TarotCommand extends Command {
                 name: 'reverse',
                 type: ApplicationCommandOptionType.Boolean,
                 description: 'get meaning of the reversed card',
-                required: true,
+                required: false,
               },
             ],
           },
@@ -122,7 +122,7 @@ export class TarotCommand extends Command {
                 name: 'reverse',
                 type: ApplicationCommandOptionType.Boolean,
                 description: 'get meaning of the reversed card',
-                required: true,
+                required: false,
               },
             ],
           },
@@ -134,7 +134,7 @@ export class TarotCommand extends Command {
   // cooldown?: RateLimiter;
   public usage = () => `${this.mention('draw')}
   ${this.mention('major-arcana', 'search')} \`XXI - The World\` \`True\`
-  ${this.mention('minor-arcana', 'search')} \`cups\` \`10\` \`False\``;
+  ${this.mention('minor-arcana', 'search')} \`cups\` \`10\``;
 
   public category: CommandCategory = CommandCategory.MISC;
 
@@ -147,6 +147,7 @@ export class TarotCommand extends Command {
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
+    console.log(JSON.stringify(interaction.options.data));
     const subCommand = interaction.options.getSubcommand();
 
     switch (subCommand) {
@@ -160,7 +161,7 @@ export class TarotCommand extends Command {
       }
       case 'major-arcana': {
         const num = interaction.options.getNumber('card');
-        const reverse = interaction.options.getBoolean('reverse');
+        const reverse = interaction.options.getBoolean('reverse') || false;
         const card = this.deck.getMajorArcana(num);
         const embed = this.createCardEmbed(card, reverse);
         await InteractionUtils.send(interaction, embed, undefined);
@@ -170,7 +171,7 @@ export class TarotCommand extends Command {
         const suit = interaction.options.getString('suit');
         const rank = interaction.options.getString('rank');
         const maybeIntRank = parseInt(rank, 10) || rank;
-        const reverse = interaction.options.getBoolean('reverse');
+        const reverse = interaction.options.getBoolean('reverse') || false;
         const card = this.deck.getMinorArcana(suit, maybeIntRank);
         const embed = this.createCardEmbed(card, reverse);
         await InteractionUtils.send(interaction, embed, undefined);

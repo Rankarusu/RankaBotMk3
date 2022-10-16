@@ -109,33 +109,23 @@ export class DiscordMock {
     Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
 
     this.mockedCommandInteraction.options.getString = jest.fn((option) => {
-      const subCommand = this.mockedCommandInteraction.options.data.find(
-        (x) => x.type === 1
-      )?.name;
-
-      let location: readonly CommandInteractionOption<CacheType>[];
-
-      if (subCommand) {
-        location = this.mockedCommandInteraction.options.data[0].options;
-      } else {
-        location = this.mockedCommandInteraction.options.data;
-      }
+      const location = this.getCommandOptionLocation();
 
       const requestedOption = location.find((x) => x.name === option)?.value;
       return requestedOption?.toString() || '';
     });
 
     this.mockedCommandInteraction.options.getMember = jest.fn((option) => {
-      const requestedOption = this.mockedCommandInteraction.options.data.find(
-        (x) => x.name === option
-      )?.member;
+      const location = this.getCommandOptionLocation();
+
+      const requestedOption = location.find((x) => x.name === option)?.member;
       return requestedOption || null;
     });
 
     this.mockedCommandInteraction.options.getBoolean = jest.fn((option) => {
-      const requestedOption = this.mockedCommandInteraction.options.data.find(
-        (x) => x.name === option
-      )?.value;
+      const location = this.getCommandOptionLocation();
+
+      const requestedOption = location.find((x) => x.name === option)?.value;
 
       if (typeof requestedOption == 'boolean') {
         return requestedOption;
@@ -144,9 +134,9 @@ export class DiscordMock {
     });
 
     this.mockedCommandInteraction.options.getNumber = jest.fn((option) => {
-      const requestedOption = this.mockedCommandInteraction.options.data.find(
-        (x) => x.name === option
-      )?.value;
+      const location = this.getCommandOptionLocation();
+
+      const requestedOption = location.find((x) => x.name === option)?.value;
 
       if (typeof requestedOption == 'number') {
         return requestedOption;
@@ -155,31 +145,43 @@ export class DiscordMock {
     });
 
     this.mockedCommandInteraction.options.getSubcommand = jest.fn(() => {
-      const subCommand = this.mockedCommandInteraction.options.data.find(
-        (x) => x.type === 1
-      ).name;
-
-      return subCommand;
+      const type = this.mockedCommandInteraction.options.data[0]?.type;
+      if (type === 2) {
+        return this.mockedCommandInteraction.options.data[0].options[0].name;
+      } else if (type === 1) {
+        return this.mockedCommandInteraction.options.data[0].name;
+      } else {
+        return undefined;
+      }
     });
 
     this.mockedCommandInteraction.options.getAttachment = jest.fn((option) => {
-      const subCommand = this.mockedCommandInteraction.options.data.find(
-        (x) => x.type === 1
-      ).name;
-
-      let location: readonly CommandInteractionOption<CacheType>[];
-
-      if (subCommand) {
-        location = this.mockedCommandInteraction.options.data[0].options;
-      } else {
-        location = this.mockedCommandInteraction.options.data;
-      }
+      const location = this.getCommandOptionLocation();
 
       const requestedOption = location.find(
         (x) => x.name === option
       )?.attachment;
       return requestedOption;
     });
+  }
+
+  private getCommandOptionLocation(): readonly CommandInteractionOption<CacheType>[] {
+    //make sure we fetch the command options from the right place. The options are nested for subcommands and subcommandgroups
+    const type = this.mockedCommandInteraction.options.data[0]?.type;
+
+    let location: readonly CommandInteractionOption<CacheType>[];
+
+    if (type === 2) {
+      //subcommand group
+      location =
+        this.mockedCommandInteraction.options.data[0].options[0].options;
+    } else if (type === 1) {
+      //subcommand
+      location = this.mockedCommandInteraction.options.data[0].options;
+    } else {
+      location = this.mockedCommandInteraction.options.data;
+    }
+    return location;
   }
 
   private mockGuild() {

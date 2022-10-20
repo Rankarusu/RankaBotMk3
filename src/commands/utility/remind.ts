@@ -89,11 +89,13 @@ export class RemindCommand extends Command {
           parsedTime.setMilliseconds(0);
         } catch (e) {
           InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
+          return;
         }
 
         if (!parsedTime) {
           // parsed time is null if parse is unsuccessful
           InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
+          return;
         }
 
         //check for too short of a notice
@@ -104,6 +106,7 @@ export class RemindCommand extends Command {
             data,
             'Is your attention span really that small?'
           );
+          return;
         }
 
         const notificationMessage =
@@ -115,28 +118,21 @@ export class RemindCommand extends Command {
             data,
             'Termi was banned for that. Do you want to follow him?'
           );
+          return;
         }
 
         const unixTime = DateUtils.getUnixTime(parsedTime);
-        const processingEmbed = EmbedUtils.infoEmbed(
-          "I'm processing your request..."
-        );
-        const successEmbed = EmbedUtils.successEmbed(
-          `Alright. I'm going to remind you to **${notificationMessage}** at <t:${unixTime}:f>`
-        );
 
-        const confirmation = await InteractionUtils.send(
-          interaction,
-          processingEmbed
+        const successEmbed = EmbedUtils.successEmbed(
+          `Alright. I'm going to remind you to **${notificationMessage}** at <t:${unixTime}:f>`,
+          'Reminder added'
         );
-        //we cannot reply to interactions after 15 minutes, so we need to get a reference to the confirmation message
 
         const reminder: Reminder = {
           interactionId: interaction.id,
-          messageId: confirmation.id,
           userId: interaction.user.id,
           guildId: interaction.guild ? interaction.guild.id : null,
-          channelId: interaction.channel.id,
+          channelId: interaction.channelId,
           message: notificationMessage,
           invokeTime: interaction.createdAt,
           parsedTime,
@@ -146,10 +142,10 @@ export class RemindCommand extends Command {
         try {
           await DbUtils.createReminder(reminder);
         } catch {
-          confirmation.delete();
           InteractionUtils.sendError(data, 'Could not create reminder');
+          return;
         }
-        await InteractionUtils.editReply(interaction, successEmbed);
+        await InteractionUtils.send(interaction, successEmbed);
         break;
       }
     }

@@ -20,7 +20,6 @@ model Exp {
 
 model Reminder {
   interactionId String   @id @map("interaction_id")
-  messageId     String   @map("message_id")
   userId        String   @map("user_id")
   guildId       String?  @map("guild_id")
   channelId     String?  @map("channel_id")

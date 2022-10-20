@@ -118,6 +118,7 @@ export class DiscordMock {
     this.mockedCommandInteraction.guildId = DiscordMock.GUILDID;
     this.mockedCommandInteraction.user = this.mockedUser;
     this.mockedCommandInteraction.member = this.newMockGuildMember(12);
+    this.mockedCommandInteraction.channelId = '0';
     Reflect.set(this.mockedCommandInteraction, 'createdAt', new Date());
     Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
 

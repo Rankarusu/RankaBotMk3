@@ -48,6 +48,12 @@ export class CommandTestHelper {
     expect(InteractionUtils.sendWarning).toHaveBeenCalled();
   }
 
+  public async executeWithoutWarning() {
+    await this.commandInstance.execute(this.interaction, new EventData());
+
+    expect(InteractionUtils.sendWarning).not.toHaveBeenCalled();
+  }
+
   public setInput(input: CommandInteractionOption[]) {
     Reflect.set(this.interaction.options, 'data', input);
   }

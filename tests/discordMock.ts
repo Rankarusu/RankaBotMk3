@@ -136,6 +136,13 @@ export class DiscordMock {
       return requestedOption || null;
     });
 
+    this.mockedCommandInteraction.options.getUser = jest.fn((option) => {
+      const location = this.getCommandOptionLocation();
+
+      const requestedOption = location.find((x) => x.name === option)?.user;
+      return requestedOption || null;
+    });
+
     this.mockedCommandInteraction.options.getBoolean = jest.fn((option) => {
       const location = this.getCommandOptionLocation();
 

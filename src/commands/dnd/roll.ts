@@ -38,6 +38,7 @@ export class RollCommand extends Command {
   ): Promise<void> {
     const dice = interaction.options.getString('dice');
     if (!dice.match(/^[\d\sdDwW+-]+$/)) {
+      //anything that is not a number, d,D,w,W
       InteractionUtils.sendError(
         data,
         'There are invalid characters in your input.'

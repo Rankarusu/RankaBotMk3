@@ -64,7 +64,6 @@ export class InfoCommand extends Command {
         inline: true,
       },
     ];
-    console.log(JSON.stringify(stats));
 
     const embed = EmbedUtils.infoEmbed(
       `Here is some general information about me.

@@ -66,6 +66,9 @@ describe('Remind', () => {
     beforeEach(async () => {
       await DbUtils.deleteRemindersById(['0']); // deletemany does not throw an error if record does not exist
     });
+    afterAll(async () => {
+      await DbUtils.deleteRemindersById(['0']); // deletemany does not throw an error if record does not exist
+    });
 
     it('should throw an error if date was not parsable', async () => {
       helper.setInput(unparsableInput);

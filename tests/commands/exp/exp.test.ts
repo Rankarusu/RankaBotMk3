@@ -39,8 +39,8 @@ const dbExp = {
 describe('Exp', () => {
   const helper = new CommandTestHelper(new ExpCommand());
 
-  beforeAll(() => {
-    DbUtils.upsertExp(
+  beforeAll(async () => {
+    await DbUtils.upsertExp(
       dbExp.guildId,
       dbExp.userId,
       dbExp.level,
@@ -49,8 +49,8 @@ describe('Exp', () => {
     );
   });
 
-  afterAll(() => {
-    DbUtils.deleteExpById(dbExp.guildId, dbExp.userId);
+  afterAll(async () => {
+    await DbUtils.deleteExpById(dbExp.guildId, dbExp.userId);
   });
 
   beforeEach(() => {

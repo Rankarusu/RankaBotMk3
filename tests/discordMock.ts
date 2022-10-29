@@ -24,6 +24,8 @@ import {
 } from 'discord.js/typings/rawDataTypes';
 import createMockInstance from 'jest-create-mock-instance';
 
+const Config = require('../config/config.json');
+
 //thanks to https://github.com/OpyFicarlogg/discord-bot-template for providing a rudimentary feamwork for testing.
 
 class MockCommandInteraction extends ChatInputCommandInteraction {
@@ -58,6 +60,12 @@ export class DiscordMock {
   private mockedWebSocketManager!: jest.Mocked<WebSocketManager>;
 
   private static readonly GUILDID: string = 'abc';
+
+  private static readonly USERID: string = '12';
+
+  private static readonly DEVELOPER_USER_ID: string = Config.developers[0];
+
+  private static readonly BOT_ID: string = Config.client.id;
 
   constructor() {
     this.mockWebSocketManager();
@@ -99,9 +107,9 @@ export class DiscordMock {
     Reflect.set(this.mockedClient, 'ws', this.getMockWebSocketManager());
   }
 
-  private mockUser() {
+  private mockUser(id = DiscordMock.USERID) {
     this.mockedUser = createMockInstance(MockUser);
-    this.mockedUser.id = '12';
+    this.mockedUser.id = id;
     this.mockedUser.username = 'test';
     this.mockedUser.bot = false;
     Reflect.set(this.mockedUser, 'tag', 'bot#0000');
@@ -117,7 +125,9 @@ export class DiscordMock {
     this.mockedCommandInteraction.options = mockedOptions;
     this.mockedCommandInteraction.guildId = DiscordMock.GUILDID;
     this.mockedCommandInteraction.user = this.mockedUser;
-    this.mockedCommandInteraction.member = this.newMockGuildMember(12);
+    this.mockedCommandInteraction.member = this.newMockGuildMember(
+      DiscordMock.USERID
+    );
     this.mockedCommandInteraction.channelId = '0';
     Reflect.set(this.mockedCommandInteraction, 'createdAt', new Date());
     Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
@@ -241,6 +251,29 @@ export class DiscordMock {
     Reflect.set(this.mockedOldVoiceState, 'member', this.newMockGuildMember());
   }
 
+  public getDevMember() {
+    return this.newMockGuildMember(DiscordMock.DEVELOPER_USER_ID);
+  }
+
+  public getBotMember() {
+    return this.newMockGuildMember(DiscordMock.BOT_ID);
+  }
+
+  public newMockGuildMember(
+    userId: number | string = DiscordMock.USERID
+  ): jest.Mocked<GuildMember> {
+    const guildMember = {
+      id: userId.toString(),
+    } as jest.Mocked<GuildMember>;
+    guildMember.user = this.getMockUser();
+    Reflect.set(guildMember, 'tag', DiscordMock.GUILDID);
+    guildMember.displayAvatarURL = jest.fn(() => {
+      return 'https://cdn.discordapp.com/avatars/0/0.webp';
+    });
+    guildMember.ban = jest.fn();
+    return guildMember;
+  }
+
   public getMockWebSocketManager(): jest.Mocked<WebSocketManager> {
     return this.mockedWebSocketManager;
   }
@@ -271,19 +304,5 @@ export class DiscordMock {
 
   public getMockOldVoiceState(): jest.Mocked<VoiceState> {
     return this.mockedOldVoiceState;
-  }
-
-  public newMockGuildMember(
-    id: number | string = 12
-  ): jest.Mocked<GuildMember> {
-    const guildMember = {
-      id: id.toString(),
-    } as jest.Mocked<GuildMember>;
-    guildMember.user = this.getMockUser();
-    Reflect.set(guildMember, 'tag', 'abc');
-    guildMember.displayAvatarURL = jest.fn(() => {
-      return 'https://cdn.discordapp.com/avatars/0/0.webp';
-    });
-    return guildMember;
   }
 }

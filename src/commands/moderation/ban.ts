@@ -54,30 +54,32 @@ export class BanCommand extends Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const member = interaction.options.get('user').member as GuildMember;
+    const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
     const deleteMessageDays = interaction.options.getNumber(
       'delete-message-days'
     );
 
     if (
-      Config.developers.includes(member.user.id) ||
-      Config.client.id === member.user.id
+      Config.developers.includes(member.id) ||
+      Config.client.id === member.id
     ) {
       // don't kick the bot or the developer
       InteractionUtils.sendError(data, 'You cannot ban this user.');
+      return;
     }
 
-    if (member.bannable) {
-      const embed = this.createdBanEmbed(member, deleteMessageDays, reason);
-      member.ban({ deleteMessageDays, reason });
-      await InteractionUtils.send(interaction, embed);
-    } else {
+    if (!member.bannable) {
       InteractionUtils.sendError(
         data,
         "I cannot ban this user. Make sure my role is above the user's role."
       );
+      return;
     }
+
+    const embed = this.createdBanEmbed(member, deleteMessageDays, reason);
+    member.ban({ deleteMessageDays, reason });
+    await InteractionUtils.send(interaction, embed);
   }
 
   private createdBanEmbed(

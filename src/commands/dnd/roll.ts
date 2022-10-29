@@ -46,8 +46,14 @@ export class RollCommand extends Command {
     }
 
     const dicearr = this.cleanInput(dice);
+    let output: { result: number; resultstr: string };
+    try {
+      output = this.evaluate(dicearr);
+    } catch (e) {
+      InteractionUtils.sendError(data, e.message);
+      return;
+    }
 
-    const output = this.evaluate(dicearr);
     const embed = this.createRollEmbed(dicearr, output);
     await InteractionUtils.send(interaction, embed);
   }

@@ -54,24 +54,16 @@ export class TimeoutCommand extends Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const member = interaction.options.get('user').member as GuildMember;
+    const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
-    const time = interaction.options.getString('until');
+    const timeStr = interaction.options.getString('until');
     let parsedTime: Date;
 
     try {
-      parsedTime = chrono.parseDate(
-        time,
-        { instant: new Date(), timezone: 'Europe/Berlin' },
-        { forwardDate: true }
-      );
-    } catch (e) {
-      InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-    }
-
-    if (!parsedTime) {
-      // parsed time is null if parse is unsuccessful
-      InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
+      parsedTime = this.parseTime(timeStr);
+    } catch (error) {
+      InteractionUtils.sendError(data, `Could not parse the time: ${timeStr}`);
+      return;
     }
 
     if (member.isCommunicationDisabled()) {
@@ -93,8 +85,9 @@ export class TimeoutCommand extends Command {
       if (error.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType) {
         InteractionUtils.sendError(
           data,
-          'The Discord API limits timeouts to 4 weeks'
+          'The Discord API limits timeouts to 4 weeks.'
         );
+        return;
       }
     }
     const embed = EmbedUtils.memberEmbed(
@@ -104,5 +97,22 @@ export class TimeoutCommand extends Command {
       )}:f>`
     );
     await InteractionUtils.send(interaction, embed);
+  }
+
+  private parseTime(timeStr: string) {
+    const now = new Date();
+    const parsedTime = chrono.parseDate(
+      timeStr,
+      { instant: now, timezone: 'Europe/Berlin' },
+      { forwardDate: true }
+    );
+
+    if (!parsedTime) {
+      // parsed time is null if parse is unsuccessful
+      throw new Error(`Could not parse the time: ${timeStr}`);
+    } else if (parsedTime < now) {
+      throw new Error(`${timeStr} lies in the past.`);
+    }
+    return parsedTime;
   }
 }

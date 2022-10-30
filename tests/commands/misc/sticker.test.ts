@@ -36,13 +36,13 @@ const addInput: CommandInteractionOption[] = [
         attachment: {
           attachment:
             'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
-          name: '1430737471383.gif',
-          id: '1030784728187539537',
-          size: 95504,
+          name: '0.gif',
+          id: '0',
+          size: 256,
           url: 'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
           proxyURL:
             'https://media.discordapp.net/ephemeral-attachments/0/0/0.gif',
-          height: 132,
+          height: 100,
           width: 100,
           contentType: 'image/gif',
           description: null,
@@ -66,13 +66,13 @@ const addInputInvalidType: CommandInteractionOption[] = [
         attachment: {
           attachment:
             'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
-          name: '1430737471383.gif',
-          id: '1030784728187539537',
-          size: 95504,
+          name: '0.gif',
+          id: '0',
+          size: 256,
           url: 'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
           proxyURL:
             'https://media.discordapp.net/ephemeral-attachments/0/0/0.gif',
-          height: 132,
+          height: 100,
           width: 100,
           contentType: 'image/bmp',
           description: null,

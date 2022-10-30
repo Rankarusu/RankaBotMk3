@@ -1,3 +1,4 @@
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
   CacheType,
   Channel,
@@ -7,6 +8,7 @@ import {
   Collection,
   CommandInteractionOption,
   CommandInteractionOptionResolver,
+  DateResolvable,
   Guild,
   GuildManager,
   GuildMember,
@@ -39,6 +41,17 @@ class MockCommandInteraction extends ChatInputCommandInteraction {
 class MockUser extends User {
   public constructor(client: Client, raw: RawUserData) {
     super(client, raw);
+  }
+}
+
+class MockInvalidFormBodyOrContentTypeError extends Error {
+  code: RESTJSONErrorCodes;
+
+  constructor(message: string) {
+    super(message);
+
+    this.name = 'MockInvalidFormBodyOrContentTypeError';
+    this.code = RESTJSONErrorCodes.InvalidFormBodyOrContentType;
   }
 }
 
@@ -244,7 +257,6 @@ export class DiscordMock {
   private mockMessage() {
     this.mockedMessage = {} as jest.Mocked<Message>;
     this.mockedMessage.author = this.mockedUser;
-    //Allow to set a private/protected method
     Reflect.set(this.mockedMessage, 'guild', this.mockedGuild);
     this.mockedMessage.reply = jest.fn();
   }
@@ -293,6 +305,16 @@ export class DiscordMock {
     });
     guildMember.ban = jest.fn();
     guildMember.kick = jest.fn();
+    guildMember.disableCommunicationUntil = jest.fn(
+      async (timeout: DateResolvable, reason?: string) => {
+        const now = new Date();
+        const apiLimit = now.setDate(now.getDate() + 4 * 7); //in 4 weeks
+        if (timeout > apiLimit) {
+          throw new MockInvalidFormBodyOrContentTypeError('Duration too long');
+        }
+        return guildMember;
+      }
+    );
     return guildMember;
   }
 

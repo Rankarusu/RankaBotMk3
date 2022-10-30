@@ -271,6 +271,7 @@ export class DiscordMock {
       return 'https://cdn.discordapp.com/avatars/0/0.webp';
     });
     guildMember.ban = jest.fn();
+    guildMember.kick = jest.fn();
     return guildMember;
   }
 

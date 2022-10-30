@@ -64,7 +64,7 @@ export class BanCommand extends Command {
       Config.developers.includes(member.id) ||
       Config.client.id === member.id
     ) {
-      // don't kick the bot or the developer
+      // don't ban the bot or the developer
       InteractionUtils.sendError(data, 'You cannot ban this user.');
       return;
     }

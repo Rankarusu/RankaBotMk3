@@ -46,27 +46,29 @@ export class KickCommand extends Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const member = interaction.options.get('user').member as GuildMember;
+    const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
 
     if (
-      Config.developers.includes(member.user.id) ||
-      Config.client.id === member.user.id
+      Config.developers.includes(member.id) ||
+      Config.client.id === member.id
     ) {
       // don't kick the bot or the developer
       InteractionUtils.sendError(data, 'You cannot kick this user.');
+      return;
     }
 
-    const embed = this.createKickEmbed(member, reason);
-    if (member.kickable) {
-      member.kick(reason);
-      await InteractionUtils.send(interaction, embed);
-    } else {
+    if (!member.kickable) {
       InteractionUtils.sendError(
         data,
         "I cannot kick this user. Make sure my role is above the user's role."
       );
+      return;
     }
+
+    const embed = this.createKickEmbed(member, reason);
+    member.kick(reason);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private createKickEmbed(member: GuildMember, reason: string) {

@@ -147,7 +147,6 @@ export class TarotCommand extends Command {
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
-    console.log(JSON.stringify(interaction.options.data));
     const subCommand = interaction.options.getSubcommand();
 
     switch (subCommand) {

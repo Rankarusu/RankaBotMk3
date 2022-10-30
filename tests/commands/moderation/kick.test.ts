@@ -96,7 +96,6 @@ describe('Kick', () => {
   it('should not throw an error on valid input', async () => {
     helper.setInput(validInput);
     setMemberKickable(helper, true);
-    await helper.executeInstance();
-    helper.expectSend();
+    await helper.executeWithoutError();
   });
 });

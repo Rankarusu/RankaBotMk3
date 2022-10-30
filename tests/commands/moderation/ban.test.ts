@@ -97,7 +97,6 @@ describe('Ban', () => {
   it('should not throw an error on valid input', async () => {
     helper.setInput(validInput);
     setMemberBannable(helper, true);
-    await helper.executeInstance();
-    helper.expectSend();
+    await helper.executeWithoutError();
   });
 });

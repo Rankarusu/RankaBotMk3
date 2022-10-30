@@ -10,7 +10,9 @@ import {
   Guild,
   GuildManager,
   GuildMember,
+  GuildTextBasedChannel,
   Message,
+  PartialMessage,
   Snowflake,
   User,
   UserManager,
@@ -71,6 +73,7 @@ export class DiscordMock {
     this.mockWebSocketManager();
     this.mockClient();
     this.mockUser();
+    this.mockChannel();
     this.mockCommand();
     this.mockGuild();
     this.mockMessage();
@@ -127,6 +130,11 @@ export class DiscordMock {
     this.mockedCommandInteraction.user = this.mockedUser;
     this.mockedCommandInteraction.member = this.newMockGuildMember(
       DiscordMock.USERID
+    );
+    Reflect.set(
+      this.mockedCommandInteraction,
+      'channel',
+      this.getMockChannel()
     );
     this.mockedCommandInteraction.channelId = '0';
     Reflect.set(this.mockedCommandInteraction, 'createdAt', new Date());
@@ -220,6 +228,19 @@ export class DiscordMock {
     this.mockedGuild.id = DiscordMock.GUILDID;
   }
 
+  private mockChannel() {
+    this.mockedChannel = {} as jest.Mocked<Channel>;
+    (this.mockedChannel as GuildTextBasedChannel).bulkDelete = jest.fn(
+      // eslint-disable-next-line require-await
+      async () => {
+        const messages: Collection<string, Message<boolean> | PartialMessage> =
+          new Collection();
+        messages.set('0', this.getMockMessage());
+        return messages;
+      }
+    );
+  }
+
   private mockMessage() {
     this.mockedMessage = {} as jest.Mocked<Message>;
     this.mockedMessage.author = this.mockedUser;
@@ -293,6 +314,10 @@ export class DiscordMock {
 
   public getMockMessage(): jest.Mocked<Message> {
     return this.mockedMessage;
+  }
+
+  public getMockChannel(): jest.Mocked<Channel> {
+    return this.mockedChannel;
   }
 
   public getMockGuild(): jest.Mocked<Guild> {

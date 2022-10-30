@@ -2,7 +2,13 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  Collection,
+  Message,
+  PartialMessage,
+  PermissionsString,
+} from 'discord.js';
 import { EventData } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
@@ -41,20 +47,23 @@ export class PurgeCommand extends Command {
     data: EventData
   ): Promise<void> {
     const messagesAmount = interaction.options.getNumber('amount');
-    await interaction.channel
-      .bulkDelete(messagesAmount, true)
 
-      .then((messages) => {
-        const embed = EmbedUtils.infoEmbed(
-          `Deleted **${messages.size}** messages successfully`
-        );
-        InteractionUtils.send(interaction, embed);
-      })
-      .catch(() =>
-        InteractionUtils.sendError(
-          data,
-          'An error ocurred while deleting messages.'
-        )
+    let messages: Collection<string, Message<boolean> | PartialMessage>;
+
+    try {
+      messages = await interaction.channel.bulkDelete(messagesAmount, true);
+    } catch (error) {
+      InteractionUtils.sendError(
+        data,
+        'An error ocurred while deleting messages.'
       );
+      return;
+    }
+
+    const embed = EmbedUtils.successEmbed(
+      `Deleted **${messages.size}** messages successfully`
+    );
+
+    await InteractionUtils.send(interaction, embed);
   }
 }

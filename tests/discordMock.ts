@@ -10,6 +10,7 @@ import {
   CommandInteractionOptionResolver,
   DateResolvable,
   Guild,
+  GuildBanManager,
   GuildManager,
   GuildMember,
   GuildTextBasedChannel,
@@ -87,11 +88,11 @@ export class DiscordMock {
     this.mockClient();
     this.mockUser();
     this.mockChannel();
-    this.mockCommand();
     this.mockGuild();
     this.mockMessage();
     this.mockNewVoiceState();
     this.mockOldVoiceState();
+    this.mockCommand();
   }
 
   private mockWebSocketManager() {
@@ -152,7 +153,7 @@ export class DiscordMock {
     this.mockedCommandInteraction.channelId = '0';
     Reflect.set(this.mockedCommandInteraction, 'createdAt', new Date());
     Reflect.set(this.mockedCommandInteraction, 'client', this.getMockClient());
-
+    Reflect.set(this.mockedCommandInteraction, 'guild', this.getMockGuild());
     this.mockedCommandInteraction.options.getString = jest.fn((option) => {
       const location = this.getCommandOptionLocation();
 
@@ -239,6 +240,9 @@ export class DiscordMock {
   private mockGuild() {
     this.mockedGuild = {} as jest.Mocked<Guild>;
     this.mockedGuild.id = DiscordMock.GUILDID;
+    this.mockedGuild.bans = {} as jest.Mocked<GuildBanManager>;
+
+    this.mockedGuild.bans.remove = jest.fn();
   }
 
   private mockChannel() {

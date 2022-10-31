@@ -50,7 +50,7 @@ export class UnbanCommand extends Command {
 
     let bannedUser: User;
     try {
-      bannedUser = (await interaction.guild.members.fetch(memberId)).user;
+      bannedUser = await this.getBannedUser(interaction, memberId);
     } catch (error) {
       InteractionUtils.sendError(data, 'There is no user banned with that id');
       return;
@@ -66,6 +66,18 @@ export class UnbanCommand extends Command {
     const embed = this.createUnbanEmbed(bannedUser, reason);
 
     await InteractionUtils.send(interaction, embed);
+  }
+
+  private async getBannedUser(
+    interaction: ChatInputCommandInteraction,
+    memberId: string
+  ) {
+    const member = await interaction.guild.members.fetch(memberId);
+    const user = member.user;
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    return user;
   }
 
   private createUnbanEmbed(bannedUser: User, reason: string) {

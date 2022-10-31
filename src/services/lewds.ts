@@ -10,7 +10,7 @@ interface GuildCounter {
 const url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
 const limit = 100;
 
-class Lewds implements Scheduler {
+class Lewds extends Scheduler {
   //implementing a Singleton that automatically gets new data from a MultiReddit.
 
   private lewds: RedditPost[] = [];
@@ -23,6 +23,7 @@ class Lewds implements Scheduler {
 
   private constructor() {
     // private constructor, so that it can only be instantiated once
+    super();
   }
 
   public async start() {
@@ -36,7 +37,7 @@ class Lewds implements Scheduler {
     }
 
     // run every 15 minutes
-    cron.schedule('0,15,30,45 * * * *', async () => {
+    const job = cron.schedule('0,15,30,45 * * * *', async () => {
       if (this.lewds.length >= 10000) {
         this.lewds = [];
         this.next = '';
@@ -46,6 +47,8 @@ class Lewds implements Scheduler {
       this.next = lewds.data.after;
       this.lewds.push(...RedditUtils.getPostList(lewds));
     });
+    this.job = job;
+
     Logger.info(
       LogMessages.info.cronInfo.replaceAll('{TEXT}', 'Lewds scheduler started')
     );

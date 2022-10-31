@@ -66,14 +66,16 @@ query ($search: String, $format: MediaFormat) {
 }
 `;
 
-class AniList implements Scheduler {
+class AniList extends Scheduler {
   //implementing a Singleton that automatically gets new data from AniList.
+
   private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
 
   private static _instance: AniList;
 
   private constructor() {
     // private constructor, so that it can only be instantiated once
+    super();
   }
 
   public async start() {
@@ -87,7 +89,7 @@ class AniList implements Scheduler {
       }, 30000);
     }
 
-    cron.schedule('0 * * * *', async () => {
+    const job = cron.schedule('0 * * * *', async () => {
       const timestamps = this.getTimestamps();
       await this.updateSchedule(timestamps);
     });
@@ -97,6 +99,7 @@ class AniList implements Scheduler {
         'Anilist scheduler started'
       )
     );
+    this.job = job;
   }
 
   public static get Instance() {

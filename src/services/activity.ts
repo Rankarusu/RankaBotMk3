@@ -21,10 +21,11 @@ const activities = [
   'with my own PokéDex',
 ];
 
-export class ActivityScheduler implements Scheduler {
+export class ActivityScheduler extends Scheduler {
   client: Client;
 
   constructor(client: Client) {
+    super();
     this.client = client;
   }
 
@@ -34,7 +35,7 @@ export class ActivityScheduler implements Scheduler {
   }
 
   public start() {
-    cron.schedule('0 * * * *', () => {
+    const job = cron.schedule('0 * * * *', () => {
       this.changeActivity();
     });
     Logger.info(
@@ -43,5 +44,6 @@ export class ActivityScheduler implements Scheduler {
         'Activity scheduler started'
       )
     );
+    this.job = job;
   }
 }

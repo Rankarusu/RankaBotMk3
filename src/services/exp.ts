@@ -4,10 +4,11 @@ import { Logger, Scheduler } from '.';
 import LogMessages from '../static/logs.json';
 import { DbUtils } from '../utils';
 
-export class ExpScheduler implements Scheduler {
+export class ExpScheduler extends Scheduler {
   client: Client;
 
   constructor(client: Client) {
+    super();
     this.client = client;
   }
 
@@ -29,11 +30,12 @@ export class ExpScheduler implements Scheduler {
 
   public start() {
     // run once a day at 00:00
-    cron.schedule('0 0 * * *', () => {
+    const job = cron.schedule('0 0 * * *', () => {
       this.cleanOrphanedUsers();
     });
     Logger.info(
       LogMessages.info.cronInfo.replaceAll('{TEXT}', 'EXP scheduler started')
     );
+    this.job = job;
   }
 }

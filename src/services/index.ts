@@ -1,3 +1,4 @@
+export { Scheduler } from '../models/scheduler';
 export { ActivityScheduler } from './activity';
 export { aniList } from './anilist';
 export { Db } from './db';
@@ -5,5 +6,4 @@ export { ExpScheduler } from './exp';
 export { lewds } from './lewds';
 export { Logger } from './logger';
 export { ReminderScheduler } from './reminder';
-export { Scheduler } from './scheduler';
 export { Tarot } from './tarot';

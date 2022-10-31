@@ -4,10 +4,11 @@ import { Logger, Scheduler } from '.';
 import LogMessages from '../static/logs.json';
 import { ClientUtils, DbUtils, EmbedUtils, MessageUtils } from '../utils';
 
-export class ReminderScheduler implements Scheduler {
+export class ReminderScheduler extends Scheduler {
   client: Client;
 
   constructor(client: Client) {
+    super();
     this.client = client;
   }
 
@@ -42,7 +43,7 @@ export class ReminderScheduler implements Scheduler {
 
   public start() {
     // run every 20 seconds
-    cron.schedule('0,20,40 * * * * *', async () => {
+    const job = cron.schedule('0,20,40 * * * * *', async () => {
       await this.remind();
     });
     Logger.info(
@@ -51,5 +52,6 @@ export class ReminderScheduler implements Scheduler {
         'Reminder scheduler started'
       )
     );
+    this.job = job;
   }
 }

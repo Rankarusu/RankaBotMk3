@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -101,7 +101,16 @@ export class Rule34Command extends Command {
       .filter((option) => option.name.match(/tag-\d\d/g))
       .map((tag) => tag.value) as string[];
 
-    const posts: Rule34Post[] = await this.getPost(tags, data);
+    let posts: Rule34Post[];
+
+    try {
+      posts = await this.getPosts(tags);
+    } catch (error) {
+      InteractionUtils.sendError(
+        data,
+        'An error occurred while communicating with the API'
+      );
+    }
 
     if (posts.length === 0) {
       InteractionUtils.sendWarning(
@@ -119,29 +128,18 @@ export class Rule34Command extends Command {
     await InteractionUtils.send(interaction, embed);
   }
 
-  private async getPost(
-    tags: string[],
-    data: EventData
-  ): Promise<Rule34Post[]> {
-    let response: AxiosResponse;
-    try {
-      response = await axios.get(url, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'axios',
-        },
-        params: {
-          limit,
-          tags: tags.join(' '),
-          json: 1,
-        },
-      });
-    } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-    }
+  private async getPosts(tags: string[]): Promise<Rule34Post[]> {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'axios',
+      },
+      params: {
+        limit,
+        tags: tags.join(' '),
+        json: 1,
+      },
+    });
     return response.data;
   }
 }

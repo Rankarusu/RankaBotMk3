@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -54,8 +54,16 @@ export class DanbooruCommand extends Command {
       .filter((option) => option.name.match(/tag-\d\d/g))
       .map((tag) => tag.value) as string[];
 
-    const posts: DanbooruPost[] = await this.getPost(tags, data);
-
+    let posts: DanbooruPost[];
+    try {
+      posts = await this.getPosts(tags);
+    } catch (error) {
+      InteractionUtils.sendError(
+        data,
+        'An error occurred while communicating with the API'
+      );
+      return;
+    }
     if (posts.length === 0) {
       InteractionUtils.sendWarning(
         interaction,
@@ -72,28 +80,18 @@ export class DanbooruCommand extends Command {
     await InteractionUtils.send(interaction, embed);
   }
 
-  private async getPost(
-    tags: string[],
-    data: EventData
-  ): Promise<DanbooruPost[]> {
-    let response: AxiosResponse;
-    try {
-      response = await axios.get(url, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'axios',
-        },
-        params: {
-          limit,
-          tags: tags.join(' '),
-        },
-      });
-    } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-    }
+  private async getPosts(tags: string[]): Promise<DanbooruPost[]> {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'axios',
+      },
+      params: {
+        limit,
+        tags: tags.join(' '),
+      },
+    });
+
     return response.data;
   }
 }

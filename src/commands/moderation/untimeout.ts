@@ -39,7 +39,7 @@ export class UntimeoutCommand extends Command {
     interaction: ChatInputCommandInteraction,
     data: EventData
   ): Promise<void> {
-    const member = interaction.options.get('user').member as GuildMember;
+    const member = interaction.options.getMember('user') as GuildMember;
 
     if (!member.isCommunicationDisabled()) {
       InteractionUtils.sendWarning(
@@ -47,6 +47,7 @@ export class UntimeoutCommand extends Command {
         data,
         'This user is not timed out.'
       );
+      return;
     }
 
     member.disableCommunicationUntil(null);

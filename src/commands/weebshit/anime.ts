@@ -72,12 +72,15 @@ export class AnimeCommand extends Command {
             data,
             'An Error occurred while talking to the API'
           );
+          return;
         }
         if (!media) {
-          InteractionUtils.sendError(
+          InteractionUtils.sendWarning(
+            interaction,
             data,
-            'An Error occurred while talking to the API'
+            `I could not find any anime with the name \`${title}\``
           );
+          return;
         }
 
         const embed = this.createAniListSearchEmbed(media);

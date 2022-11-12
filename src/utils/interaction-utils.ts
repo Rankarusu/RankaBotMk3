@@ -172,19 +172,6 @@ export class InteractionUtils {
     }
   }
 
-  // public static sendWarning(
-  //   interaction: CommandInteraction | MessageComponentInteraction,
-  //   message: string,
-  //   imageUrl?: string
-  // ) {
-  //   data.description = message;
-  //   const embed = EmbedUtils.warnEmbed(data);
-  //   if (imageUrl) {
-  //     embed.setImage(imageUrl);
-  //   }
-  //   InteractionUtils.send(interaction, embed);
-  // }
-
   public static canUse(
     command: Command,
     interaction: CommandInteraction

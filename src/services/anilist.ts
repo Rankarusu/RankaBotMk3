@@ -3,6 +3,7 @@ import * as cron from 'node-cron';
 import { Logger, Scheduler } from '.';
 import {
   AniListAiringScheduleItem,
+  AniListScheduleDay,
   AniListSearchItem,
   MediaFormat,
   MediaType,
@@ -69,7 +70,7 @@ query ($search: String, $format: MediaFormat) {
 class AniList extends Scheduler {
   //implementing a Singleton that automatically gets new data from AniList.
 
-  private schedule: { day: number; airing: AniListAiringScheduleItem[] }[];
+  private schedule: AniListScheduleDay[];
 
   private static _instance: AniList;
 
@@ -83,11 +84,10 @@ class AniList extends Scheduler {
     try {
       await this.updateSchedule(this.getTimestamps());
     } catch (error) {
-      //try again in 30 seconds
-      // setTimeout(() => {
-      //   this.start();
-      // }, 30000);
-      console.log(error);
+      // try again in 30 seconds
+      setTimeout(() => {
+        this.start();
+      }, 30000);
     }
 
     const job = cron.schedule('0 * * * *', async () => {

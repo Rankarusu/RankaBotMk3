@@ -16,21 +16,19 @@ const blessYellow = '#F9DC92';
 
 export class EmbedUtils {
   public static errorEmbed(error?: Error) {
-    const { message } = error;
     const embed = new EmbedBuilder()
       .setTitle('Error')
       .setColor(Config.colors.error as ColorResolvable)
-      .setDescription(message || 'An error occurred')
+      .setDescription(error?.message || 'An error occurred')
       .setTimestamp();
     return embed;
   }
 
   public static warnEmbed(error?: Error, imageUrl?: string) {
-    const { message } = error;
     const embed = new EmbedBuilder()
       .setTitle('Warning')
       .setColor(Config.colors.warning as ColorResolvable)
-      .setDescription(message)
+      .setDescription(error?.message)
       .setTimestamp();
     if (imageUrl) {
       embed.setImage(imageUrl);

@@ -13,6 +13,11 @@ export interface AniListAiringScheduleItem {
   };
 }
 
+export interface AniListScheduleDay {
+  day: number;
+  airing: AniListAiringScheduleItem[];
+}
+
 export interface AniListSearchItem {
   idMal: number;
   title: {

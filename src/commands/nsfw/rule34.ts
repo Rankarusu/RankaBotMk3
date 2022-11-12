@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -7,6 +6,7 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { APICommunicationError, Rule34Post } from '../../models';
 import { WeirdTastesWarning } from '../../models/warnings';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import { RequestUtils } from '../../utils/request-utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const limit = 100;
@@ -104,7 +104,7 @@ export class Rule34Command extends Command {
     let posts: Rule34Post[];
 
     try {
-      posts = await this.getPosts(tags);
+      posts = await RequestUtils.getBooruPosts<Rule34Post>(url, tags, limit);
     } catch (error) {
       throw new APICommunicationError();
     }
@@ -118,20 +118,5 @@ export class Rule34Command extends Command {
     const embed = EmbedUtils.r34Embed(post);
 
     await InteractionUtils.send(interaction, embed);
-  }
-
-  private async getPosts(tags: string[]): Promise<Rule34Post[]> {
-    const response = await axios.get(url, {
-      headers: {
-        Accept: 'application/json',
-        'User-Agent': 'axios',
-      },
-      params: {
-        limit,
-        tags: tags.join(' '),
-        json: 1,
-      },
-    });
-    return response.data;
   }
 }

@@ -1,5 +1,6 @@
 export {
   AniListAiringScheduleItem,
+  AniListScheduleDay,
   AniListSearchItem,
   MediaFormat,
   MediaSeason,

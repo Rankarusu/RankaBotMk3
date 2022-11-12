@@ -148,7 +148,13 @@ export class PaginationEmbed {
     });
     interactionCollector.on('end', async () => {
       //empty out action rows after timeout
-      await InteractionUtils.editReply(this.interaction, undefined, []);
+
+      if (this.interaction.ephemeral) {
+        await InteractionUtils.editReply(this.interaction, undefined, []);
+      } else {
+        //ephemeral deletes are not yet in djs.
+        await this.interaction.deleteReply();
+      }
     });
   }
 

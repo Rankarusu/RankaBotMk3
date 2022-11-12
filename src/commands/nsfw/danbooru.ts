@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -7,6 +6,7 @@ import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { APICommunicationError, DanbooruPost } from '../../models';
 import { WeirdTastesWarning } from '../../models/warnings';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
+import { RequestUtils } from '../../utils/request-utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const limit = 100;
@@ -56,7 +56,7 @@ export class DanbooruCommand extends Command {
 
     let posts: DanbooruPost[];
     try {
-      posts = await this.getPosts(tags);
+      posts = await RequestUtils.getBooruPosts<DanbooruPost>(url, tags, limit);
     } catch (error) {
       throw new APICommunicationError();
     }
@@ -69,20 +69,5 @@ export class DanbooruCommand extends Command {
     const embed = EmbedUtils.danbooruEmbed(post);
 
     await InteractionUtils.send(interaction, embed);
-  }
-
-  private async getPosts(tags: string[]): Promise<DanbooruPost[]> {
-    const response = await axios.get(url, {
-      headers: {
-        Accept: 'application/json',
-        'User-Agent': 'axios',
-      },
-      params: {
-        limit,
-        tags: tags.join(' '),
-      },
-    });
-
-    return response.data;
   }
 }

@@ -4,10 +4,12 @@ import {
 } from 'discord-api-types/v10';
 import {
   ChatInputCommandInteraction,
+  EmbedBuilder,
   EmbedField,
   PermissionsString,
 } from 'discord.js';
 import {
+  AniListScheduleDay,
   AniListSearchItem,
   APICommunicationError,
   PaginationEmbed,
@@ -84,7 +86,14 @@ export class AnimeCommand extends Command {
         break;
       }
       case 'schedule': {
-        const pages = this.createPages();
+        const schedule = aniList.getSchedule();
+
+        let pages: EmbedBuilder[];
+        try {
+          pages = this.createPages(schedule);
+        } catch (error) {
+          throw new APICommunicationError();
+        }
 
         const paginatedEmbed = new PaginationEmbed(interaction, pages, 20);
         await paginatedEmbed.start();
@@ -136,8 +145,8 @@ export class AnimeCommand extends Command {
     return embed;
   }
 
-  private createPages() {
-    const schedule = aniList.getSchedule();
+  private createPages(schedule: AniListScheduleDay[]) {
+    console.log(schedule);
     const pages = schedule.map((day) => {
       let fields: EmbedField[] = day.airing.map((anime) => {
         return {

@@ -159,7 +159,7 @@ export class CommandHandler implements EventHandler {
     error?: Error
   ): Promise<void> {
     {
-      const embed = EmbedUtils.errorEmbed(error?.message, error?.name);
+      const embed = EmbedUtils.errorEmbed(error);
       await InteractionUtils.send(interaction, embed);
     }
   }
@@ -169,11 +169,7 @@ export class CommandHandler implements EventHandler {
     error?: DiscordCommandWarning
   ): Promise<void> {
     {
-      const embed = EmbedUtils.warnEmbed(
-        error?.message,
-        'Warning',
-        error?.imageUrl
-      );
+      const embed = EmbedUtils.warnEmbed(error, error.imageUrl);
       await InteractionUtils.send(interaction, embed);
     }
   }

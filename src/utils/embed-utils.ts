@@ -15,26 +15,26 @@ const danbooruBlue = '#0075f8';
 const blessYellow = '#F9DC92';
 
 export class EmbedUtils {
-  public static errorEmbed(description?: string, title?: string) {
+  public static errorEmbed(error?: Error) {
+    const { message } = error;
     const embed = new EmbedBuilder()
-      .setTitle(title || 'Error')
+      .setTitle('Error')
       .setColor(Config.colors.error as ColorResolvable)
-      .setDescription(description || 'An error occurred')
+      .setDescription(message || 'An error occurred')
       .setTimestamp();
     return embed;
   }
 
-  public static warnEmbed(
-    description?: string,
-    title?: string,
-    imageUrl?: string
-  ) {
+  public static warnEmbed(error?: Error, imageUrl?: string) {
+    const { message } = error;
     const embed = new EmbedBuilder()
-      .setTitle(title || 'Warning')
+      .setTitle('Warning')
       .setColor(Config.colors.warning as ColorResolvable)
-      .setDescription(description)
-      .setTimestamp()
-      .setImage(imageUrl);
+      .setDescription(message)
+      .setTimestamp();
+    if (imageUrl) {
+      embed.setImage(imageUrl);
+    }
 
     return embed;
   }

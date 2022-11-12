@@ -15,6 +15,7 @@ export class RequestUtils {
       params: {
         limit,
         tags: tags.join(' '),
+        json: 1,
       },
     });
 

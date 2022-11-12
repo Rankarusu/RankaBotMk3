@@ -1,4 +1,5 @@
 import { ChooseCommand } from '../../../src/commands';
+import { InvalidInputError, TooFewOptionsWarning } from '../../../src/models';
 
 import { CommandTestHelper } from '../helper';
 
@@ -30,7 +31,7 @@ describe('Choose', () => {
     });
 
     it('should send an error on bad input', async () => {
-      await helper.executeWithError();
+      await helper.executeWithError(new InvalidInputError());
     });
   });
 
@@ -51,6 +52,6 @@ describe('Choose', () => {
 
   it('should issue a warning on too few options', async () => {
     helper.setInput(tooFewOptions);
-    await helper.executeWithWarning();
+    await helper.executeWithError(new TooFewOptionsWarning());
   });
 });

@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { CommandInteractionOption } from 'discord.js';
 import { RemindCommand } from '../../../src/commands';
-import { ReminderListSelectEmbed } from '../../../src/models';
+import {
+  PingInInputError,
+  ReminderCreationError,
+  ReminderIntervalTooShortError,
+  ReminderLimitError,
+  ReminderListSelectEmbed,
+  TimeParseError,
+} from '../../../src/models';
 import { DbUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
@@ -72,17 +79,17 @@ describe('Remind', () => {
 
     it('should throw an error if date was not parsable', async () => {
       helper.setInput(unparsableInput);
-      await helper.executeWithError();
+      await helper.executeWithError(new TimeParseError(''));
     });
 
     it('should throw an error if notice is too short', async () => {
       helper.setInput(tooSoonInput);
-      await helper.executeWithError();
+      await helper.executeWithError(new ReminderIntervalTooShortError());
     });
 
     it('should throw an error if user tries to ping someone', async () => {
       helper.setInput(pingInput);
-      await helper.executeWithError();
+      await helper.executeWithError(new PingInInputError());
     });
 
     it('should throw an error if the database raises an error', async () => {
@@ -90,12 +97,21 @@ describe('Remind', () => {
       jest.spyOn(DbUtils, 'createReminder').mockImplementationOnce(() => {
         throw new Error();
       });
-      await helper.executeWithError();
+      await helper.executeWithError(new ReminderCreationError());
     });
 
     it('should not throw an error on valid input', async () => {
       helper.setInput(validSetInput);
       await helper.executeWithoutError();
+    });
+
+    it('should throw an error if too many reminders are set', async () => {
+      helper.setInput(validSetInput);
+      jest
+        .spyOn(DbUtils, 'getReminderCountByUserId')
+        // eslint-disable-next-line require-await
+        .mockImplementationOnce(async () => 100);
+      await helper.executeWithError(new ReminderLimitError());
     });
 
     it('should call InteractionUtils.send on valid input', async () => {

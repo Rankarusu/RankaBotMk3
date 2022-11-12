@@ -1,5 +1,10 @@
 import { CommandInteractionOption, GuildMember } from 'discord.js';
 import { TimeoutCommand } from '../../../src/commands';
+import {
+  AlreadyTimedOutWarning,
+  TimeoutAPILimitWarning,
+  TimeParseError,
+} from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
 
@@ -122,33 +127,32 @@ describe('Timeout', () => {
     async (input) => {
       helper.setInput(input);
       setMemberCommunicationDisabled(helper, false);
-      await helper.executeWithError();
+      await helper.executeWithError(new TimeParseError(''));
     }
   );
 
   it('should throw an error if timeout is longer than API-Limit', async () => {
     helper.setInput(DurationTooLongInput);
     setMemberCommunicationDisabled(helper, false);
-    await helper.executeWithError();
+    await helper.executeWithError(new TimeoutAPILimitWarning());
   });
 
-  it('should issue a warning if user is already muted', async () => {
+  it('should issue a warning if user is already timed out', async () => {
     helper.setInput(alreadyMutedInput);
     const now = new Date();
     const in2weeks = new Date(now.setDate(now.getDate() + 2 * 7));
     setMemberTimeout(helper, in2weeks);
     setMemberCommunicationDisabled(helper, true);
 
-    await helper.executeWithWarning();
+    await helper.executeWithError(
+      new AlreadyTimedOutWarning(
+        helper.interaction.member as GuildMember,
+        in2weeks
+      )
+    );
 
     setMemberTimeout(helper, null);
     setMemberCommunicationDisabled(helper, false);
-  });
-
-  it('should not issue a warning on valid input', async () => {
-    helper.setInput(validInput);
-    setMemberCommunicationDisabled(helper, false);
-    await helper.executeWithoutWarning();
   });
 
   it('should not throw an error on valid input', async () => {

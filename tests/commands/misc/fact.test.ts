@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import axios from 'axios';
 import { FactCommand } from '../../../src/commands';
-import { EventData } from '../../../src/models';
+import { APICommunicationError } from '../../../src/models';
 import { CommandTestHelper } from '../helper';
 
 describe('Fact', () => {
@@ -21,14 +20,10 @@ describe('Fact', () => {
     helper.expectSend();
   });
 
-  describe('getFact', () => {
-    it('should send error if axios throws', async () => {
-      axios.get = jest.fn().mockImplementationOnce(() => {
-        throw new Error();
-      });
-      await expect(
-        helper.commandInstance['getFact'](new EventData())
-      ).rejects.toThrowError();
+  it('should send error if getFact throws', async () => {
+    helper.commandInstance['getFact'] = jest.fn().mockImplementationOnce(() => {
+      throw new Error();
     });
+    await helper.executeWithError(new APICommunicationError());
   });
 });

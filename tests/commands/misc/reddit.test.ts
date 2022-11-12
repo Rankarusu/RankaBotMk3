@@ -1,7 +1,12 @@
 import { RedditCommand } from '../../../src/commands';
 
-import axios from 'axios';
-import { InteractionUtils } from '../../../src/utils';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import {
+  APICommunicationError,
+  InvalidSubredditError,
+  PrivateSubredditError,
+} from '../../../src/models';
+import { InteractionUtils, RedditUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
 
 describe('Reddit', () => {
@@ -47,7 +52,7 @@ describe('Reddit', () => {
     ],
   ];
 
-  const inexistantSubReddit = [
+  const inexistentSubReddit = [
     { name: 'subreddit', type: 3, value: 'ich_iels' },
     { name: 'amount', type: 10, value: 1 },
   ];
@@ -78,7 +83,7 @@ describe('Reddit', () => {
     });
 
     it('should send an error', async () => {
-      await helper.executeWithError();
+      await helper.executeWithError(new InvalidSubredditError());
     });
   });
 
@@ -98,8 +103,20 @@ describe('Reddit', () => {
   });
 
   it('should throw an error when the subreddit was not found', async () => {
-    helper.setInput(inexistantSubReddit);
-    await helper.executeWithError();
+    helper.setInput(inexistentSubReddit);
+    await helper.executeWithError(new APICommunicationError());
+  });
+
+  it('should throw an error when the subreddit is private', async () => {
+    helper.setInput(inexistentSubReddit);
+    jest.spyOn(RedditUtils, 'fetchPosts').mockImplementationOnce(() => {
+      const error = new AxiosError('', '', undefined, undefined, {
+        status: 403,
+      } as AxiosResponse);
+
+      throw error;
+    });
+    await helper.executeWithError(new PrivateSubredditError());
   });
 
   it.each(varyingPostNumbers)(
@@ -119,6 +136,6 @@ describe('Reddit', () => {
     jest.spyOn(axios, 'get').mockImplementationOnce(() => {
       throw new Error();
     });
-    await helper.executeWithError();
+    await helper.executeWithError(new APICommunicationError());
   });
 });

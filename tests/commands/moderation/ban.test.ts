@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { CommandInteractionOption, GuildMember } from 'discord.js';
 import { BanCommand } from '../../../src/commands';
+import {
+  InvalidBanTargetError,
+  UnbannableUserError,
+} from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
@@ -72,19 +76,19 @@ describe('Ban', () => {
     helper.setInput(banBotInput);
     setMemberBannable(helper, true);
 
-    await helper.executeWithError();
+    await helper.executeWithError(new InvalidBanTargetError());
   });
 
   it('should throw an error if you try to ban a dev', async () => {
     helper.setInput(banDevInput);
     setMemberBannable(helper, true);
-    await helper.executeWithError();
+    await helper.executeWithError(new InvalidBanTargetError());
   });
 
   it('should throw an error if member is not bannable', async () => {
     helper.setInput(validInput);
     setMemberBannable(helper, false);
-    await helper.executeWithError();
+    await helper.executeWithError(new UnbannableUserError());
   });
 
   it('should call InteractionUtils.send on valid input', async () => {

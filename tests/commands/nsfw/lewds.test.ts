@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { LewdsCommand } from '../../../src/commands';
+import { NoLewdsAvailableWarning } from '../../../src/models';
 import { lewds } from '../../../src/services';
 import { InteractionUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
@@ -24,13 +25,7 @@ describe('Lewds', () => {
     helper.setInput(input);
     jest.spyOn(lewds, 'getLewdsFromStash').mockImplementationOnce(() => []);
 
-    await helper.executeWithWarning();
-  });
-
-  it('should not issue a warning on valid input', async () => {
-    helper.setInput(input);
-
-    await helper.executeWithoutWarning();
+    await helper.executeWithError(new NoLewdsAvailableWarning());
   });
 
   it('should not throw an error on valid input', async () => {

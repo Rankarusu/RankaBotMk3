@@ -13,6 +13,7 @@ import {
   GuildBanManager,
   GuildManager,
   GuildMember,
+  GuildMemberManager,
   GuildTextBasedChannel,
   Message,
   PartialMessage,
@@ -241,6 +242,8 @@ export class DiscordMock {
     this.mockedGuild = {} as jest.Mocked<Guild>;
     this.mockedGuild.id = DiscordMock.GUILDID;
     this.mockedGuild.bans = {} as jest.Mocked<GuildBanManager>;
+    this.mockedGuild.members = {} as jest.Mocked<GuildMemberManager>;
+    this.mockedGuild.members.fetch = jest.fn();
 
     this.mockedGuild.bans.remove = jest.fn();
   }

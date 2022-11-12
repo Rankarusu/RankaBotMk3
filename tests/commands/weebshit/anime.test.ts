@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { AnimeCommand } from '../../../src/commands';
-import { PaginationEmbed } from '../../../src/models';
+import {
+  AnimeNotFoundWarning,
+  APICommunicationError,
+  PaginationEmbed,
+} from '../../../src/models';
 import { aniList } from '../../../src/services';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
@@ -39,13 +43,13 @@ describe('Anime', () => {
     it('should issue a warning if no anime was found', async () => {
       helper.setInput(invalidSearchInput);
 
-      await helper.executeWithWarning();
+      await helper.executeWithError(new AnimeNotFoundWarning(''));
     });
 
     it('should not issue a warning on valid input', async () => {
       helper.setInput(validSearchInput);
 
-      await helper.executeWithoutWarning();
+      await helper.executeWithoutError();
     });
 
     it('should throw an error if api-call fails', async () => {
@@ -54,7 +58,7 @@ describe('Anime', () => {
         throw new Error();
       });
 
-      await helper.executeWithError();
+      await helper.executeWithError(new APICommunicationError());
     });
 
     it('should not throw an error on valid input', async () => {

@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { CommandInteractionOption, GuildMember } from 'discord.js';
 import { KickCommand } from '../../../src/commands';
+import {
+  InvalidKickTargetError,
+  UnkickableUserError,
+} from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
@@ -71,19 +75,19 @@ describe('Kick', () => {
     helper.setInput(kickBotInput);
     setMemberKickable(helper, true);
 
-    await helper.executeWithError();
+    await helper.executeWithError(new InvalidKickTargetError());
   });
 
   it('should throw an error if you try to kick a dev', async () => {
     helper.setInput(kickDevInput);
     setMemberKickable(helper, true);
-    await helper.executeWithError();
+    await helper.executeWithError(new InvalidKickTargetError());
   });
 
   it('should throw an error if member is not kickable', async () => {
     helper.setInput(validInput);
     setMemberKickable(helper, false);
-    await helper.executeWithError();
+    await helper.executeWithError(new UnkickableUserError());
   });
 
   it('should call InteractionUtils.send on valid input', async () => {

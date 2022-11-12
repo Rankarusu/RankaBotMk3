@@ -55,11 +55,13 @@ export class DanbooruCommand extends Command {
       .map((tag) => tag.value) as string[];
 
     let posts: DanbooruPost[];
+
     try {
       posts = await RequestUtils.getBooruPosts<DanbooruPost>(url, tags, limit);
     } catch (error) {
       throw new APICommunicationError();
     }
+
     if (posts.length === 0) {
       throw new WeirdTastesWarning();
     }

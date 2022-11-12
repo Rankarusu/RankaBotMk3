@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import axios from 'axios';
 import { Rule34Command } from '../../../src/commands';
+import { WeirdTastesWarning } from '../../../src/models';
+import { APICommunicationError } from '../../../src/models/errors';
+import { RequestUtils } from '../../../src/utils/request-utils';
 import { CommandTestHelper } from '../helper';
 
 const validInput = [
@@ -18,24 +20,18 @@ describe('Rule34', () => {
     jest.restoreAllMocks();
   });
 
-  it('should throw an error if axios throws', async () => {
+  it('should throw an error if getBooruPosts throws', async () => {
     helper.setInput(validInput);
-    jest.spyOn(axios, 'get').mockImplementationOnce(() => {
+    jest.spyOn(RequestUtils, 'getBooruPosts').mockImplementationOnce(() => {
       throw new Error();
     });
-    await helper.executeWithError();
+    await helper.executeWithError(new APICommunicationError());
   });
 
   it('should issue a warning on invalid input', async () => {
     helper.setInput(invalidInput);
 
-    await helper.executeWithWarning();
-  });
-
-  it('should not issue a warning on valid input', async () => {
-    helper.setInput(validInput);
-
-    await helper.executeWithoutWarning();
+    await helper.executeWithError(new WeirdTastesWarning());
   });
 
   it('should not throw an error on valid input', async () => {

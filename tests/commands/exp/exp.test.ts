@@ -2,7 +2,11 @@
 import { Exp } from '@prisma/client';
 import { CommandInteractionOption } from 'discord.js';
 import { ExpCommand } from '../../../src/commands';
-import { PaginationEmbed } from '../../../src/models';
+import {
+  NotTrackedByExpWarning,
+  NoUsersTrackedByExpWarning,
+  PaginationEmbed,
+} from '../../../src/models';
 import { DbUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
@@ -68,13 +72,7 @@ describe('Exp', () => {
       helper.setInput(userInput);
       jest.spyOn(DbUtils, 'getExpByUser').mockResolvedValueOnce(null);
 
-      await helper.executeWithWarning();
-    });
-
-    it('should not issue a warning if user is tracked', async () => {
-      helper.setInput(userInput);
-
-      await helper.executeWithoutWarning();
+      await helper.executeWithError(new NotTrackedByExpWarning());
     });
 
     it('should not throw an error on valid input', async () => {
@@ -110,14 +108,7 @@ describe('Exp', () => {
       helper.setInput(leaderboardInput);
 
       jest.spyOn(DbUtils, 'getExpByGuild').mockResolvedValueOnce([]);
-      await helper.executeWithWarning();
-    });
-
-    it('should not issue a warning if users are found', async () => {
-      helper.setInput(leaderboardInput);
-
-      jest.spyOn(DbUtils, 'getExpByGuild').mockResolvedValueOnce([dbExp]);
-      await helper.executeWithoutWarning();
+      await helper.executeWithError(new NoUsersTrackedByExpWarning());
     });
 
     it('should not throw an error', async () => {

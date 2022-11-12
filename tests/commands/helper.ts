@@ -3,7 +3,6 @@ import {
   CommandInteractionOption,
 } from 'discord.js';
 import { Command } from '../../src/commands';
-import { EventData } from '../../src/models';
 import { InteractionUtils } from '../../src/utils';
 import { DiscordMock } from '../discordMock';
 export class CommandTestHelper {
@@ -19,11 +18,10 @@ export class CommandTestHelper {
     this.commandInstance = instance;
 
     InteractionUtils.send = jest.fn();
-    InteractionUtils.sendWarning = jest.fn();
   }
 
   public async executeInstance() {
-    await this.commandInstance.execute(this.interaction, new EventData());
+    await this.commandInstance.execute(this.interaction);
   }
 
   public expectSend() {
@@ -32,26 +30,15 @@ export class CommandTestHelper {
 
   public async executeWithError(error?: Error) {
     await expect(
-      this.commandInstance.execute(this.interaction, new EventData())
-    ).rejects.toThrowError(error);
+      this.commandInstance.execute(this.interaction)
+      //because JS is dumb, we have to check the error message instead of the object.
+    ).rejects.toThrowError(error.message);
   }
 
   public async executeWithoutError() {
     await expect(
-      this.commandInstance.execute(this.interaction, new EventData())
+      this.commandInstance.execute(this.interaction)
     ).resolves.not.toThrowError();
-  }
-
-  public async executeWithWarning() {
-    await this.commandInstance.execute(this.interaction, new EventData());
-
-    expect(InteractionUtils.sendWarning).toHaveBeenCalled();
-  }
-
-  public async executeWithoutWarning() {
-    await this.commandInstance.execute(this.interaction, new EventData());
-
-    expect(InteractionUtils.sendWarning).not.toHaveBeenCalled();
   }
 
   public setInput(input: CommandInteractionOption[]) {

@@ -1,5 +1,6 @@
 import { CommandInteractionOption, GuildMember } from 'discord.js';
 import { UntimeoutCommand } from '../../../src/commands';
+import { NotTimedOutWarning } from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
 
@@ -46,16 +47,9 @@ describe('Untimeout', () => {
     helper.setInput(input);
     setMemberCommunicationDisabled(helper, false);
 
-    await helper.executeWithWarning();
+    await helper.executeWithError(new NotTimedOutWarning());
 
     setMemberCommunicationDisabled(helper, true);
-  });
-
-  it('should not issue a warning on valid input', async () => {
-    helper.setInput(input);
-    setMemberCommunicationDisabled(helper, true);
-
-    await helper.executeWithoutWarning();
   });
 
   it('should not throw an error on valid input', async () => {

@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Sticker } from '@prisma/client';
-import { Attachment, CommandInteractionOption } from 'discord.js';
+import { Attachment, CommandInteractionOption, EmbedBuilder } from 'discord.js';
 import { StickerCommand } from '../../../src/commands';
-import { StickerListSelectEmbed } from '../../../src/models';
-import { DbUtils } from '../../../src/utils';
+import {
+  InvalidMediaTypeError,
+  StickerAddError,
+  StickerAlreadyExistsError,
+  StickerListSelectEmbed,
+  StickerNotFoundError,
+} from '../../../src/models';
+import { DbUtils, EmbedUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
 
@@ -124,13 +130,15 @@ describe('Sticker', () => {
     it('should throw an error if sticker was not found', async () => {
       helper.setInput(invalidPostInput);
 
-      await helper.executeWithError();
+      await helper.executeWithError(new StickerNotFoundError(''));
     });
 
     it('should not throw an error on valid input', async () => {
       helper.setInput(validPostInput);
-
-      await helper.executeWithError();
+      jest
+        .spyOn(EmbedUtils, 'stickerEmbed')
+        .mockImplementationOnce(() => new EmbedBuilder());
+      await helper.executeWithoutError();
     });
 
     it('should call InteractionUtils.send on valid input', async () => {
@@ -143,18 +151,18 @@ describe('Sticker', () => {
 
   describe('sticker add', () => {
     beforeEach(async () => {
-      await DbUtils.deleteStickersById(['0']); // deletemany does not throw an error if record does not exist
+      await DbUtils.deleteStickersById(['0']); // deleteMany does not throw an error if record does not exist
     });
 
     it('should throw an error if a sticker with that name already exists', async () => {
       helper.setInput(addInput);
       await DbUtils.createSticker(dbSticker);
-      await helper.executeWithError();
+      await helper.executeWithError(new StickerAlreadyExistsError(''));
     });
 
     it('should throw an error if the type is invalid', async () => {
       helper.setInput(addInputInvalidType);
-      await helper.executeWithError();
+      await helper.executeWithError(new InvalidMediaTypeError(''));
     });
 
     it('should throw an error if the database raises an error', async () => {
@@ -162,7 +170,7 @@ describe('Sticker', () => {
       jest.spyOn(DbUtils, 'createSticker').mockImplementationOnce(() => {
         throw new Error();
       });
-      await helper.executeWithError();
+      await helper.executeWithError(new StickerAddError());
     });
 
     it('should not throw an error on valid input', async () => {

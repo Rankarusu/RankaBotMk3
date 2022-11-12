@@ -110,6 +110,7 @@ export class Rule34Command extends Command {
     }
 
     if (posts.length === 0) {
+      //R34 API still sends a string on no results
       throw new WeirdTastesWarning();
     }
 

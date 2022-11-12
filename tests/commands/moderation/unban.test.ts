@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { CommandInteractionOption } from 'discord.js';
 import { UnbanCommand } from '../../../src/commands';
+import { UnbanError, UserNotBannedError } from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
 
@@ -30,7 +31,7 @@ describe('Unban', () => {
         throw new Error();
       });
 
-    await helper.executeWithError();
+    await helper.executeWithError(new UserNotBannedError());
   });
 
   it('should throw an error if GuildBanManager.remove throws an error', async () => {
@@ -41,7 +42,7 @@ describe('Unban', () => {
         throw new Error();
       });
 
-    await helper.executeWithError();
+    await helper.executeWithError(new UnbanError());
   });
 
   it('should call InteractionUtils.send on valid input', async () => {

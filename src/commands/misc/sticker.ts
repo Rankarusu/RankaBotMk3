@@ -3,7 +3,11 @@ import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
-import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
+import {
+  Attachment,
+  ChatInputCommandInteraction,
+  PermissionsString,
+} from 'discord.js';
 import { StickerListSelectEmbed } from '../../models';
 import {
   InvalidMediaTypeError,
@@ -103,7 +107,7 @@ export class StickerCommand extends Command {
             throw new StickerNotFoundError(name);
           }
           const embed = await this.createStickerEmbed(interaction, sticker);
-          InteractionUtils.send(interaction, embed);
+          await InteractionUtils.send(interaction, embed);
         }
         break;
       case 'add':
@@ -152,13 +156,16 @@ export class StickerCommand extends Command {
     }
   }
 
-  private async createStickerEmbed(interaction, sticker: Sticker) {
+  private async createStickerEmbed(
+    interaction: ChatInputCommandInteraction,
+    sticker: Sticker
+  ) {
     const creator = await interaction.guild.members.fetch(sticker.userId);
     const embed = EmbedUtils.stickerEmbed(creator, sticker);
     return embed;
   }
 
-  private createStickerAddSuccessEmbed(name: string, image) {
+  private createStickerAddSuccessEmbed(name: string, image: Attachment) {
     const embed = EmbedUtils.successEmbed(
       `Added sticker \`${name}\``,
       'Sticker'

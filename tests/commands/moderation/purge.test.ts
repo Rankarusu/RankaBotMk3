@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { CommandInteractionOption } from 'discord.js';
 import { PurgeCommand } from '../../../src/commands';
+import { MessageDeleteError } from '../../../src/models';
 import { CommandTestHelper } from '../helper';
 
 const input: CommandInteractionOption[] = [
@@ -23,7 +24,7 @@ describe('Purge', () => {
         throw new Error();
       });
 
-    await helper.executeWithError();
+    await helper.executeWithError(new MessageDeleteError());
   });
 
   it('should call InteractionUtils.send on valid input', async () => {

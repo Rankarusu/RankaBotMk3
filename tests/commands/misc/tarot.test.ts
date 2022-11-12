@@ -2,8 +2,8 @@ import { TarotCommand } from '../../../src/commands';
 import { CommandTestHelper } from '../helper';
 
 const drawInputs = [
+  [[{ name: 'draw', type: 1, options: [] }]],
   [
-    [{ name: 'draw', type: 1, options: [] }],
     [
       {
         name: 'draw',
@@ -11,6 +11,8 @@ const drawInputs = [
         options: [{ name: 'no-reverse', type: 5, value: true }],
       },
     ],
+  ],
+  [
     [
       {
         name: 'draw',
@@ -39,6 +41,8 @@ const majorArcanaInputs = [
         ],
       },
     ],
+  ],
+  [
     [
       {
         name: 'search',
@@ -77,6 +81,8 @@ const minorArcanaInputs = [
         ],
       },
     ],
+  ],
+  [
     [
       {
         name: 'search',
@@ -94,6 +100,8 @@ const minorArcanaInputs = [
         ],
       },
     ],
+  ],
+  [
     [
       {
         name: 'search',
@@ -111,6 +119,8 @@ const minorArcanaInputs = [
         ],
       },
     ],
+  ],
+  [
     [
       {
         name: 'search',

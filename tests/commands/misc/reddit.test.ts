@@ -23,6 +23,8 @@ describe('Reddit', () => {
         { name: 'subreddit', type: 3, value: 'tifu' },
         { name: 'amount', type: 10, value: 2 },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: 'birdsarentreal' },
         { name: 'amount', type: 10, value: 20 },
@@ -37,14 +39,20 @@ describe('Reddit', () => {
         { name: 'subreddit', type: 3, value: 'thisNameIsALittleBitTooLong' },
         { name: 'amount', type: 10, value: 1 },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: '_underscore' },
         { name: 'amount', type: 10, value: 1 },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: '12' },
         { name: 'amount', type: 10, value: 1 },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: '12' },
         { name: 'amount', type: 10, value: 1 },
@@ -64,11 +72,15 @@ describe('Reddit', () => {
         { name: 'amount', type: 10, value: 4 },
         { name: 'listings', type: 3, value: 'random' },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: 'birdsarentreal' },
         { name: 'amount', type: 10, value: 12 },
         { name: 'listings', type: 3, value: 'random' },
       ],
+    ],
+    [
       [
         { name: 'subreddit', type: 3, value: 'birdsarentreal' },
         { name: 'amount', type: 10, value: 20 },

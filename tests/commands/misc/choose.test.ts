@@ -9,10 +9,8 @@ const validInputs = [
 
 //yes, there is one bracket more than needed, but as jest tries to map these in the each() function we need another layer, since our input is and array as well.
 const invalidInputs = [
-  [
-    [{ name: 'options', type: 3, value: ',,,,' }],
-    [{ name: 'options', type: 3, value: '' }],
-  ],
+  [[{ name: 'options', type: 3, value: ',,,,' }]],
+  [[{ name: 'options', type: 3, value: '' }]],
 ];
 
 const tooFewOptions = [{ name: 'options', type: 3, value: '1' }];

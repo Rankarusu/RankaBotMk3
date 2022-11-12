@@ -4,26 +4,22 @@ import { InvalidInputError } from '../../../src/models/errors';
 import { CommandTestHelper } from '../helper';
 
 const validInputs = [
-  [
-    [{ name: 'dice', type: 3, value: '3d8 +5' }],
-    [{ name: 'dice', type: 3, value: '100d100' }],
-    [{ name: 'dice', type: 3, value: '20W12' }],
-    [{ name: 'dice', type: 3, value: '10d8 -14 ' }],
-    [{ name: 'dice', type: 3, value: '10d8- 14 + 4d6' }],
-    [{ name: 'dice', type: 3, value: '10d8 -- 14 + 4d6' }],
-  ],
+  [[{ name: 'dice', type: 3, value: '3d8 +5' }]],
+  [[{ name: 'dice', type: 3, value: '100d100' }]],
+  [[{ name: 'dice', type: 3, value: '20W12' }]],
+  [[{ name: 'dice', type: 3, value: '13' }]],
+  [[{ name: 'dice', type: 3, value: '10d8 -14 ' }]],
+  [[{ name: 'dice', type: 3, value: '10d8- 14 + 4d6' }]],
+  [[{ name: 'dice', type: 3, value: '10d8 -- 14 + 4d6' }]],
 ];
 
 //yes, there is one bracket more than needed, but as jest tries to map these in the each() function we need another layer, since our input is and array as well.
 const invalidInputs = [
-  [
-    [{ name: 'dice', type: 3, value: '101d100' }],
-    [{ name: 'dice', type: 3, value: '100d101' }],
-    [{ name: 'dice', type: 3, value: '1w0' }],
-    [{ name: 'dice', type: 3, value: 'not_a_die' }],
-    [{ name: 'dice', type: 3, value: '13' }],
-    [{ name: 'dice', type: 3, value: '1x5' }],
-  ],
+  [[{ name: 'dice', type: 3, value: '101d100' }]],
+  [[{ name: 'dice', type: 3, value: '100d101' }]],
+  [[{ name: 'dice', type: 3, value: '1w0' }]],
+  [[{ name: 'dice', type: 3, value: 'not_a_die' }]],
+  [[{ name: 'dice', type: 3, value: '1x5' }]],
 ];
 
 describe('Roll', () => {
@@ -34,7 +30,7 @@ describe('Roll', () => {
     jest.restoreAllMocks();
   });
 
-  describe.each(invalidInputs)('invalid inputs', (input) => {
+  describe.each(invalidInputs)('invalid input %j', (input) => {
     beforeEach(() => {
       helper.setInput(input);
     });
@@ -44,7 +40,7 @@ describe('Roll', () => {
     });
   });
 
-  describe.each(validInputs)('valid inputs', (input) => {
+  describe.each(validInputs)('valid input %j', (input) => {
     beforeEach(() => {
       helper.setInput(input);
     });

@@ -22,6 +22,8 @@ const validPokemonInputs = [
         options: [{ name: 'pokemon-name', type: 3, value: 'bulbasaur' }],
       },
     ],
+  ],
+  [
     [
       {
         name: 'pokemon',
@@ -29,6 +31,8 @@ const validPokemonInputs = [
         options: [{ name: 'pokemon-name', type: 3, value: 'charizard-mega-x' }],
       },
     ],
+  ],
+  [
     [
       {
         name: 'pokemon',
@@ -36,6 +40,8 @@ const validPokemonInputs = [
         options: [{ name: 'pokemon-name', type: 3, value: 'pikachu' }],
       },
     ],
+  ],
+  [
     [
       {
         name: 'pokemon',
@@ -43,6 +49,8 @@ const validPokemonInputs = [
         options: [{ name: 'pokemon-name', type: 3, value: 'snorlax-gmax' }],
       },
     ],
+  ],
+  [
     [
       {
         name: 'pokemon',

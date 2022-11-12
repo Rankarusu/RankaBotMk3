@@ -59,9 +59,9 @@ export class HelpCommand extends Command {
     if (!cmd) {
       // all commands
       const commands = bot.getCommands();
-
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = this.createCommandListEmbed(prettyCommands, iconUrl);
+
       await new PaginationEmbed(interaction, embed, 20).start();
     } else {
       //specific command

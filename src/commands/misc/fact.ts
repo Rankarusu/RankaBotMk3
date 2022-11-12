@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models';
+import { APICommunicationError } from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -25,10 +25,14 @@ export class FactCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
-    const fact = await this.getFact(data);
+    let fact: string;
+    try {
+      fact = await this.getFact();
+    } catch (error) {
+      throw new APICommunicationError();
+    }
     const embed = this.createFactEmbed(fact);
     InteractionUtils.send(interaction, embed);
   }
@@ -39,22 +43,14 @@ export class FactCommand extends Command {
     return embed;
   }
 
-  private async getFact(data: EventData): Promise<string> {
-    let response: AxiosResponse;
-    try {
-      response = await axios.get(url, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'axios',
-        },
-      });
-    } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-      return;
-    }
+  private async getFact(): Promise<string> {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'axios',
+      },
+    });
+
     const text = response.data.text;
     return text;
   }

@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models';
+import { NoLewdsAvailableWarning } from '../../models/warnings';
 import { lewds } from '../../services';
 import {
   ArrayUtils,
@@ -43,23 +43,18 @@ export class LewdsCommand extends Command {
 
   public nsfw?: boolean = true;
 
-  //TODO: put a rate limiter here.
-
   // eslint-disable-next-line require-await
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const amount = interaction.options.getNumber('amount');
 
     const posts = lewds.getLewdsFromStash(amount, interaction.guildId);
+
     if (posts.length === 0) {
-      InteractionUtils.sendWarning(
-        interaction,
-        data,
-        'There are currently no more lewds available, please try again in a few minutes.'
-      );
+      throw new NoLewdsAvailableWarning();
     }
+
     //even though embeds of videos do not work, we use our own embeds here just to circumvent the "over 18?"-embed.
     const embeds = posts.map((post) => {
       return EmbedUtils.lewdEmbed(post);

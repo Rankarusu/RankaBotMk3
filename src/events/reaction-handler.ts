@@ -1,6 +1,6 @@
 import { Message, MessageReaction, User } from 'discord.js';
 import { EventHandler } from '.';
-import { EventData, Reaction } from '../models';
+import { Reaction } from '../models';
 export class ReactionHandler implements EventHandler {
   constructor(private reactions: Reaction[]) {}
 
@@ -31,9 +31,7 @@ export class ReactionHandler implements EventHandler {
       return;
     }
 
-    const data = new EventData();
-
-    await reaction.execute(msgReaction, msg, reactor, data);
+    await reaction.execute(msgReaction, msg, reactor);
   }
 
   private findReaction(emoji: string): Reaction {

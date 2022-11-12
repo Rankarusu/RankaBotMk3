@@ -1,5 +1,4 @@
 import { Message, MessageReaction, User } from 'discord.js';
-import { EventData } from './event-data';
 
 export interface Reaction {
   emoji: string;
@@ -10,7 +9,6 @@ export interface Reaction {
   execute(
     msgReaction: MessageReaction,
     msg: Message,
-    reactor: User,
-    data: EventData
+    reactor: User
   ): Promise<void>;
 }

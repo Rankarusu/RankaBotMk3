@@ -1,7 +1,6 @@
 import { Message, SelectMenuInteraction } from 'discord.js';
 import { EventHandler } from '.';
 import { SelectMenu, SelectMenuDeferType } from '../menus';
-import { EventData } from '../models';
 import { InteractionUtils } from '../utils';
 
 export class SelectMenuHandler implements EventHandler {
@@ -52,10 +51,8 @@ export class SelectMenuHandler implements EventHandler {
       return;
     }
 
-    const data = new EventData();
-
     // Execute the menu
-    await menu.execute(intr, msg, data);
+    await menu.execute(intr, msg);
   }
 
   private findMenu(id: string): SelectMenu {

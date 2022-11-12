@@ -27,7 +27,15 @@ export class InfoCommand extends Command {
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
-    const stats: EmbedField[] = [
+    const stats: EmbedField[] = this.getStats(interaction);
+
+    const embed = this.createInfoEmbed(stats);
+    embed.setThumbnail(interaction.client.user.avatarURL());
+    await InteractionUtils.send(interaction, embed);
+  }
+
+  private getStats(interaction: ChatInputCommandInteraction): EmbedField[] {
+    return [
       {
         name: 'Version',
         value: `${process.env.npm_package_version}`,
@@ -64,15 +72,15 @@ export class InfoCommand extends Command {
         inline: true,
       },
     ];
+  }
 
-    const embed = EmbedUtils.infoEmbed(
+  private createInfoEmbed(stats: EmbedField[]) {
+    return EmbedUtils.infoEmbed(
       `Here is some general information about me.
       You can also [visit me on GitHub](https://github.com/Rankarusu/RankaBotMk3)`,
       'RankaBotMk3',
       stats
     );
-    embed.setThumbnail(interaction.client.user.avatarURL());
-    await InteractionUtils.send(interaction, embed);
   }
 
   private getKnownUsers(interaction: ChatInputCommandInteraction) {

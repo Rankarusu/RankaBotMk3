@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models';
+import { InvalidInputError } from '../../models/errors';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -33,28 +33,23 @@ export class RollCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const dice = interaction.options.getString('dice');
     if (!dice.match(/^[\d\sdDwW+-]+$/)) {
       //anything that is not a number, d,D,w,W
-      InteractionUtils.sendError(
-        data,
-        'There are invalid characters in your input.'
-      );
+      throw new InvalidInputError();
     }
 
-    const dicearr = this.cleanInput(dice);
-    let output: { result: number; resultstr: string };
+    const diceArr = this.cleanInput(dice);
+    let output: { result: number; resultStr: string };
     try {
-      output = this.evaluate(dicearr);
-    } catch (e) {
-      InteractionUtils.sendError(data, e.message);
-      return;
+      output = this.evaluate(diceArr);
+    } catch (error) {
+      throw new InvalidInputError();
     }
 
-    const embed = this.createRollEmbed(dicearr, output);
+    const embed = this.createRollEmbed(diceArr, output);
     await InteractionUtils.send(interaction, embed);
   }
 
@@ -65,12 +60,12 @@ export class RollCommand extends Command {
       .filter((e) => e); //to get rid of empty array items. the split above leaves multiple signs in a row with an empty string in between
   }
 
-  private rollDice(str: string): { result: number; resultstr: string } {
+  private rollDice(str: string): { result: number; resultStr: string } {
     //match everything up to 100d100
     const roll = str.match(/^([1-9][0-9]?|100)?[dDwW]([1-9][0-9]?|100)$/);
 
     let result = 0;
-    const resultarr = [];
+    const resultArr = [];
 
     if (!roll) {
       throw new Error('invalid Dice');
@@ -81,21 +76,21 @@ export class RollCommand extends Command {
 
     for (let i = 0; i < times; i++) {
       const rollResult = Math.floor(Math.random() * die) + 1;
-      resultarr.push(rollResult);
+      resultArr.push(rollResult);
       result = result + rollResult;
     }
     return {
       result,
-      resultstr: `(${resultarr.join(' + ')})`,
+      resultStr: `(${resultArr.join(' + ')})`,
     };
   }
 
-  private evaluate(dicearr: string[]): { result: number; resultstr: string } {
+  private evaluate(diceArr: string[]): { result: number; resultStr: string } {
     let result = 0;
-    const resultstr = [];
+    const resultStr = [];
     let sign: string;
 
-    dicearr.forEach((item) => {
+    diceArr.forEach((item) => {
       if (item === '+' || item === '-') {
         //flip sign on double negatives.
         if (item === '-' && sign === '-') {
@@ -103,7 +98,7 @@ export class RollCommand extends Command {
         } else {
           sign = item;
         }
-        resultstr.push(item);
+        resultStr.push(item);
       } else if (item.match(/^\d+$/)) {
         //add numbers
         if (!sign || sign === '+') {
@@ -111,7 +106,7 @@ export class RollCommand extends Command {
         } else {
           result = result - parseInt(item);
         }
-        resultstr.push(item);
+        resultStr.push(item);
         //make sure to reset sign once we actually modified values.
         sign = undefined;
       } else {
@@ -122,22 +117,22 @@ export class RollCommand extends Command {
         } else {
           result = result - roll.result;
         }
-        resultstr.push(roll.resultstr);
+        resultStr.push(roll.resultStr);
         sign = undefined;
       }
     });
 
-    return { result, resultstr: resultstr.join(' ') };
+    return { result, resultStr: resultStr.join(' ') };
   }
 
   private createRollEmbed(
-    dicearr: string[],
-    output: { result: number; resultstr: string }
+    diceArr: string[],
+    output: { result: number; resultStr: string }
   ) {
     const embed = EmbedUtils.infoEmbed(
-      `\`${StringUtils.truncate(output.resultstr, 2048)}\`
+      `\`${StringUtils.truncate(output.resultStr, 2048)}\`
       **= ${output.result}**`,
-      `🎲 ${dicearr.join(' ')}`
+      `🎲 ${diceArr.join(' ')}`
     );
     return embed;
   }

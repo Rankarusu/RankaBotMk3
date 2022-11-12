@@ -1,7 +1,6 @@
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
-import { EventData } from '../models';
 
 export abstract class Command {
   id?: string;
@@ -30,10 +29,7 @@ export abstract class Command {
     }${subcommand ? ` ${subcommand}` : ''}:${this.id}>`;
   }
 
-  abstract execute(
-    interaction: ChatInputCommandInteraction,
-    data?: EventData
-  ): Promise<void>;
+  abstract execute(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
 export enum CommandDeferType {

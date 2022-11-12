@@ -7,7 +7,7 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models';
+import { NotTimedOutWarning } from '../../models/warnings';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -36,25 +36,29 @@ export class UntimeoutCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['ModerateMembers'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const member = interaction.options.getMember('user') as GuildMember;
 
     if (!member.isCommunicationDisabled()) {
-      InteractionUtils.sendWarning(
-        interaction,
-        data,
-        'This user is not timed out.'
-      );
-      return;
+      throw new NotTimedOutWarning();
     }
 
     member.disableCommunicationUntil(null);
-    const embed = EmbedUtils.memberEmbed(
+
+    const embed = this.createUntimeoutEmbed(member);
+    await InteractionUtils.send(interaction, embed);
+  }
+
+  private createUntimeoutEmbed(
+    member: GuildMember & {
+      communicationDisabledUntilTimestamp: number;
+      readonly communicationDisabledUntil: Date;
+    }
+  ) {
+    return EmbedUtils.memberEmbed(
       member,
       `${member.user.tag}'s timeout has been lifted.`
     );
-    await InteractionUtils.send(interaction, embed);
   }
 }

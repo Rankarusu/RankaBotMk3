@@ -1,4 +1,5 @@
 import { RollCommand } from '../../../src/commands';
+import { InvalidInputError } from '../../../src/models/errors';
 
 import { CommandTestHelper } from '../helper';
 
@@ -39,7 +40,7 @@ describe('Roll', () => {
     });
 
     it('should send an error on bad input', async () => {
-      await helper.executeWithError();
+      await helper.executeWithError(new InvalidInputError());
     });
   });
 

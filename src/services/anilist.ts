@@ -84,9 +84,10 @@ class AniList extends Scheduler {
       await this.updateSchedule(this.getTimestamps());
     } catch (error) {
       //try again in 30 seconds
-      setTimeout(() => {
-        this.start();
-      }, 30000);
+      // setTimeout(() => {
+      //   this.start();
+      // }, 30000);
+      console.log(error);
     }
 
     const job = cron.schedule('0 * * * *', async () => {

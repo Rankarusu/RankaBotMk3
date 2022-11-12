@@ -9,7 +9,11 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData, PaginationEmbed } from '../../models';
+import { PaginationEmbed } from '../../models';
+import {
+  NotTrackedByExpWarning,
+  NoUsersTrackedByExpWarning,
+} from '../../models/warnings';
 import {
   ClientUtils,
   DbUtils,
@@ -63,8 +67,7 @@ export class ExpCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
@@ -75,12 +78,7 @@ export class ExpCommand extends Command {
         const user = await DbUtils.getExpByUser(guildId, userId);
 
         if (!user) {
-          InteractionUtils.sendWarning(
-            interaction,
-            data,
-            'This user is not tracked by the EXP-System yet.'
-          );
-          return;
+          throw new NotTrackedByExpWarning();
         }
 
         const list = await DbUtils.getExpByGuild(guildId);
@@ -99,17 +97,12 @@ export class ExpCommand extends Command {
         const expList = await DbUtils.getExpByGuild(guildId);
 
         if (expList.length === 0) {
-          InteractionUtils.sendWarning(
-            interaction,
-            data,
-            'There are currently no users registered in the EXP-System. Try to send some messages.'
-          );
-          return;
+          throw new NoUsersTrackedByExpWarning();
         }
 
         const fields = this.createLeaderboardFields(interaction, expList);
         const embed = this.createLeaderboardEmbed(interaction, fields);
-        const paginatedEmbed = new PaginationEmbed(interaction, data, embed);
+        const paginatedEmbed = new PaginationEmbed(interaction, embed);
         await paginatedEmbed.start();
         break;
       }

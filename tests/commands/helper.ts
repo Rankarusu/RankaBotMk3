@@ -30,10 +30,10 @@ export class CommandTestHelper {
     expect(InteractionUtils.send).toHaveBeenCalled();
   }
 
-  public async executeWithError() {
+  public async executeWithError(error?: Error) {
     await expect(
       this.commandInstance.execute(this.interaction, new EventData())
-    ).rejects.toThrowError();
+    ).rejects.toThrowError(error);
   }
 
   public async executeWithoutError() {

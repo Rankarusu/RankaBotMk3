@@ -3,7 +3,8 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models';
+import { InvalidInputError } from '../../models';
+import { TooFewOptionsWarning } from '../../models/warnings';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -35,36 +36,22 @@ export class ChooseCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const options = interaction.options.getString('options');
     let optionsArr: string[];
     try {
       optionsArr = options.split(',').map((s) => s.trim());
     } catch {
-      InteractionUtils.sendError(
-        data,
-        'Something went wrong while parsing your options, please try again'
-      );
-      return;
+      throw new InvalidInputError();
     }
 
     if (optionsArr.includes('')) {
-      InteractionUtils.sendError(
-        data,
-        'Something went wrong while parsing your options, please try again'
-      );
-      return;
+      throw new InvalidInputError();
     }
 
     if (optionsArr.length < 2) {
-      InteractionUtils.sendWarning(
-        interaction,
-        data,
-        'Tough decision you got there...'
-      );
-      return;
+      throw new TooFewOptionsWarning();
     }
 
     const result = optionsArr[Math.floor(Math.random() * optionsArr.length)];

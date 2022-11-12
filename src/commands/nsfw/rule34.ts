@@ -4,7 +4,8 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData, Rule34Post } from '../../models';
+import { APICommunicationError, Rule34Post } from '../../models';
+import { WeirdTastesWarning } from '../../models/warnings';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -94,8 +95,7 @@ export class Rule34Command extends Command {
   public nsfw?: boolean = true;
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const tags = interaction.options.data
       .filter((option) => option.name.match(/tag-\d\d/g))
@@ -106,19 +106,11 @@ export class Rule34Command extends Command {
     try {
       posts = await this.getPosts(tags);
     } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
+      throw new APICommunicationError();
     }
 
     if (posts.length === 0) {
-      InteractionUtils.sendWarning(
-        interaction,
-        data,
-        'I could not find anything matching your taste you sick fuck.'
-      );
-      return;
+      throw new WeirdTastesWarning();
     }
 
     const post = posts[Math.floor(Math.random() * posts.length)];

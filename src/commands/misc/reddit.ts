@@ -3,7 +3,12 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData, RedditListingWrapper, RedditPost } from '../../models';
+import { RedditListingWrapper, RedditPost } from '../../models';
+import {
+  APICommunicationError,
+  InvalidSubredditError,
+  PrivateSubredditError,
+} from '../../models/errors';
 import {
   ArrayUtils,
   ClientUtils,
@@ -91,15 +96,13 @@ export class RedditCommand extends Command {
   //TODO: put a rate limiter here.
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subreddit = interaction.options.getString('subreddit');
     const listing = interaction.options.getString('listing') || 'hot';
     const amount = interaction.options.getNumber('amount') || 1;
     if (!subredditPattern.test(subreddit)) {
-      InteractionUtils.sendError(data, 'That is not a valid subreddit name.');
-      return;
+      throw new InvalidSubredditError();
     }
 
     const url = `${baseUrl}/r/${subreddit}/${listing}.json`;
@@ -108,17 +111,9 @@ export class RedditCommand extends Command {
       response = await RedditUtils.fetchPosts(url, null, amount + stickyLimit); // reddit has a sticky post limit of 2. we generally do not want to send those.
     } catch (error) {
       if (error.response?.status === 403) {
-        InteractionUtils.sendError(
-          data,
-          'It looks like this community is private.'
-        );
-        return;
+        throw new PrivateSubredditError();
       }
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-      return;
+      throw new APICommunicationError();
     }
 
     const posts = RedditUtils.getPostList(response);

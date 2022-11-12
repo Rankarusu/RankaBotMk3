@@ -8,7 +8,13 @@ import {
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventHandler } from '.';
 import { Command, CommandDeferType } from '../commands';
-import { EventData } from '../models';
+import { DiscordCommandError } from '../models/errors';
+import {
+  DiscordCommandWarning,
+  InsufficientPermissionsWarning,
+  LewdWarning,
+} from '../models/warnings';
+import { CommandOnCooldownWarning } from '../models/warnings/command-on-cooldown-warning';
 import { Logger } from '../services';
 import LogMessages from '../static/logs.json';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
@@ -35,8 +41,6 @@ export class CommandHandler implements EventHandler {
       // do not talk to yourself or other bots!
       return;
     }
-
-    const data = new EventData();
 
     // Check if user is rate limited
     const limited = this.rateLimiter.take(interaction.user.id);
@@ -101,25 +105,18 @@ export class CommandHandler implements EventHandler {
           !InteractionUtils.isDeveloper(interaction.user)) ||
         !InteractionUtils.canUse(command, interaction)
       ) {
-        InteractionUtils.sendWarning(
-          interaction,
-          data,
-          "You don't have permission to use this command"
-        );
-        return;
+        throw new InsufficientPermissionsWarning();
       }
       //check if command is on cooldown
       if (InteractionUtils.isOnCooldown(interaction, command)) {
-        InteractionUtils.sendWarning(interaction, data, 'Chill.');
-        return;
+        throw new CommandOnCooldownWarning();
       }
 
       if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
-        InteractionUtils.sendWarning(interaction, data, 'lewd.', nsfwimage);
-        return;
+        throw new LewdWarning(nsfwimage);
       }
 
-      await command.execute(interaction, data);
+      await command.execute(interaction);
     } catch (error) {
       Logger.error(
         interaction.channel instanceof TextChannel ||
@@ -141,10 +138,13 @@ export class CommandHandler implements EventHandler {
               .replaceAll('{USER_ID}', interaction.user.id),
         error
       );
-      if (!data.description) {
-        data.description = 'An error occurred';
+      if (error instanceof DiscordCommandError) {
+        await this.sendError(interaction, error);
+      } else if (error instanceof DiscordCommandWarning) {
+        await this.sendWarning(interaction, error);
+      } else {
+        await this.sendError(interaction);
       }
-      await this.sendError(interaction, data);
     }
   }
 
@@ -156,10 +156,24 @@ export class CommandHandler implements EventHandler {
 
   private async sendError(
     interaction: CommandInteraction,
-    data: EventData
+    error?: Error
   ): Promise<void> {
     {
-      const embed = EmbedUtils.errorEmbed(data);
+      const embed = EmbedUtils.errorEmbed(error?.message, error?.name);
+      await InteractionUtils.send(interaction, embed);
+    }
+  }
+
+  private async sendWarning(
+    interaction: CommandInteraction,
+    error?: DiscordCommandWarning
+  ): Promise<void> {
+    {
+      const embed = EmbedUtils.warnEmbed(
+        error?.message,
+        'Warning',
+        error?.imageUrl
+      );
       await InteractionUtils.send(interaction, embed);
     }
   }

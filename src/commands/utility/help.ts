@@ -12,7 +12,8 @@ import {
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
 import { bot } from '../..';
-import { EventData, PaginationEmbed } from '../../models';
+import { PaginationEmbed } from '../../models';
+import { CommandNotFoundError } from '../../models/errors';
 import {
   ArrayUtils,
   EmbedUtils,
@@ -50,8 +51,7 @@ export class HelpCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const cmd = interaction.options.getString('command');
     const iconUrl = interaction.client.user.avatarURL();
@@ -62,17 +62,13 @@ export class HelpCommand extends Command {
 
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = this.createCommandListEmbed(prettyCommands, iconUrl);
-      await new PaginationEmbed(interaction, data, embed, 20).start();
+      await new PaginationEmbed(interaction, embed, 20).start();
     } else {
       //specific command
       const requestedCommand = this.findCommand(interaction, cmd);
 
       if (!requestedCommand) {
-        InteractionUtils.sendError(
-          data,
-          `Command \`${cmd.toLowerCase()}\` not found or you may not use it`
-        );
-        return;
+        throw new CommandNotFoundError(cmd);
       }
 
       const embed = this.createCommandHelpEmbed(requestedCommand, iconUrl);

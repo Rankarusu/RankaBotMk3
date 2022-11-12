@@ -1,7 +1,6 @@
 import { Message } from 'discord.js';
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventHandler } from '.';
-import { EventData } from '../models';
 import { Trigger } from '../triggers';
 
 const Config = require('../../config/config.json');
@@ -27,9 +26,7 @@ export class TriggerHandler implements EventHandler {
       return;
     }
 
-    const data = new EventData();
-
-    triggers.forEach((trigger) => trigger.execute(msg, data));
+    triggers.forEach((trigger) => trigger.execute(msg));
   }
 
   private findTriggers(msg: Message<boolean>) {

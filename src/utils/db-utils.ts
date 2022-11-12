@@ -1,6 +1,6 @@
 import { Exp, Reminder, Sticker } from '@prisma/client';
-import { Db } from '../services';
 import { Snowflake } from 'discord.js';
+import { Db } from '../services';
 
 export class DbUtils {
   //reminders
@@ -11,13 +11,22 @@ export class DbUtils {
   }
 
   public static async getRemindersByUserId(
-    interactionId: Snowflake
+    userId: Snowflake
   ): Promise<Reminder[]> {
     const reminders = await Db.reminder.findMany({
-      where: { userId: interactionId },
+      where: { userId },
       orderBy: { parsedTime: 'asc' },
     });
     return reminders;
+  }
+
+  public static async getReminderCountByUserId(
+    userId: Snowflake
+  ): Promise<number> {
+    const reminderCount = await Db.reminder.count({
+      where: { userId },
+    });
+    return reminderCount;
   }
 
   public static async createReminder(data: Reminder): Promise<void> {

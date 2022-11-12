@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import axios from 'axios';
 import { DadJokeCommand } from '../../../src/commands';
-import { EventData } from '../../../src/models';
+import { APICommunicationError } from '../../../src/models/errors';
 import { CommandTestHelper } from '../helper';
 
 describe('DadJoke', () => {
@@ -21,14 +20,10 @@ describe('DadJoke', () => {
     helper.expectSend();
   });
 
-  describe('getJoke', () => {
-    it('should send error if axios throws', async () => {
-      axios.get = jest.fn().mockImplementationOnce(() => {
-        throw new Error();
-      });
-      await expect(
-        helper.commandInstance['getJoke'](new EventData())
-      ).rejects.toThrowError();
+  it('should send error if getJoke throws', async () => {
+    helper.commandInstance['getJoke'] = jest.fn().mockImplementationOnce(() => {
+      throw new Error();
     });
+    await helper.executeWithError(new APICommunicationError());
   });
 });

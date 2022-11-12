@@ -1,11 +1,17 @@
 import { Reminder } from '@prisma/client';
-import * as chrono from 'chrono-node';
 import {
   ApplicationCommandOptionType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData, ReminderListSelectEmbed } from '../../models';
+import { ReminderListSelectEmbed } from '../../models';
+import {
+  PingInInputError,
+  ReminderCreationError,
+  ReminderIntervalTooShortError,
+  ReminderLimitError,
+  TimeParseError,
+} from '../../models/errors';
 import {
   ClientUtils,
   DateUtils,
@@ -66,13 +72,12 @@ export class RemindCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'list': {
-        const paginatedEmbed = new ReminderListSelectEmbed(interaction, data);
+        const paginatedEmbed = new ReminderListSelectEmbed(interaction);
         await paginatedEmbed.start();
         break;
       }
@@ -80,33 +85,16 @@ export class RemindCommand extends Command {
         const time = interaction.options.getString('time');
         let parsedTime: Date;
         try {
-          parsedTime = chrono.parseDate(
-            time,
-            { instant: new Date(), timezone: 'Europe/Berlin' },
-            { forwardDate: true }
-          );
-          parsedTime.setSeconds(0);
-          parsedTime.setMilliseconds(0);
-        } catch (e) {
-          InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-          return;
-        }
-
-        if (!parsedTime) {
-          // parsed time is null if parse is unsuccessful
-          InteractionUtils.sendError(data, `Could not parse the time: ${time}`);
-          return;
+          parsedTime = DateUtils.parseTime(time);
+        } catch (error) {
+          throw new TimeParseError(time);
         }
 
         //check for too short of a notice
         const in2minutes = new Date(new Date().getTime() + 2 * 60 * 1000);
 
         if (parsedTime < in2minutes) {
-          InteractionUtils.sendError(
-            data,
-            'Is your attention span really that small?'
-          );
-          return;
+          throw new ReminderIntervalTooShortError();
         }
 
         const notificationMessage =
@@ -114,11 +102,7 @@ export class RemindCommand extends Command {
 
         // send error if someone abuses mentions
         if (notificationMessage.match(/<@(.*?)>/)) {
-          InteractionUtils.sendError(
-            data,
-            'Termi was banned for that. Do you want to follow him?'
-          );
-          return;
+          throw new PingInInputError();
         }
 
         const unixTime = DateUtils.getUnixTime(parsedTime);
@@ -137,13 +121,20 @@ export class RemindCommand extends Command {
           invokeTime: interaction.createdAt,
           parsedTime,
         };
-        //TODO: handle upper limit for reminders per user
+
+        const reminderCount = await DbUtils.getReminderCountByUserId(
+          // limit per user and not per server
+          interaction.user.id
+        );
+
+        if (reminderCount >= 100) {
+          throw new ReminderLimitError();
+        }
 
         try {
           await DbUtils.createReminder(reminder);
         } catch {
-          InteractionUtils.sendError(data, 'Could not create reminder');
-          return;
+          throw new ReminderCreationError();
         }
         await InteractionUtils.send(interaction, successEmbed);
         break;

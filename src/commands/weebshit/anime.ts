@@ -7,7 +7,12 @@ import {
   EmbedField,
   PermissionsString,
 } from 'discord.js';
-import { AniListSearchItem, EventData, PaginationEmbed } from '../../models';
+import {
+  AniListSearchItem,
+  APICommunicationError,
+  PaginationEmbed,
+} from '../../models';
+import { AnimeNotFoundWarning } from '../../models/warnings';
 import { aniList } from '../../services';
 import {
   ClientUtils,
@@ -57,8 +62,7 @@ export class AnimeCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
@@ -68,19 +72,10 @@ export class AnimeCommand extends Command {
         try {
           media = await aniList.searchMedia(title);
         } catch (error) {
-          InteractionUtils.sendError(
-            data,
-            'An Error occurred while talking to the API'
-          );
-          return;
+          throw new APICommunicationError();
         }
         if (!media) {
-          InteractionUtils.sendWarning(
-            interaction,
-            data,
-            `I could not find any anime with the name \`${title}\``
-          );
-          return;
+          throw new AnimeNotFoundWarning(title);
         }
 
         const embed = this.createAniListSearchEmbed(media);
@@ -91,12 +86,7 @@ export class AnimeCommand extends Command {
       case 'schedule': {
         const pages = this.createPages();
 
-        const paginatedEmbed = new PaginationEmbed(
-          interaction,
-          data,
-          pages,
-          20
-        );
+        const paginatedEmbed = new PaginationEmbed(interaction, pages, 20);
         await paginatedEmbed.start();
       }
     }

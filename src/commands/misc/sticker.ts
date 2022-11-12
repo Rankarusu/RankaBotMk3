@@ -4,7 +4,13 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData, StickerListSelectEmbed } from '../../models';
+import { StickerListSelectEmbed } from '../../models';
+import {
+  InvalidMediaTypeError,
+  StickerAddError,
+  StickerAlreadyExistsError,
+  StickerNotFoundError,
+} from '../../models/errors';
 import {
   ClientUtils,
   DbUtils,
@@ -81,8 +87,7 @@ export class StickerCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
@@ -95,7 +100,7 @@ export class StickerCommand extends Command {
             interaction.guildId
           );
           if (!sticker) {
-            InteractionUtils.sendError(data, `Sticker ${name} not found`);
+            throw new StickerNotFoundError(name);
           }
           const embed = await this.createStickerEmbed(interaction, sticker);
           InteractionUtils.send(interaction, embed);
@@ -110,18 +115,11 @@ export class StickerCommand extends Command {
           );
 
           if (stickerNames.find((sticker) => sticker.stickerName === name)) {
-            InteractionUtils.sendError(
-              data,
-              `A Sticker with name \`${name}\`already exists on this server.`
-            );
+            throw new StickerAlreadyExistsError(name);
           }
 
           if (!allowedTypes.includes(image.contentType)) {
-            InteractionUtils.sendError(
-              data,
-              `The image you provided is not a valid media type.
-            Please use one of the following types: ${allowedTypes.join(', ')}`
-            );
+            throw new InvalidMediaTypeError(allowedTypes.join(', '));
           }
 
           const sticker: Sticker = {
@@ -136,10 +134,7 @@ export class StickerCommand extends Command {
           try {
             await DbUtils.createSticker(sticker);
           } catch (error) {
-            InteractionUtils.sendError(
-              data,
-              'Something went wrong while adding the sicker.'
-            );
+            throw new StickerAddError();
           }
 
           const embed = this.createStickerAddSuccessEmbed(name, image);
@@ -148,7 +143,7 @@ export class StickerCommand extends Command {
         break;
       case 'list':
         {
-          const paginatedEmbed = new StickerListSelectEmbed(interaction, data);
+          const paginatedEmbed = new StickerListSelectEmbed(interaction);
           await paginatedEmbed.start();
           //merge list and remove into one as we did with remind.
           //rewrite remind pagination embed to fit poll style. waaaaay cleaner

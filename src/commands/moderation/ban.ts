@@ -7,7 +7,10 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models';
+import {
+  InvalidBanTargetError,
+  UnbannableUserError,
+} from '../../models/errors';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -51,8 +54,7 @@ export class BanCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['BanMembers'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
@@ -65,16 +67,11 @@ export class BanCommand extends Command {
       Config.client.id === member.id
     ) {
       // don't ban the bot or the developer
-      InteractionUtils.sendError(data, 'You cannot ban this user.');
-      return;
+      throw new InvalidBanTargetError();
     }
 
     if (!member.bannable) {
-      InteractionUtils.sendError(
-        data,
-        "I cannot ban this user. Make sure my role is above the user's role."
-      );
-      return;
+      throw new UnbannableUserError();
     }
 
     const embed = this.createdBanEmbed(member, deleteMessageDays, reason);

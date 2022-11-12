@@ -1,4 +1,3 @@
-import * as chrono from 'chrono-node';
 import {
   ApplicationCommandOptionType,
   RESTJSONErrorCodes,
@@ -9,7 +8,11 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models';
+import { ParsedTimeInPastError, TimeParseError } from '../../models/errors';
+import {
+  AlreadyTimedOutWarning,
+  TimeoutAPILimitWarning,
+} from '../../models/warnings';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -51,8 +54,7 @@ export class TimeoutCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['ModerateMembers'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
@@ -60,59 +62,45 @@ export class TimeoutCommand extends Command {
     let parsedTime: Date;
 
     try {
-      parsedTime = this.parseTime(timeStr);
+      parsedTime = DateUtils.parseTime(timeStr);
     } catch (error) {
-      InteractionUtils.sendError(data, `Could not parse the time: ${timeStr}`);
-      return;
+      throw new TimeParseError(timeStr);
+    }
+
+    if (parsedTime < interaction.createdAt) {
+      throw new ParsedTimeInPastError(timeStr);
     }
 
     if (member.isCommunicationDisabled()) {
-      const timeout = member.communicationDisabledUntil;
-      if (timeout > parsedTime) {
-        InteractionUtils.sendWarning(
-          interaction,
-          data,
-          `${member.user.tag} is already muted until <t:${DateUtils.getUnixTime(
-            timeout
-          )}:f>`
-        );
-        return;
+      const timedOutUntil = member.communicationDisabledUntil;
+      if (timedOutUntil > parsedTime) {
+        throw new AlreadyTimedOutWarning(member, timedOutUntil);
       }
     }
+
     try {
       await member.disableCommunicationUntil(parsedTime, reason);
     } catch (error) {
       if (error.code === RESTJSONErrorCodes.InvalidFormBodyOrContentType) {
-        InteractionUtils.sendError(
-          data,
-          'The Discord API limits timeouts to 4 weeks.'
-        );
-        return;
+        throw new TimeoutAPILimitWarning();
       }
     }
-    const embed = EmbedUtils.memberEmbed(
+    const embed = this.createTimeoutEmbed(member, parsedTime);
+    await InteractionUtils.send(interaction, embed);
+  }
+
+  private createTimeoutEmbed(
+    member: GuildMember & {
+      communicationDisabledUntilTimestamp: number;
+      readonly communicationDisabledUntil: Date;
+    },
+    parsedTime: Date
+  ) {
+    return EmbedUtils.memberEmbed(
       member,
       `${member.user.tag} has been muted until <t:${DateUtils.getUnixTime(
         parsedTime
       )}:f>`
     );
-    await InteractionUtils.send(interaction, embed);
-  }
-
-  private parseTime(timeStr: string) {
-    const now = new Date();
-    const parsedTime = chrono.parseDate(
-      timeStr,
-      { instant: now, timezone: 'Europe/Berlin' },
-      { forwardDate: true }
-    );
-
-    if (!parsedTime) {
-      // parsed time is null if parse is unsuccessful
-      throw new Error(`Could not parse the time: ${timeStr}`);
-    } else if (parsedTime < now) {
-      throw new Error(`${timeStr} lies in the past.`);
-    }
-    return parsedTime;
   }
 }

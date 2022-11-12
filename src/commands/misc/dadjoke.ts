@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { EventData } from '../../models';
+import { APICommunicationError } from '../../models/errors';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -25,10 +25,14 @@ export class DadJokeCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
-    const joke = await this.getJoke(data);
+    let joke: string;
+    try {
+      joke = await this.getJoke();
+    } catch (error) {
+      throw new APICommunicationError();
+    }
     const embed = this.createDadJokeEmbed(joke);
     await InteractionUtils.send(interaction, embed);
   }
@@ -39,22 +43,14 @@ export class DadJokeCommand extends Command {
     return embed;
   }
 
-  private async getJoke(data: EventData): Promise<string> {
-    let response: AxiosResponse;
-    try {
-      response = await axios.get(url, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': 'axios',
-        },
-      });
-    } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error occurred while communicating with the API'
-      );
-      return;
-    }
+  private async getJoke(): Promise<string> {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'axios',
+      },
+    });
+
     const joke = response.data.joke;
     return joke;
   }

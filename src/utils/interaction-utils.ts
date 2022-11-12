@@ -17,9 +17,7 @@ import {
   ThreadChannel,
   User,
 } from 'discord.js';
-import { EmbedUtils } from '.';
 import { Command } from '../commands';
-import { EventData } from '../models';
 
 const Config = require('../../config/config.json');
 
@@ -174,25 +172,18 @@ export class InteractionUtils {
     }
   }
 
-  public static sendError(data: EventData, message: string) {
-    //we set event data and throw so the command handler can take over.
-    data.description = message;
-    throw new Error(message);
-  }
-
-  public static sendWarning(
-    interaction: CommandInteraction | MessageComponentInteraction,
-    data: EventData,
-    message: string,
-    imageUrl?: string
-  ) {
-    data.description = message;
-    const embed = EmbedUtils.warnEmbed(data);
-    if (imageUrl) {
-      embed.setImage(imageUrl);
-    }
-    InteractionUtils.send(interaction, embed);
-  }
+  // public static sendWarning(
+  //   interaction: CommandInteraction | MessageComponentInteraction,
+  //   message: string,
+  //   imageUrl?: string
+  // ) {
+  //   data.description = message;
+  //   const embed = EmbedUtils.warnEmbed(data);
+  //   if (imageUrl) {
+  //     embed.setImage(imageUrl);
+  //   }
+  //   InteractionUtils.send(interaction, embed);
+  // }
 
   public static canUse(
     command: Command,

@@ -1,3 +1,5 @@
+import * as chrono from 'chrono-node';
+
 export class DateUtils {
   public static getUnixTime(date: Date): number {
     return Math.floor(date.getTime() / 1000);
@@ -29,5 +31,23 @@ export class DateUtils {
 
   public static getWeekdayFromNumber(number: number): string {
     return this.weekdays[number];
+  }
+
+  public static parseTime(timeStr: string) {
+    const now = new Date();
+    const parsedTime = chrono.parseDate(
+      timeStr,
+      { instant: now, timezone: 'Europe/Berlin' },
+      { forwardDate: true }
+    );
+
+    if (!parsedTime) {
+      // parsed time is null if parse is unsuccessful
+      throw new Error(`Could not parse the time: ${timeStr}`);
+    }
+
+    parsedTime.setSeconds(0);
+    parsedTime.setMilliseconds(0);
+    return parsedTime;
   }
 }

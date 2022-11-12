@@ -7,7 +7,7 @@ import {
   PermissionsString,
   User,
 } from 'discord.js';
-import { EventData } from '../../models';
+import { UnbanError, UserNotBannedError } from '../../models/errors';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -42,8 +42,7 @@ export class UnbanCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['BanMembers'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const memberId = interaction.options.getString('user-id');
     const reason = interaction.options.getString('reason');
@@ -52,15 +51,13 @@ export class UnbanCommand extends Command {
     try {
       bannedUser = await this.getBannedUser(interaction, memberId);
     } catch (error) {
-      InteractionUtils.sendError(data, 'There is no user banned with that id');
-      return;
+      throw new UserNotBannedError();
     }
 
     try {
       interaction.guild.bans.remove(bannedUser);
     } catch (error) {
-      InteractionUtils.sendError(data, 'Failed to unban user');
-      return;
+      throw new UnbanError();
     }
 
     const embed = this.createUnbanEmbed(bannedUser, reason);

@@ -8,7 +8,10 @@ import {
   PermissionsString,
 } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { EventData } from '../../models';
+import {
+  InvalidKickTargetError,
+  UnkickableUserError,
+} from '../../models/errors';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 
 const Config = require('../../../config/config.json');
@@ -43,8 +46,7 @@ export class KickCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['KickMembers'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const member = interaction.options.getMember('user') as GuildMember;
     const reason = interaction.options.getString('reason');
@@ -54,16 +56,11 @@ export class KickCommand extends Command {
       Config.client.id === member.id
     ) {
       // don't kick the bot or the developer
-      InteractionUtils.sendError(data, 'You cannot kick this user.');
-      return;
+      throw new InvalidKickTargetError();
     }
 
     if (!member.kickable) {
-      InteractionUtils.sendError(
-        data,
-        "I cannot kick this user. Make sure my role is above the user's role."
-      );
-      return;
+      throw new UnkickableUserError();
     }
 
     const embed = this.createKickEmbed(member, reason);

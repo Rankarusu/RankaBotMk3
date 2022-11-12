@@ -15,7 +15,6 @@ import {
   User,
   UserResolvable,
 } from 'discord.js';
-import { EventData } from '.';
 import {
   DateUtils,
   DbUtils,
@@ -36,8 +35,6 @@ export class PaginationEmbed {
   message: Message;
 
   pages: EmbedBuilder[];
-
-  protected data: EventData;
 
   protected timeout?: number;
 
@@ -76,7 +73,6 @@ export class PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
-    data: EventData,
     pages?: EmbedBuilder[] | EmbedBuilder,
     limit?: number,
     timeout?: number
@@ -90,7 +86,6 @@ export class PaginationEmbed {
     }
     this.author = interaction.user;
     this.timeout = timeout ? timeout : 60000;
-    this.data = data;
   }
 
   public async start(): Promise<void> {
@@ -296,13 +291,12 @@ export class ExtendedPaginationEmbed extends PaginationEmbed {
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
-    data: EventData,
     pages?: EmbedBuilder[] | EmbedBuilder,
     additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     limit?: number,
     timeout?: number
   ) {
-    super(interaction, data, pages, limit, timeout);
+    super(interaction, pages, limit, timeout);
     this.additionalRows = additionalRows || [];
   }
 
@@ -354,11 +348,7 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (reminders.length === 0) {
-      await InteractionUtils.sendWarning(
-        this.interaction,
-        this.data,
-        noReminderWarning
-      );
+      await InteractionUtils.sendWarning(this.interaction, noReminderWarning);
       return;
     }
 

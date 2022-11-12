@@ -27,11 +27,15 @@ import {
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
+import { ExtendedPaginationEmbed, PokemonDamageRelations } from '../../models';
 import {
-  EventData,
-  ExtendedPaginationEmbed,
-  PokemonDamageRelations,
-} from '../../models';
+  APICommunicationError,
+  PokemonAbilityNotFoundError,
+  PokemonBerryNotFoundError,
+  PokemonItemNotFoundError,
+  PokemonMoveNotFoundError,
+  PokemonNotFoundError,
+} from '../../models/errors';
 import { types } from '../../static/pokemonDamageRelations.json';
 import {
   ClientUtils,
@@ -262,8 +266,7 @@ export class DexCommand extends Command {
   });
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
@@ -299,11 +302,7 @@ export class DexCommand extends Command {
             })
           );
         } catch (error) {
-          //pokenode throws an error when it can't find a pokemon
-          InteractionUtils.sendError(
-            data,
-            "I couldn't find any PokéMon matching that name or ID."
-          );
+          throw new PokemonNotFoundError();
         }
         const pages: EmbedBuilder[] = [];
         const baseEmbed = await this.createPokemonEmbed(
@@ -334,12 +333,9 @@ export class DexCommand extends Command {
 
         const actionRow = this.createActionRow(pokemon.species.name);
 
-        const paginatedEmbed = new ExtendedPaginationEmbed(
-          interaction,
-          data,
-          pages,
-          [actionRow]
-        );
+        const paginatedEmbed = new ExtendedPaginationEmbed(interaction, pages, [
+          actionRow,
+        ]);
 
         paginatedEmbed.start();
         break;
@@ -350,14 +346,7 @@ export class DexCommand extends Command {
         try {
           ability = await this.api.pokemon.getAbilityByName(name);
         } catch {
-          InteractionUtils.sendError(
-            data,
-            `I couldn't find any abilities matching that name or ID. 
-            
-            **Note**: The API uses kebab-case for abilities.
-            E.G if you want to find Bad Dreams, you would use 'bad-dreams'.
-            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
-          );
+          throw new PokemonAbilityNotFoundError();
         }
 
         const embed = this.createAbilityEmbed(ability);
@@ -377,10 +366,7 @@ export class DexCommand extends Command {
           berry = await this.api.berry.getBerryByName(sanitizedBerryString);
           berryItem = await this.api.item.getItemByName(berry.item.name);
         } catch {
-          InteractionUtils.sendError(
-            data,
-            `I couldn't find any berries matching that name or ID.`
-          );
+          throw new PokemonBerryNotFoundError();
         }
         const embed = this.createBerryEmbed(berry, berryItem);
         await InteractionUtils.send(interaction, embed);
@@ -392,14 +378,7 @@ export class DexCommand extends Command {
         try {
           item = await this.api.item.getItemByName(name);
         } catch (error) {
-          InteractionUtils.sendError(
-            data,
-            `I couldn't find any items matching that name or ID.
-            
-            **Note**: The API uses kebab-case for abilities.
-            E.G if you want to find the fishing rod, you would use 'fishing-rod'.
-            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
-          );
+          throw new PokemonItemNotFoundError();
         }
         const embed = this.createItemEmbed(item);
         await InteractionUtils.send(interaction, embed);
@@ -411,14 +390,7 @@ export class DexCommand extends Command {
         try {
           move = await this.api.move.getMoveByName(name);
         } catch (error) {
-          InteractionUtils.sendError(
-            data,
-            `I couldn't find any moves matching that name or ID.
-            
-            **Note**: The API uses kebab-case for abilities.
-            E.G if you want to find hyper beam, you would use 'hyper-beam'.
-            There will be a point in the future where I will implement fuzzy search, but today is not the day.`
-          );
+          throw new PokemonMoveNotFoundError();
         }
         const embed = this.createMoveEmbed(move);
         await InteractionUtils.send(interaction, embed);
@@ -430,10 +402,7 @@ export class DexCommand extends Command {
         try {
           nature = await this.api.pokemon.getNatureByName(name);
         } catch (error) {
-          InteractionUtils.sendError(
-            data,
-            'An Error occurred while talking to the API.'
-          );
+          throw new APICommunicationError();
         }
         const embed = this.createNatureEmbed(nature);
         await InteractionUtils.send(interaction, embed);

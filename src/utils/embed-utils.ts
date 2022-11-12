@@ -6,7 +6,7 @@ import {
   GuildMember,
   User,
 } from 'discord.js';
-import { DanbooruPost, EventData, RedditPost, Rule34Post } from '../models';
+import { DanbooruPost, RedditPost, Rule34Post } from '../models';
 
 const Config = require('../../config/config.json');
 const blessImage = 'https://imgur.com/j6S4CLe.png';
@@ -15,32 +15,27 @@ const danbooruBlue = '#0075f8';
 const blessYellow = '#F9DC92';
 
 export class EmbedUtils {
-  public static errorEmbed(data: EventData) {
+  public static errorEmbed(description?: string, title?: string) {
     const embed = new EmbedBuilder()
-      .setTitle('Error')
+      .setTitle(title || 'Error')
       .setColor(Config.colors.error as ColorResolvable)
-      .setDescription(data.description)
+      .setDescription(description || 'An error occurred')
       .setTimestamp();
-
-    if (data.fields) {
-      embed.addFields(data.fields);
-    }
     return embed;
   }
 
-  public static warnEmbed(data: EventData) {
+  public static warnEmbed(
+    description?: string,
+    title?: string,
+    imageUrl?: string
+  ) {
     const embed = new EmbedBuilder()
-      .setTitle('Warning')
+      .setTitle(title || 'Warning')
       .setColor(Config.colors.warning as ColorResolvable)
-      .setDescription(data.description)
-      .setTimestamp();
+      .setDescription(description)
+      .setTimestamp()
+      .setImage(imageUrl);
 
-    if (data.fields) {
-      embed.addFields(data.fields);
-    }
-    if (data.imageUrl) {
-      embed.setImage(data.imageUrl);
-    }
     return embed;
   }
 

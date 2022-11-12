@@ -1,5 +1,6 @@
 export { ArrayUtils } from './array-utils';
 export { ClientUtils } from './client-utils';
+export {} from './commands/dnd-utils';
 export { DateUtils } from './date-utils';
 export { DbUtils } from './db-utils';
 export { EmbedUtils } from './embed-utils';

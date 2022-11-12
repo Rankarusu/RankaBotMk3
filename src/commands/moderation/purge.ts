@@ -9,7 +9,7 @@ import {
   PartialMessage,
   PermissionsString,
 } from 'discord.js';
-import { EventData } from '../../models';
+import { MessageDeleteError } from '../../models/errors';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
@@ -43,8 +43,7 @@ export class PurgeCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['ManageMessages'];
 
   public async execute(
-    interaction: ChatInputCommandInteraction,
-    data: EventData
+    interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const messagesAmount = interaction.options.getNumber('amount');
 
@@ -53,11 +52,7 @@ export class PurgeCommand extends Command {
     try {
       messages = await interaction.channel.bulkDelete(messagesAmount, true);
     } catch (error) {
-      InteractionUtils.sendError(
-        data,
-        'An error ocurred while deleting messages.'
-      );
-      return;
+      throw new MessageDeleteError();
     }
 
     const embed = EmbedUtils.successEmbed(

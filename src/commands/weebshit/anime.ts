@@ -146,7 +146,6 @@ export class AnimeCommand extends Command {
   }
 
   private createPages(schedule: AniListScheduleDay[]) {
-    console.log(schedule);
     const pages = schedule.map((day) => {
       let fields: EmbedField[] = day.airing.map((anime) => {
         return {

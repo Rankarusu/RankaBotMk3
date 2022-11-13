@@ -5,25 +5,61 @@ on:
       - master
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
 jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+    env:
+      DB_PASSWORD: test
+
+    container: node:lts
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      db:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: create-json
+      - name: Create config.json
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
           name: 'config.json'
           json: ${{ secrets.CONFIG }}
           dir: 'config/'
+
       - name: Install dependencies
         run: npm install
+
+      - name: Generate Prisma Client
+        run: npm run prisma:gen
+
+      - name: Connect to PostgreSQL
+        run: npm run prisma:migrate:deploy
+        env:
+          POSTGRES_HOST: db
+          POSTGRES_PORT: 5432
+          POSTGRES_PASSWORD: test
+          DATABASE_URL: 'postgresql://postgres:test@db:5432/rankabot?schema=public'
+
       - name: Test and coverage
         run: npm run test:coverage
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

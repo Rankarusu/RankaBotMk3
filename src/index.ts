@@ -37,7 +37,6 @@ import {
   Rule34Command,
   StickerCommand,
   TarotCommand,
-  TestCommand,
   TimeoutCommand,
   UnbanCommand,
   UntimeoutCommand,
@@ -82,8 +81,48 @@ const Config = require('../config/config.json');
 
 const rest = new REST().setToken(Config.client.token);
 
-// for help command
-export let bot: Bot;
+//export a function here so we can access all commands in tests from a single source. Jest had problems when i tried to put it in a class.
+export function getCommandList() {
+  const helpCommand = new HelpCommand();
+
+  const commands: Command[] = [
+    helpCommand,
+    new AnimeCommand(),
+    new BanCommand(),
+    new BlessCommand(),
+    new BofhCommand(),
+    new ChooseCommand(),
+    new CoinflipCommand(),
+    new DadJokeCommand(),
+    new DanbooruCommand(),
+    new DexCommand(),
+    new EightballCommand(),
+    new ExpCommand(),
+    new FactCommand(),
+    new HugCommand(),
+    new InfoCommand(),
+    new KickCommand(),
+    new LewdsCommand(),
+    new PingCommand(),
+    new PollCommand(),
+    new PurgeCommand(),
+    new RedditCommand(),
+    new RemindCommand(),
+    new RollCommand(),
+    new Rule34Command(),
+    new StickerCommand(),
+    new TarotCommand(),
+    // new TestCommand(),
+    new TimeoutCommand(),
+    new UnbanCommand(),
+    new UntimeoutCommand(),
+    new UwuifyCommand(),
+  ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
+
+  helpCommand.commands = commands;
+
+  return commands;
+}
 
 async function start(): Promise<void> {
   const client = new Client({
@@ -95,40 +134,7 @@ async function start(): Promise<void> {
   });
 
   // Commands
-  const commands: Command[] = [
-    new PingCommand(),
-    new TestCommand(),
-    new RemindCommand(),
-    new HelpCommand(),
-    new KickCommand(),
-    new BanCommand(),
-    new UnbanCommand(),
-    new PurgeCommand(),
-    new TimeoutCommand(),
-    new UntimeoutCommand(),
-    new InfoCommand(),
-    new CoinflipCommand(),
-    new EightballCommand(),
-    new ChooseCommand(),
-    new TarotCommand(),
-    new BofhCommand(),
-    new HugCommand(),
-    new DadJokeCommand(),
-    new FactCommand(),
-    new PollCommand(),
-    new StickerCommand(),
-    new AnimeCommand(),
-    new DexCommand(),
-    new Rule34Command(),
-    new DanbooruCommand(),
-    new LewdsCommand(),
-    new RedditCommand(),
-    new UwuifyCommand(),
-    new RollCommand(),
-    new BlessCommand(),
-    new ExpCommand(),
-  ].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
-
+  const commands: Command[] = getCommandList();
   // Reactions
   const reactions: Reaction[] = [];
 
@@ -151,7 +157,7 @@ async function start(): Promise<void> {
 
   // Autocompletes
   const autocompletes: Autocomplete[] = [
-    new CommandAutocomplete(),
+    new CommandAutocomplete(commands),
     new PokemonAutocomplete(),
   ];
 
@@ -164,7 +170,7 @@ async function start(): Promise<void> {
   const autoCompleteHandler = new AutoCompleteHandler(autocompletes);
 
   // Bot
-  bot = new Bot(
+  const bot = new Bot(
     Config.client.token,
     client,
     messageHandler,

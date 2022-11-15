@@ -3,17 +3,21 @@ import {
   AutocompleteFocusedOption,
 } from 'discord.js';
 import { Autocomplete } from '.';
-import { bot } from '..';
+import { Command } from '../commands';
 
 export class CommandAutocomplete implements Autocomplete {
   public name = 'command';
 
-  public execute(focusedValue: AutocompleteFocusedOption) {
-    const commands = bot.getCommands();
+  private commands: Command[];
 
+  constructor(commands: Command[]) {
+    this.commands = commands;
+  }
+
+  public execute(focusedValue: AutocompleteFocusedOption) {
     const filtered: ApplicationCommandOptionChoiceData[] = [];
     let limit = 0;
-    for (const command of commands) {
+    for (const command of this.commands) {
       if (
         command.metadata.name
           .toLowerCase()

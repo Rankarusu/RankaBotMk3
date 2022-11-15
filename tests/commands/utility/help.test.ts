@@ -1,38 +1,6 @@
 import { CommandInteractionOption } from 'discord.js';
-import { bot } from '../../../src';
-import {
-  AnimeCommand,
-  BanCommand,
-  BlessCommand,
-  BofhCommand,
-  ChooseCommand,
-  CoinflipCommand,
-  Command,
-  DadJokeCommand,
-  DanbooruCommand,
-  DexCommand,
-  EightballCommand,
-  ExpCommand,
-  FactCommand,
-  HelpCommand,
-  HugCommand,
-  InfoCommand,
-  KickCommand,
-  LewdsCommand,
-  PingCommand,
-  PollCommand,
-  PurgeCommand,
-  RedditCommand,
-  RemindCommand,
-  RollCommand,
-  Rule34Command,
-  StickerCommand,
-  TarotCommand,
-  TimeoutCommand,
-  UnbanCommand,
-  UntimeoutCommand,
-  UwuifyCommand,
-} from '../../../src/commands';
+import { getCommandList } from '../../../src';
+import { Command, HelpCommand } from '../../../src/commands';
 import { CommandNotFoundError, PaginationEmbed } from '../../../src/models';
 import { InteractionUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
@@ -49,38 +17,7 @@ const invalidCommandInput = [
 ];
 
 // not the prettiest solution, but I have no clue how I would import this.
-const commands: Command[] = [
-  new PingCommand(),
-  new RemindCommand(),
-  new HelpCommand(),
-  new KickCommand(),
-  new BanCommand(),
-  new UnbanCommand(),
-  new PurgeCommand(),
-  new TimeoutCommand(),
-  new UntimeoutCommand(),
-  new InfoCommand(),
-  new CoinflipCommand(),
-  new EightballCommand(),
-  new ChooseCommand(),
-  new TarotCommand(),
-  new BofhCommand(),
-  new HugCommand(),
-  new DadJokeCommand(),
-  new FactCommand(),
-  new PollCommand(),
-  new StickerCommand(),
-  new AnimeCommand(),
-  new DexCommand(),
-  new Rule34Command(),
-  new DanbooruCommand(),
-  new LewdsCommand(),
-  new RedditCommand(),
-  new UwuifyCommand(),
-  new RollCommand(),
-  new BlessCommand(),
-  new ExpCommand(),
-].sort((a, b) => (a.metadata.name < b.metadata.name ? -1 : 1));
+const commands: Command[] = getCommandList();
 
 const commandInputs = commands.map((command) => [
   [
@@ -93,13 +30,14 @@ const commandInputs = commands.map((command) => [
 ]);
 
 describe('Help', () => {
-  const helper = new CommandTestHelper(new HelpCommand());
+  const helpCommand = new HelpCommand();
+  helpCommand.commands = commands;
+  const helper = new CommandTestHelper(helpCommand);
   InteractionUtils.canUse = jest.fn(() => true);
-  bot.getCommands = jest.fn(() => commands);
 
   beforeEach(() => {
     helper.resetInput();
-    jest.restoreAllMocks();
+    // jest.restoreAllMocks();
   });
 
   describe('all', () => {

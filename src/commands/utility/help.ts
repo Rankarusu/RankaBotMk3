@@ -11,7 +11,6 @@ import {
 } from 'discord.js';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { bot } from '../..';
 import { PaginationEmbed } from '../../models';
 import { CommandNotFoundError } from '../../models/errors';
 import {
@@ -50,6 +49,8 @@ export class HelpCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
+  public commands: Command[] = [];
+
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
@@ -58,7 +59,7 @@ export class HelpCommand extends Command {
 
     if (!cmd) {
       // all commands
-      const commands = bot.getCommands();
+      const commands = this.commands;
       const prettyCommands = this.getPrettyCommandList(commands, interaction);
       const embed = this.createCommandListEmbed(prettyCommands, iconUrl);
 
@@ -98,8 +99,7 @@ export class HelpCommand extends Command {
   }
 
   private findCommand(interaction: CommandInteraction, cmd: string) {
-    return bot
-      .getCommands()
+    return this.commands
       .filter((command: Command) => {
         return (
           !command.developerOnly &&

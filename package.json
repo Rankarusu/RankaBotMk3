@@ -25,7 +25,8 @@
     "postinstall": "patch-package",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --forceExit",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --coverage --ci --runInBand --forceExit",
     "commit": "cz",
     "release": "standard-version --no-verify"
   },

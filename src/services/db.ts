@@ -55,13 +55,6 @@ if (Config.env === 'development') {
   global.Db = Db;
 }
 
-// if (Config.env === 'development') {
-//   //don't spam logs every seconds in prod.
-//   Db.$on('query', (e: QueryEvent) => {
-//     Logger.info(LogMessages.info.prismaQuery.replaceAll('{QUERY}', e.query));
-//   });
-// }
-
 Db.$on('error', (e: LogEvent) => {
   Logger.info(LogMessages.error.prismaError.replaceAll('{TEXT}', e.message));
 });

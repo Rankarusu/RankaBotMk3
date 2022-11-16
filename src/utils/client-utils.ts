@@ -7,14 +7,10 @@ export class ClientUtils {
     client: Client,
     channelId: string
   ): Promise<TextChannel> {
-    try {
-      const channel: TextChannel = (await client.channels.fetch(
-        channelId
-      )) as TextChannel;
-      return channel;
-    } catch (error) {
-      throw error;
-    }
+    const channel: TextChannel = (await client.channels.fetch(
+      channelId
+    )) as TextChannel;
+    return channel;
   }
 
   public static async getMessage(
@@ -22,17 +18,12 @@ export class ClientUtils {
     channelId: Snowflake,
     messageId: Snowflake
   ): Promise<Message> {
-    try {
-      const channel: TextChannel = await ClientUtils.getChannel(
-        client,
-        channelId
-      );
-      const message: Message = await channel.messages.fetch(messageId);
-      return message;
-    } catch (error) {
-      //filtering maybe
-      throw error;
-    }
+    const channel: TextChannel = await ClientUtils.getChannel(
+      client,
+      channelId
+    );
+    const message: Message = await channel.messages.fetch(messageId);
+    return message;
   }
 
   public static APICallCommandRateLimiter() {

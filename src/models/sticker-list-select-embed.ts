@@ -6,7 +6,6 @@ import {
   EmbedField,
   SelectMenuBuilder,
   SelectMenuOptionBuilder,
-  User,
 } from 'discord.js';
 import { DbUtils, EmbedUtils, InteractionUtils, MessageUtils } from '../utils';
 import { PaginatedSelectEmbed } from './paginated-select-embed';
@@ -79,13 +78,10 @@ export class StickerListSelectEmbed extends PaginatedSelectEmbed {
 
   protected initializeAdditionalCollectors(): void {
     const interactionCollector = this.message.createMessageComponentCollector({
-      componentType: ComponentType.SelectMenu,
+      componentType: ComponentType.StringSelect,
       max: 5,
       filter: (x) => {
-        return (
-          this.interaction.user &&
-          x.user.id === (this.interaction.user as User).id
-        );
+        return this.interaction.user && x.user.id === this.interaction.user.id;
       },
     });
 

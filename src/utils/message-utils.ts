@@ -1,14 +1,15 @@
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import {
   ActionRowBuilder,
+  BaseMessageOptions,
   ButtonBuilder,
   DiscordAPIError,
   EmbedBuilder,
   EmojiResolvable,
   Message,
   MessageEditOptions,
-  BaseMessageOptions,
   MessageReaction,
+  MessageReplyOptions,
   SelectMenuBuilder,
   StartThreadOptions,
   TextBasedChannel,
@@ -24,54 +25,65 @@ export class MessageUtils {
     content: string | EmbedBuilder | Array<EmbedBuilder> | BaseMessageOptions
   ): Promise<Message> {
     try {
-      const options: BaseMessageOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
+      const options: BaseMessageOptions = this.setContent(content);
       return await target.send(options);
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  private static setContent(
+    content:
+      | string
+      | EmbedBuilder
+      | EmbedBuilder[]
+      | MessageReplyOptions
+      | MessageEditOptions
+  ): BaseMessageOptions {
+    if (typeof content === 'string') {
+      return { content };
+    } else if (content instanceof EmbedBuilder) {
+      return { embeds: [content] };
+    } else if (content instanceof Array<EmbedBuilder>) {
+      return { embeds: content };
+    } else {
+      return content;
     }
   }
 
   public static async reply(
     msg: Message,
-    content: string | EmbedBuilder | Array<EmbedBuilder> | BaseMessageOptions
+    content: string | EmbedBuilder | Array<EmbedBuilder> | MessageReplyOptions
   ): Promise<Message> {
     try {
-      const options: BaseMessageOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
+      const options: MessageReplyOptions = this.setContent(content);
       return await msg.reply(options);
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
   public static async edit(
     msg: Message,
     content?: string | EmbedBuilder | Array<EmbedBuilder> | MessageEditOptions,
-    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
-      const options: MessageEditOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
+      const options: MessageEditOptions = this.setContent(content);
 
       return await msg.edit({ ...options, components });
     } catch (error) {
@@ -93,7 +105,14 @@ export class MessageUtils {
     try {
       return await msg.react(emoji);
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -101,7 +120,14 @@ export class MessageUtils {
     try {
       return await msg.pin();
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -109,7 +135,14 @@ export class MessageUtils {
     try {
       return await msg.unpin();
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -120,7 +153,14 @@ export class MessageUtils {
     try {
       return await msg.startThread(options);
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -128,7 +168,14 @@ export class MessageUtils {
     try {
       return await msg.delete();
     } catch (error) {
-      throw error;
+      if (
+        error instanceof DiscordAPIError &&
+        IGNORED_ERRORS.includes(error.code as number)
+      ) {
+        return;
+      } else {
+        throw error;
+      }
     }
   }
 }

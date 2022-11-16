@@ -5,9 +5,9 @@ export class StringUtils {
     options: readonly CommandInteractionOption[]
   ) {
     let optionString = '';
-    for (let i = 0; i < options.length; i++) {
-      optionString += `${options[i].name}: ${options[i].value} `;
-    }
+    options.forEach((option) => {
+      optionString += `${option.name}: ${option.value} `;
+    });
     return optionString;
   }
 

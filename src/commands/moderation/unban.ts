@@ -55,7 +55,7 @@ export class UnbanCommand extends Command {
     }
 
     try {
-      interaction.guild.bans.remove(bannedUser);
+      await interaction.guild.bans.remove(bannedUser);
     } catch (error) {
       throw new UnbanError();
     }

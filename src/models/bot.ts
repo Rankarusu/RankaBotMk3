@@ -79,7 +79,7 @@ export class Bot {
 
     this.ready = true;
     Logger.info(LogMessages.info.clientReady.replaceAll('{USER_TAG}', userTag));
-    await this.registerGuildCommands();
+    this.registerGuildCommands();
     this.client.user.setActivity('Hello, World!');
 
     //put the application command ids into our command classes so we can mention them in the help command.
@@ -125,10 +125,7 @@ export class Bot {
       //TODO: buttonInteraction later
     } else if (interaction.isSelectMenu()) {
       try {
-        await this.selectMenuHandler.process(
-          interaction,
-          interaction.message as Message
-        );
+        await this.selectMenuHandler.process(interaction, interaction.message);
       } catch (error) {
         Logger.error(LogMessages.error.selectMenu, error);
       }
@@ -183,7 +180,6 @@ export class Bot {
     );
     const commands = this.getCommands();
     const commandsJson = commands.map((command) => command.metadata);
-    // const guildIds = this.client.guilds.cache.map((guild) => guild.id);
 
     const guildIds: string[] = Config.devServers;
     //if we register all commands globally and locally, we will see them twice on every server.

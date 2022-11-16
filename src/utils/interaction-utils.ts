@@ -55,35 +55,29 @@ export class InteractionUtils {
       | EmbedBuilder
       | Array<EmbedBuilder>
       | InteractionReplyOptions,
-    // components?: APIActionRowComponent<APIMessageActionRowComponent>[],
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     files?: AttachmentBuilder[],
     hidden = false
   ): Promise<Message> {
     try {
-      const options: InteractionReplyOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
+      const options: InteractionReplyOptions = this.setContent(
+        content
+      ) as InteractionReplyOptions;
       if (interaction.deferred || interaction.replied) {
-        return (await interaction.followUp({
+        return await interaction.followUp({
           ...options,
           ephemeral: hidden,
           components,
           files,
-        })) as Message;
+        });
       } else {
-        return (await interaction.reply({
+        return await interaction.reply({
           ...options,
           ephemeral: hidden,
           fetchReply: true,
           components,
           files,
-        })) as Message;
+        });
       }
     } catch (error) {
       if (
@@ -97,32 +91,42 @@ export class InteractionUtils {
     }
   }
 
+  private static setContent(
+    content:
+      | string
+      | EmbedBuilder
+      | EmbedBuilder[]
+      | InteractionReplyOptions
+      | MessageEditOptions
+      | InteractionUpdateOptions
+  ) {
+    if (typeof content === 'string') {
+      return { content };
+    } else if (content instanceof EmbedBuilder) {
+      return { embeds: [content] };
+    } else if (content instanceof Array<EmbedBuilder>) {
+      return { embeds: content };
+    } else {
+      return content;
+    }
+  }
+
   public static async deferUpdate(
     intr: MessageComponentInteraction
-  ): Promise<InteractionResponse> {
-    try {
-      return await intr.deferUpdate();
-    } catch (error) {
-      throw error;
-    }
+  ): Promise<void> {
+    await intr.deferUpdate();
   }
 
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | Array<EmbedBuilder>,
-    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
-      const options: MessageEditOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
-      return (await intr.editReply({ ...options, components })) as Message;
+      const options: MessageEditOptions = this.setContent(
+        content
+      ) as MessageEditOptions;
+      return await intr.editReply({ ...options, components });
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&
@@ -142,24 +146,18 @@ export class InteractionUtils {
       | EmbedBuilder
       | Array<EmbedBuilder>
       | InteractionUpdateOptions,
-    // components?: APIActionRowComponent<APIMessageActionRowComponent>[]
     components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
   ): Promise<Message> {
     try {
-      const options: InteractionUpdateOptions =
-        typeof content === 'string'
-          ? { content }
-          : content instanceof EmbedBuilder
-          ? { embeds: [content] }
-          : content instanceof Array<EmbedBuilder>
-          ? { embeds: content }
-          : content;
+      const options: InteractionUpdateOptions = this.setContent(
+        content
+      ) as InteractionUpdateOptions;
 
-      return (await intr.update({
+      return await intr.update({
         ...options,
         components,
         fetchReply: true,
-      })) as Message;
+      });
     } catch (error) {
       if (
         error instanceof DiscordAPIError &&

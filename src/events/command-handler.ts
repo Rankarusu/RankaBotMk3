@@ -100,21 +100,7 @@ export class CommandHandler implements EventHandler {
 
     try {
       // check if user is eligible to use the command
-      if (
-        (command.developerOnly &&
-          !InteractionUtils.isDeveloper(interaction.user)) ||
-        !InteractionUtils.canUse(command, interaction)
-      ) {
-        throw new InsufficientPermissionsWarning();
-      }
-      //check if command is on cooldown
-      if (InteractionUtils.isOnCooldown(interaction, command)) {
-        throw new CommandOnCooldownWarning();
-      }
-
-      if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
-        throw new LewdWarning(nsfwimage);
-      }
+      this.runChecks(command, interaction);
 
       await command.execute(interaction);
     } catch (error) {
@@ -145,6 +131,27 @@ export class CommandHandler implements EventHandler {
       } else {
         await this.sendError(interaction);
       }
+    }
+  }
+
+  private runChecks(
+    command: Command,
+    interaction: ChatInputCommandInteraction
+  ) {
+    if (
+      (command.developerOnly &&
+        !InteractionUtils.isDeveloper(interaction.user)) ||
+      !InteractionUtils.canUse(command, interaction)
+    ) {
+      throw new InsufficientPermissionsWarning();
+    }
+    //check if command is on cooldown
+    if (InteractionUtils.isOnCooldown(interaction, command)) {
+      throw new CommandOnCooldownWarning();
+    }
+
+    if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
+      throw new LewdWarning(nsfwimage);
     }
   }
 

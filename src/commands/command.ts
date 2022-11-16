@@ -24,9 +24,16 @@ export abstract class Command {
   requireClientPerms: PermissionsString[];
 
   public mention(subcommand?: string, subcommandGroup?: string) {
-    return `</${this.metadata.name}${
-      subcommandGroup ? ` ${subcommandGroup}` : ''
-    }${subcommand ? ` ${subcommand}` : ''}:${this.id}>`;
+    let mentionStr = `</${this.metadata.name}`;
+    if (subcommandGroup) {
+      mentionStr += ` ${subcommandGroup}`;
+    }
+    if (subcommand) {
+      mentionStr += ` ${subcommand}`;
+    }
+
+    mentionStr += `:${this.id}>`;
+    return mentionStr;
   }
 
   abstract execute(interaction: ChatInputCommandInteraction): Promise<void>;

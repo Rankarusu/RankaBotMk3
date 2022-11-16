@@ -32,6 +32,5 @@ export class ExpTrigger implements Trigger {
       level = Math.floor((newXp / 42) ** 0.55);
     }
     await DbUtils.upsertExp(guildId, userId, newXp, level, newLock);
-    return;
   }
 }

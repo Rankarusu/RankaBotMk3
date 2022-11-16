@@ -1,25 +1,36 @@
 import {
+  DiscordAPIError,
   Message,
   MessageReaction,
   PartialMessage,
   PartialMessageReaction,
   PartialUser,
+  RESTJSONErrorCodes,
   User,
 } from 'discord.js';
 
-/**
- * A helper class for working with partial objects. Partial objects are objects that do
- * not have all of their properties filled in. This class provides methods to convert them to full objects.
- * @export
- * @class PartialUtils
- */
+const IGNORED_ERRORS = [
+  RESTJSONErrorCodes.UnknownMessage,
+  RESTJSONErrorCodes.UnknownChannel,
+  RESTJSONErrorCodes.UnknownGuild,
+  RESTJSONErrorCodes.UnknownUser,
+  RESTJSONErrorCodes.UnknownInteraction,
+];
+
 export class PartialUtils {
   public static async fillUser(user: User | PartialUser): Promise<User> {
     if (user.partial) {
       try {
         return await user.fetch();
       } catch (error) {
-        throw error;
+        if (
+          error instanceof DiscordAPIError &&
+          IGNORED_ERRORS.includes(error.code as number)
+        ) {
+          return;
+        } else {
+          throw error;
+        }
       }
     }
     return user as User;
@@ -32,8 +43,14 @@ export class PartialUtils {
       try {
         return await msg.fetch();
       } catch (error) {
-        //we could ignore certain errors here
-        throw error;
+        if (
+          error instanceof DiscordAPIError &&
+          IGNORED_ERRORS.includes(error.code as number)
+        ) {
+          return;
+        } else {
+          throw error;
+        }
       }
     }
     return msg as Message;
@@ -46,11 +63,16 @@ export class PartialUtils {
       try {
         return await msgReaction.fetch();
       } catch (error) {
-        //we could ignore certain errors here
-        throw error;
+        if (
+          error instanceof DiscordAPIError &&
+          IGNORED_ERRORS.includes(error.code as number)
+        ) {
+          return;
+        } else {
+          throw error;
+        }
       }
     }
-
     msgReaction.message = await this.fillMessage(msgReaction.message);
     if (!msgReaction.message) {
       return;

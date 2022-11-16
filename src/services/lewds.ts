@@ -17,7 +17,7 @@ class Lewds extends Scheduler {
 
   private next = '';
 
-  private guildCounters: GuildCounter[] = [];
+  private guildCounters: Map<string, number> = new Map<string, number>();
 
   private static _instance: Lewds;
 
@@ -60,7 +60,9 @@ class Lewds extends Scheduler {
 
   public getLewdsFromStash(amount: number, guildId: string): RedditPost[] {
     //get point in lewds array where guild left off or make them start from the beginning.
-    let pos = guildId in this.guildCounters ? this.guildCounters[guildId] : 0;
+    let pos = this.guildCounters.has(guildId)
+      ? this.guildCounters.get(guildId)
+      : 0;
 
     const res: RedditPost[] = [];
 
@@ -71,7 +73,7 @@ class Lewds extends Scheduler {
       res.push(this.lewds[pos]);
     }
 
-    this.guildCounters[guildId] = pos;
+    this.guildCounters.set(guildId, pos);
     return res;
   }
 }

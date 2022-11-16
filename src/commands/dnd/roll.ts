@@ -62,7 +62,7 @@ export class RollCommand extends Command {
 
   private rollDice(str: string): { result: number; resultStr: string } {
     //match everything up to 100d100
-    const roll = str.match(/^([1-9][0-9]?|100)?[dDwW]([1-9][0-9]?|100)$/);
+    const roll = str.match(/^([1-9]\d?|100)?[dDwW]([1-9]\d?|100)$/);
 
     let result = 0;
     const resultArr = [];

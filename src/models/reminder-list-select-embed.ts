@@ -6,7 +6,6 @@ import {
   EmbedField,
   SelectMenuBuilder,
   SelectMenuOptionBuilder,
-  User,
 } from 'discord.js';
 import {
   DateUtils,
@@ -27,8 +26,6 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
     );
 
     if (reminders.length === 0) {
-      // await InteractionUtils.sendWarning(this.interaction, noReminderWarning);
-      // return;
       throw new NoReminderWarning();
     }
 
@@ -89,13 +86,10 @@ export class ReminderListSelectEmbed extends PaginatedSelectEmbed {
 
   protected initializeAdditionalCollectors(): void {
     const interactionCollector = this.message.createMessageComponentCollector({
-      componentType: ComponentType.SelectMenu,
+      componentType: ComponentType.StringSelect,
       max: 5,
       filter: (x) => {
-        return (
-          this.interaction.user &&
-          x.user.id === (this.interaction.user as User).id
-        );
+        return this.interaction.user && x.user.id === this.interaction.user.id;
       },
     });
 

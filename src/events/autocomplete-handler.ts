@@ -30,7 +30,7 @@ export class AutoCompleteHandler implements EventHandler {
     const choices = await autocomplete.execute(focusedValue);
 
     try {
-      intr.respond(choices);
+      await intr.respond(choices);
     } catch (error) {
       Logger.error(LogMessages.error.autoComplete);
     }

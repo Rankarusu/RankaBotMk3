@@ -84,7 +84,7 @@ export class PaginationEmbed {
   }
 
   protected addPageNumbers() {
-    this.pages.map((page, pageIndex) => {
+    this.pages.forEach((page, pageIndex) => {
       if (page.data.footer && page.data.footer.text)
         return page.setFooter({
           text: `${page.data.footer.text} • ${this.footerText} ${
@@ -139,11 +139,7 @@ export class PaginationEmbed {
         );
         this.index = newPageIndex;
 
-        await InteractionUtils.update(
-          interaction,
-          this.pages[this.index],
-          undefined
-        );
+        await InteractionUtils.update(interaction, this.pages[this.index]);
       }
     });
     interactionCollector.on('end', async () => {

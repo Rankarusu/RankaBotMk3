@@ -176,12 +176,13 @@ export class EmbedUtils {
 
   public static stickerEmbed(member: GuildMember, sticker: Sticker) {
     const time = sticker.invokeTime.toLocaleDateString();
+    const memberCredit = member ? `by ${member.displayName}` : '';
     const embed = new EmbedBuilder()
       .setTitle(sticker.stickerName)
       .setColor(Config.colors.default as ColorResolvable)
       .setImage(sticker.stickerUrl)
       .setFooter({
-        text: `added ${member ? `by ${member.displayName}` : ''} at ${time}`,
+        text: `added ${memberCredit} at ${time}`,
         iconURL: member ? member.displayAvatarURL() : '',
       })
       .setTimestamp();

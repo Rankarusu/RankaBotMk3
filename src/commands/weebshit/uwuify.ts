@@ -8,11 +8,11 @@ import { Command, CommandCategory, CommandDeferType } from '../command';
 
 const uwuMap = [
   {
-    pattern: /(?:r|l)/g,
+    pattern: /(?:[rl])/g,
     replaceValue: 'w',
   },
   {
-    pattern: /(?:R|L)/g,
+    pattern: /(?:[RL])/g,
     replaceValue: 'W',
   },
   {

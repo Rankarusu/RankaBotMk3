@@ -65,10 +65,12 @@ export class EightballCommand extends Command {
   }
 
   private create8ballEmbed(question: string, answer: string) {
-    return EmbedUtils.infoEmbed(
-      `${question ? `**Q:** ${question}` : ''}
-    🎱 ${answer}`,
-      'Magic 8 Ball'
-    );
+    let description = '';
+    if (question) {
+      description += `❔: ${question}\n`;
+    }
+    description += `🎱: ${answer}`;
+
+    return EmbedUtils.infoEmbed(description, 'Magic 8 Ball');
   }
 }

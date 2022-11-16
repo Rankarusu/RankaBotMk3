@@ -304,32 +304,12 @@ export class DexCommand extends Command {
         } catch (error) {
           throw new PokemonNotFoundError();
         }
-        const pages: EmbedBuilder[] = [];
-        const baseEmbed = await this.createPokemonEmbed(
+        const pages: EmbedBuilder[] = await this.createPages(
           pokemon,
           species,
-          evoChain
-        );
-        pages.push(baseEmbed);
-        const abilityEmbed = this.createPokemonAbilityPageEmbed(
-          pokemon,
-          species,
+          evoChain,
           abilities
         );
-        pages.push(abilityEmbed);
-        const pdr = this.getDamageRelations(
-          this.resolvePokemonTypes(pokemon.types)
-        );
-        const pdrEmbed = this.createPDREmbedPage(pdr, pokemon, species);
-        pages.push(pdrEmbed);
-
-        if (species.varieties.length > 1) {
-          const additionalFormsEmbed = this.createAdditionalFormsEmbed(
-            pokemon,
-            species
-          );
-          pages.push(additionalFormsEmbed);
-        }
 
         const actionRow = this.createActionRow(pokemon.species.name);
 
@@ -419,6 +399,39 @@ export class DexCommand extends Command {
     }
   }
 
+  private async createPages(
+    pokemon: Pokemon,
+    species: PokemonSpecies,
+    evoChain: EvolutionChain,
+    abilities: Ability[]
+  ) {
+    const pages: EmbedBuilder[] = [];
+    const baseEmbed = await this.createPokemonEmbed(pokemon, species, evoChain);
+    pages.push(baseEmbed);
+
+    const abilityEmbed = this.createPokemonAbilityPageEmbed(
+      pokemon,
+      species,
+      abilities
+    );
+    pages.push(abilityEmbed);
+
+    const pdr = this.getDamageRelations(
+      this.resolvePokemonTypes(pokemon.types)
+    );
+    const pdrEmbed = this.createPDREmbedPage(pdr, pokemon, species);
+    pages.push(pdrEmbed);
+
+    if (species.varieties.length > 1) {
+      const additionalFormsEmbed = this.createAdditionalFormsEmbed(
+        pokemon,
+        species
+      );
+      pages.push(additionalFormsEmbed);
+    }
+    return pages;
+  }
+
   private async createPokemonEmbed(
     pokemon: Pokemon,
     species: PokemonSpecies,
@@ -438,9 +451,11 @@ export class DexCommand extends Command {
       (entry) => entry.language.name === 'en'
     ).genus;
     //get the newest flavor text
-    const flavorText = species.flavor_text_entries
-      .reverse()
-      .find((entry) => entry.language.name === 'en').flavor_text;
+    const reversedFlavorTextEntries = species.flavor_text_entries;
+    reversedFlavorTextEntries.reverse();
+    const flavorText = reversedFlavorTextEntries.find(
+      (entry) => entry.language.name === 'en'
+    ).flavor_text;
 
     embed.setTitle(
       `#${species.id.toString().padStart(3, '0')} ${StringUtils.toTitleCase(
@@ -984,10 +999,8 @@ export class DexCommand extends Command {
       x0: [],
     };
     if (type2) {
-      // for (let index = 0; index < types[type1]; index++) {
       Object.keys(types[type1]).forEach((type) => {
         const res = types[type1][type] * types[type2][type];
-        // const res = types[type1][index] * types[type2][index];
         switch (res) {
           case 4: {
             damageRelations.x4.push(type);
@@ -1018,7 +1031,6 @@ export class DexCommand extends Command {
     } else {
       Object.keys(types[type1]).forEach((type) => {
         const res = types[type1][type];
-        // const res = types[type1][index] * types[type2][index];
         switch (res) {
           case 4: {
             damageRelations.x4.push(type);

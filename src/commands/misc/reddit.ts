@@ -17,7 +17,7 @@ import {
 } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-const subredditPattern = new RegExp(/^[a-zA-Z0-9]{1}\w{2,20}$/);
+const subredditPattern = new RegExp(/^[a-zA-Z0-9]\w{2,20}$/);
 /* 3 to 21 upper or lowercase Latin characters, digits, or underscores 
 (but the first character can't be an underscore). 
 No spaces.
@@ -92,8 +92,6 @@ export class RedditCommand extends Command {
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
   public nsfw?: boolean = true;
-
-  //TODO: put a rate limiter here.
 
   public async execute(
     interaction: ChatInputCommandInteraction

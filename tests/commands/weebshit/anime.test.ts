@@ -7,7 +7,6 @@ import { AnimeNotFoundWarning } from '../../../src/models/warnings';
 import { aniList } from '../../../src/services/anilist';
 import { CommandTestHelper } from '../helper';
 jest.mock('../../../src/models');
-jest.mock('../../../src/services/anilist.ts');
 
 const scheduleInput = [{ name: 'schedule', type: 1, options: [] }];
 const validSearchInput = [
@@ -25,7 +24,7 @@ const invalidSearchInput = [
   },
 ];
 
-describe.skip('Anime', () => {
+describe('Anime', () => {
   const helper = new CommandTestHelper(new AnimeCommand());
 
   beforeAll(async () => {
@@ -45,12 +44,6 @@ describe.skip('Anime', () => {
       await helper.executeWithError(
         new AnimeNotFoundWarning('not_an_actual_anime')
       );
-    });
-
-    it('should not issue a warning on valid input', async () => {
-      helper.setInput(validSearchInput);
-
-      await helper.executeWithoutError();
     });
 
     it('should throw an error if api-call fails', async () => {

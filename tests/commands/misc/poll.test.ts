@@ -1,7 +1,7 @@
 import { PollCommand } from '../../../src/commands';
 import { Poll } from '../../../src/models';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
+jest.mock('../../../src/models/poll');
 
 const input = [
   { name: 'question', type: 3, value: 'what' },

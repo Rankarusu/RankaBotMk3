@@ -7,7 +7,6 @@ import {
 } from '../../../src/models';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
 
 function setMemberKickable(helper: CommandTestHelper, state: boolean) {
   const member = helper.interaction.options.getMember('user') as GuildMember;

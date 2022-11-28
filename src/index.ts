@@ -51,7 +51,7 @@ import {
   TriggerHandler,
 } from './events';
 import { SelectMenu } from './menus';
-import { Bot, Reaction } from './models';
+import { Bot, Reaction, Scheduler } from './models';
 import {
   ActivityScheduler,
   aniList,
@@ -60,7 +60,6 @@ import {
   lewds,
   Logger,
   ReminderScheduler,
-  Scheduler,
 } from './services';
 import LogMessages from './static/logs.json';
 import {

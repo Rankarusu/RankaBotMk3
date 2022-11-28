@@ -5,12 +5,11 @@ import { ExpCommand } from '../../../src/commands';
 import {
   NotTrackedByExpWarning,
   NoUsersTrackedByExpWarning,
-  PaginationEmbed,
 } from '../../../src/models';
+import { PaginationEmbed } from '../../../src/models/pagination/pagination-embed';
 import { DbUtils } from '../../../src/utils';
 import { DiscordMock } from '../../discordMock';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
 
 const discordMock = new DiscordMock();
 
@@ -42,6 +41,8 @@ const dbExp = {
 
 describe('Exp', () => {
   const helper = new CommandTestHelper(new ExpCommand());
+
+  PaginationEmbed.prototype.start = jest.fn();
 
   beforeAll(async () => {
     await DbUtils.upsertExp(

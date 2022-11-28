@@ -11,7 +11,6 @@ import {
   PokemonNotFoundError,
 } from '../../../src/models';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
 
 const validPokemonInputs = [
   [
@@ -152,6 +151,8 @@ const validPdrInput = [
 
 describe('Dex', () => {
   const helper = new CommandTestHelper(new DexCommand());
+  ExtendedPaginationEmbed.prototype.start = jest.fn();
+
   beforeEach(() => {
     helper.resetInput();
     jest.restoreAllMocks();

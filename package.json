@@ -28,7 +28,8 @@
     "test:coverage": "jest --coverage",
     "test:ci": "jest --coverage --ci --runInBand --forceExit",
     "commit": "cz",
-    "release": "standard-version --no-verify"
+    "release": "standard-version --no-verify",
+    "dependency-test": "npx madge --circular --extensions ts ./src"
   },
   "keywords": [],
   "author": "",

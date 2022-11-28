@@ -1,12 +1,12 @@
 import { CommandInteractionOption } from 'discord.js';
 import { getCommandList } from '../../../src';
 import { Command, HelpCommand } from '../../../src/commands';
-import { CommandNotFoundError, PaginationEmbed } from '../../../src/models';
+import { CommandNotFoundError } from '../../../src/models';
+import { PaginationEmbed } from '../../../src/models/pagination/pagination-embed';
 import { InteractionUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
 
-jest.mock('../../../src/models/');
-jest.mock('../../../src/services/anilist.ts');
+jest.mock('../../../src/services');
 
 const invalidCommandInput = [
   {
@@ -34,6 +34,7 @@ describe('Help', () => {
   helpCommand.commands = commands;
   const helper = new CommandTestHelper(helpCommand);
   InteractionUtils.canUse = jest.fn(() => true);
+  PaginationEmbed.prototype.start = jest.fn();
 
   beforeEach(() => {
     helper.resetInput();
@@ -57,7 +58,7 @@ describe('Help', () => {
   describe('specific command', () => {
     it('should throw error if command is not found.', async () => {
       helper.setInput(invalidCommandInput);
-      await helper.executeWithError(new CommandNotFoundError(''));
+      await helper.executeWithError(new CommandNotFoundError('not_a_command'));
     });
   });
 

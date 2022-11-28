@@ -8,9 +8,6 @@ import {
 import { PaginationEmbed } from '../../../src/models/pagination/pagination-embed';
 import { aniList } from '../../../src/services/anilist';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models/pagination/pagination-embed');
-jest.mock('../../../src/models/pagination/extended-pagination-embed');
-jest.mock('../../../src/models/pagination/self-generating-pagination-embed');
 
 const scheduleInput = [{ name: 'schedule', type: 1, options: [] }];
 const validSearchInput = [
@@ -30,6 +27,7 @@ const invalidSearchInput = [
 
 describe('Anime', () => {
   const helper = new CommandTestHelper(new AnimeCommand());
+  PaginationEmbed.prototype.start = jest.fn();
 
   beforeAll(async () => {
     await aniList.start();

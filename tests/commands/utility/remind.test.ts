@@ -11,7 +11,7 @@ import {
 } from '../../../src/models';
 import { DbUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
+jest.mock('../../../src/models/pagination/reminder-list-select-embed');
 
 const validSetInput: CommandInteractionOption[] = [
   {

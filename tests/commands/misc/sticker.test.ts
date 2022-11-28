@@ -11,7 +11,7 @@ import {
 } from '../../../src/models';
 import { DbUtils, EmbedUtils } from '../../../src/utils';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
+jest.mock('../../../src/models/pagination/sticker-list-select-embed.ts');
 
 const validPostInput: CommandInteractionOption[] = [
   {
@@ -130,7 +130,9 @@ describe('Sticker', () => {
     it('should throw an error if sticker was not found', async () => {
       helper.setInput(invalidPostInput);
 
-      await helper.executeWithError(new StickerNotFoundError(''));
+      await helper.executeWithError(
+        new StickerNotFoundError('not_a_sticker_name')
+      );
     });
 
     it('should not throw an error on valid input', async () => {
@@ -157,7 +159,9 @@ describe('Sticker', () => {
     it('should throw an error if a sticker with that name already exists', async () => {
       helper.setInput(addInput);
       await DbUtils.createSticker(dbSticker);
-      await helper.executeWithError(new StickerAlreadyExistsError(''));
+      await helper.executeWithError(
+        new StickerAlreadyExistsError('stickerName')
+      );
     });
 
     it('should throw an error if the type is invalid', async () => {

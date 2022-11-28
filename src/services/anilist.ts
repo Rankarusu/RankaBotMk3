@@ -1,14 +1,15 @@
 import axios from 'axios';
 import * as cron from 'node-cron';
-import { Logger, Scheduler } from '.';
 import {
   AniListAiringScheduleItem,
   AniListScheduleDay,
   AniListSearchItem,
   MediaFormat,
   MediaType,
+  Scheduler,
 } from '../models';
 import LogMessages from '../static/logs.json';
+import { Logger } from './logger';
 
 const url = 'https://graphql.anilist.co';
 

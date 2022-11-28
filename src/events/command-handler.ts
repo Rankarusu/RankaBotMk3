@@ -8,13 +8,13 @@ import {
 import { RateLimiter } from 'discord.js-rate-limiter';
 import { EventHandler } from '.';
 import { Command, CommandDeferType } from '../commands';
-import { DiscordCommandError } from '../models/errors';
 import {
+  CommandOnCooldownWarning,
+  DiscordCommandError,
   DiscordCommandWarning,
   InsufficientPermissionsWarning,
   LewdWarning,
-} from '../models/warnings';
-import { CommandOnCooldownWarning } from '../models/warnings/command-on-cooldown-warning';
+} from '../models';
 import { Logger } from '../services';
 import LogMessages from '../static/logs.json';
 import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';

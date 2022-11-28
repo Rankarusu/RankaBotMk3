@@ -7,7 +7,7 @@ import {
   PermissionsString,
   User,
 } from 'discord.js';
-import { UnbanError, UserNotBannedError } from '../../models/errors';
+import { UnbanError, UserNotBannedError } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

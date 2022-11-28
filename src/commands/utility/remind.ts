@@ -4,14 +4,14 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { ReminderListSelectEmbed } from '../../models';
 import {
   PingInInputError,
   ReminderCreationError,
   ReminderIntervalTooShortError,
   ReminderLimitError,
+  ReminderListSelectEmbed,
   TimeParseError,
-} from '../../models/errors';
+} from '../../models';
 import {
   ClientUtils,
   DateUtils,
@@ -77,7 +77,10 @@ export class RemindCommand extends Command {
     const subCommand = interaction.options.getSubcommand();
     switch (subCommand) {
       case 'list': {
-        const paginatedEmbed = new ReminderListSelectEmbed(interaction);
+        const paginatedEmbed = new ReminderListSelectEmbed(
+          interaction,
+          undefined
+        );
         await paginatedEmbed.start();
         break;
       }

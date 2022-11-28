@@ -11,10 +11,10 @@ import {
 import {
   AniListScheduleDay,
   AniListSearchItem,
+  AnimeNotFoundWarning,
+  APICommunicationError,
   PaginationEmbed,
 } from '../../models';
-import { APICommunicationError } from '../../models/errors';
-import { AnimeNotFoundWarning } from '../../models/warnings';
 import { aniList } from '../../services';
 import {
   ClientUtils,

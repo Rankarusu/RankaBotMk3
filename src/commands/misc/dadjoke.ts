@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { APICommunicationError } from '../../models/errors';
+import { APICommunicationError } from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

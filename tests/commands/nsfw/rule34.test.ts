@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Rule34Command } from '../../../src/commands';
-import { WeirdTastesWarning } from '../../../src/models';
-import { APICommunicationError } from '../../../src/models/errors';
+import { APICommunicationError, WeirdTastesWarning } from '../../../src/models';
 import { RequestUtils } from '../../../src/utils/request-utils';
 import { CommandTestHelper } from '../helper';
 

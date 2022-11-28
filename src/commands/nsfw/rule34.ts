@@ -3,8 +3,11 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { APICommunicationError, Rule34Post } from '../../models';
-import { WeirdTastesWarning } from '../../models/warnings';
+import {
+  APICommunicationError,
+  Rule34Post,
+  WeirdTastesWarning,
+} from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { RequestUtils } from '../../utils/request-utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';

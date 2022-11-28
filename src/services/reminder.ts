@@ -1,8 +1,9 @@
 import { Client } from 'discord.js';
 import * as cron from 'node-cron';
-import { Logger, Scheduler } from '.';
+import { Scheduler } from '../models';
 import LogMessages from '../static/logs.json';
 import { ClientUtils, DbUtils, EmbedUtils, MessageUtils } from '../utils';
+import { Logger } from './logger';
 
 export class ReminderScheduler extends Scheduler {
   client: Client;

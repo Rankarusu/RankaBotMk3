@@ -7,58 +7,64 @@ import {
   MessageComponentInteraction,
   SelectMenuBuilder,
 } from 'discord.js';
-import { InteractionUtils } from '../utils';
+import { InteractionUtils } from '../../utils';
+import { ExtendedEmbedPage } from './extended-embed-page';
 import { PaginationEmbed } from './pagination-embed';
 
 export class ExtendedPaginationEmbed extends PaginationEmbed {
-  additionalRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[] = [];
+  pages: ExtendedEmbedPage[];
 
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
-    pages?: EmbedBuilder[] | EmbedBuilder,
+    pages: EmbedBuilder[] | EmbedBuilder,
     additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
     limit?: number,
     timeout?: number
   ) {
     super(interaction, pages, limit, timeout);
-    this.additionalRows = additionalRows || [];
+    if (additionalRows) {
+      this.pages.forEach((page) => {
+        page.additionalRows = additionalRows;
+      });
+    }
   }
 
-  override async send(): Promise<Message> {
+  protected override async send(): Promise<Message> {
     //override so we can add additional Rows
+    const page = this.pages[0];
     const message = await InteractionUtils.send(
       this.interaction,
-      this.pages[0],
+      page.embed,
       this.pages.length < 2
-        ? this.additionalRows
-        : [...this.additionalRows, this.paginationButtons]
+        ? [...page.additionalRows]
+        : [...page.additionalRows, this.paginationButtons]
     );
 
     return message;
+  }
+
+  protected override async turnPage(
+    componentInteraction: MessageComponentInteraction
+  ) {
+    await InteractionUtils.update(
+      componentInteraction,
+      this.pages[this.index].embed,
+      [...this.pages[this.index].additionalRows, this.paginationButtons]
+    );
   }
 
   public override async editReply() {
     //override so we can add additional Rows
+    const page = this.pages[0];
+
     const message = await InteractionUtils.editReply(
       this.interaction,
-      this.pages[0],
+      page.embed,
       this.pages.length < 2
-        ? this.additionalRows
-        : [...this.additionalRows, this.paginationButtons]
+        ? [...page.additionalRows]
+        : [...page.additionalRows, this.paginationButtons]
     );
 
     return message;
-  }
-
-  public override changePages(
-    pages: EmbedBuilder | EmbedBuilder[],
-    additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
-  ) {
-    if (pages instanceof EmbedBuilder) {
-      this.pages = this.paginateEmbed(pages, this.limit);
-    } else {
-      this.pages = pages;
-    }
-    this.additionalRows = additionalRows;
   }
 }

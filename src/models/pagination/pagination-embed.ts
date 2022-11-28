@@ -11,7 +11,8 @@ import {
   User,
   UserResolvable,
 } from 'discord.js';
-import { InteractionUtils } from '../utils';
+import { InteractionUtils } from '../../utils';
+import { EmbedPage } from './embed-page';
 
 export class PaginationEmbed {
   interaction: CommandInteraction | MessageComponentInteraction;
@@ -20,15 +21,13 @@ export class PaginationEmbed {
 
   message: Message;
 
-  pages: EmbedBuilder[];
+  pages: EmbedPage[];
 
   protected timeout?: number;
 
   protected limit?: number;
 
   protected index = 0;
-
-  protected footerText = 'Page';
 
   paginationButtons? = new ActionRowBuilder<ButtonBuilder>().addComponents([
     new ButtonBuilder()
@@ -66,35 +65,23 @@ export class PaginationEmbed {
     this.interaction = interaction;
     this.limit = limit ? limit : 5;
     if (pages instanceof EmbedBuilder) {
-      this.pages = this.paginateEmbed(pages, this.limit);
+      this.pages = this.splitEmbedIntoPages(pages, this.limit);
     } else {
-      this.pages = pages;
+      this.pages = pages?.map(
+        (embed, index) =>
+          new EmbedPage(embed, index + 1, pages.length, this.limit)
+      );
     }
     this.author = interaction.user;
     this.timeout = timeout ? timeout : 60000;
   }
 
   public async start(): Promise<void> {
-    this.addPageNumbers();
     this.message = await this.send();
     if (this.pages.length > 0) {
       //no need to initialize collector if there is only one page
       this.initializePaginationButtonCollector();
     }
-  }
-
-  protected addPageNumbers() {
-    this.pages.forEach((page, pageIndex) => {
-      if (page.data.footer && page.data.footer.text)
-        return page.setFooter({
-          text: `${page.data.footer.text} • ${this.footerText} ${
-            pageIndex + 1
-          }/${this.pages.length}`,
-        });
-      return page.setFooter({
-        text: `${this.footerText} ${pageIndex + 1}/${this.pages.length}`,
-      });
-    });
   }
 
   protected initializePaginationButtonCollector() {
@@ -139,7 +126,7 @@ export class PaginationEmbed {
         );
         this.index = newPageIndex;
 
-        await InteractionUtils.update(interaction, this.pages[this.index]);
+        await this.turnPage(interaction);
       }
     });
     interactionCollector.on('end', async () => {
@@ -154,9 +141,37 @@ export class PaginationEmbed {
     });
   }
 
-  protected paginateEmbed(embed: EmbedBuilder, limit: number) {
+  protected async turnPage(componentInteraction: MessageComponentInteraction) {
+    await InteractionUtils.update(
+      componentInteraction,
+      this.pages[this.index].embed
+    );
+  }
+
+  protected splitEmbedIntoPages(embed: EmbedBuilder, limit: number) {
     //splits embed fields into multiple pages with same header, footer, etc.
 
+    const splitFields: APIEmbedField[][] = this.splitFieldsByLength(
+      embed,
+      limit
+    );
+
+    const pages: EmbedPage[] = splitFields.map((fieldArr, index) => {
+      //copy the initial embed but replace
+      const embedJson = embed.toJSON();
+      const embedWithFields = new EmbedBuilder(embedJson).setFields(fieldArr);
+      return new EmbedPage(
+        embedWithFields,
+        index + 1,
+        splitFields.length,
+        this.limit
+      );
+    });
+
+    return pages;
+  }
+
+  private splitFieldsByLength(embed: EmbedBuilder, limit: number) {
     const fields = embed.data.fields;
 
     const splitFields: APIEmbedField[][] = [[]];
@@ -183,20 +198,13 @@ export class PaginationEmbed {
         splitFields[idx].push(field);
       }
     });
-
-    const pages: EmbedBuilder[] = splitFields.map((fieldArr) => {
-      //copy the initial embed but replace
-      const embedJson = embed.toJSON();
-      return new EmbedBuilder(embedJson).setFields(fieldArr);
-    });
-
-    return pages;
+    return splitFields;
   }
 
   protected async send(): Promise<Message> {
     const message = await InteractionUtils.send(
       this.interaction,
-      this.pages[0],
+      this.pages[0].embed,
       //we don't need pagination on a single page.
       this.pages.length < 2 ? undefined : [this.paginationButtons]
     );
@@ -208,18 +216,10 @@ export class PaginationEmbed {
     //remove buttons if necessary
     const message = await InteractionUtils.editReply(
       this.interaction,
-      this.pages[0],
+      this.pages[0].embed,
       this.pages.length < 2 ? undefined : [this.paginationButtons]
     );
 
     return message;
-  }
-
-  public changePages(pages: EmbedBuilder | EmbedBuilder[]) {
-    if (pages instanceof EmbedBuilder) {
-      this.pages = this.paginateEmbed(pages, this.limit);
-    } else {
-      this.pages = pages;
-    }
   }
 }

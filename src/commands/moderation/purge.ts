@@ -9,7 +9,7 @@ import {
   PartialMessage,
   PermissionsString,
 } from 'discord.js';
-import { MessageDeleteError } from '../../models/errors';
+import { MessageDeleteError } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

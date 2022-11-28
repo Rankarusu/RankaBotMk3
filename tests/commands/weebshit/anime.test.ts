@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { AnimeCommand } from '../../../src/commands';
-import { PaginationEmbed } from '../../../src/models';
-import { APICommunicationError } from '../../../src/models/errors';
-import { AnimeNotFoundWarning } from '../../../src/models/warnings';
+import {
+  AnimeNotFoundWarning,
+  APICommunicationError,
+} from '../../../src/models';
 
+import { PaginationEmbed } from '../../../src/models/pagination/pagination-embed';
 import { aniList } from '../../../src/services/anilist';
 import { CommandTestHelper } from '../helper';
-jest.mock('../../../src/models');
+jest.mock('../../../src/models/pagination/pagination-embed');
+jest.mock('../../../src/models/pagination/extended-pagination-embed');
+jest.mock('../../../src/models/pagination/self-generating-pagination-embed');
 
 const scheduleInput = [{ name: 'schedule', type: 1, options: [] }];
 const validSearchInput = [

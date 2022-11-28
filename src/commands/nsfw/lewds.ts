@@ -3,7 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { NoLewdsAvailableWarning } from '../../models/warnings';
+import { NoLewdsAvailableWarning } from '../../models';
 import { lewds } from '../../services';
 import {
   ArrayUtils,

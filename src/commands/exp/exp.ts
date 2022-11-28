@@ -9,11 +9,11 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { PaginationEmbed } from '../../models';
 import {
   NotTrackedByExpWarning,
   NoUsersTrackedByExpWarning,
-} from '../../models/warnings';
+  PaginationEmbed,
+} from '../../models';
 import {
   ClientUtils,
   DbUtils,

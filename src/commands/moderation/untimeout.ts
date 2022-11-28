@@ -7,7 +7,7 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { NotTimedOutWarning } from '../../models/warnings';
+import { NotTimedOutWarning } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

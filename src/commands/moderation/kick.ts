@@ -8,10 +8,7 @@ import {
   PermissionsString,
 } from 'discord.js';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import {
-  InvalidKickTargetError,
-  UnkickableUserError,
-} from '../../models/errors';
+import { InvalidKickTargetError, UnkickableUserError } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 
 const Config = require('../../../config/config.json');

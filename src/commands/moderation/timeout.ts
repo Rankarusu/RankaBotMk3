@@ -8,11 +8,12 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import { ParsedTimeInPastError, TimeParseError } from '../../models/errors';
 import {
   AlreadyTimedOutWarning,
+  ParsedTimeInPastError,
   TimeoutAPILimitWarning,
-} from '../../models/warnings';
+  TimeParseError,
+} from '../../models';
 import { DateUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { DadJokeCommand } from '../../../src/commands';
-import { APICommunicationError } from '../../../src/models/errors';
+import { APICommunicationError } from '../../../src/models';
 import { CommandTestHelper } from '../helper';
 
 describe('DadJoke', () => {

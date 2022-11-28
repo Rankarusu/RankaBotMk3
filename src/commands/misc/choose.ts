@@ -3,8 +3,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { InvalidInputError } from '../../models';
-import { TooFewOptionsWarning } from '../../models/warnings';
+import { InvalidInputError, TooFewOptionsWarning } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

@@ -1,12 +1,9 @@
 import * as cron from 'node-cron';
-import { Logger, Scheduler } from '.';
-import { RedditPost } from '../models';
+import { RedditPost, Scheduler } from '../models';
 import LogMessages from '../static/logs.json';
 import { RedditUtils } from '../utils';
+import { Logger } from './logger';
 
-interface GuildCounter {
-  [key: string]: number;
-}
 const url = 'https://www.reddit.com/user/rankarusu/m/lewdtrash.json';
 const limit = 100;
 

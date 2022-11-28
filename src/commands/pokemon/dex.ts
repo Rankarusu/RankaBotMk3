@@ -27,15 +27,16 @@ import {
   PokemonStat,
   PokemonType,
 } from 'pokenode-ts';
-import { ExtendedPaginationEmbed, PokemonDamageRelations } from '../../models';
 import {
   APICommunicationError,
+  ExtendedPaginationEmbed,
   PokemonAbilityNotFoundError,
   PokemonBerryNotFoundError,
+  PokemonDamageRelations,
   PokemonItemNotFoundError,
   PokemonMoveNotFoundError,
   PokemonNotFoundError,
-} from '../../models/errors';
+} from '../../models';
 import { types } from '../../static/pokemonDamageRelations.json';
 import {
   ClientUtils,

@@ -104,12 +104,11 @@ export class EmbedUtils {
     return embed;
   }
 
-  public static reminderListEmbed(message: string, list: EmbedField[]) {
+  public static listEmbed(message: string, title: string, list: EmbedField[]) {
     const embed = new EmbedBuilder()
-      .setTitle('Reminders')
+      .setTitle(title)
       .setColor(Config.colors.default as ColorResolvable)
       .setDescription(message);
-    // .setFooter({ text: 'Use the menu below to delete reminders' });
     if (list) {
       embed.addFields(list);
     }
@@ -128,7 +127,7 @@ export class EmbedUtils {
         `Welcome to the fully automated, paginated and generally very based RankaBotMk3 help dialog!
         (Seriously, I put a lot of effort into this. Please use it.)
         
-        these </commands:0> are directly invocable by clicking on them.
+        these </commands:0> are directly invokable by clicking on them.
         these \`/commands\` are only invokable via **subcommands**. 
         Use ${helpMention} \`command\` for more details.
         

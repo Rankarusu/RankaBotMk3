@@ -11,8 +11,7 @@ import {
 } from 'discord.js';
 import { AsciiTree } from 'oo-ascii-tree';
 import { Command, CommandCategory, CommandDeferType } from '..';
-import { PaginationEmbed } from '../../models';
-import { CommandNotFoundError } from '../../models/errors';
+import { CommandNotFoundError, PaginationEmbed } from '../../models';
 import {
   ArrayUtils,
   EmbedUtils,

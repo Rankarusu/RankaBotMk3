@@ -3,12 +3,13 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { ChatInputCommandInteraction, PermissionsString } from 'discord.js';
-import { RedditListingWrapper, RedditPost } from '../../models';
 import {
   APICommunicationError,
   InvalidSubredditError,
   PrivateSubredditError,
-} from '../../models/errors';
+  RedditListingWrapper,
+  RedditPost,
+} from '../../models';
 import {
   ArrayUtils,
   ClientUtils,

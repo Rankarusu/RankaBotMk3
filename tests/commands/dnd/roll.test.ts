@@ -1,5 +1,5 @@
 import { RollCommand } from '../../../src/commands';
-import { InvalidInputError } from '../../../src/models/errors';
+import { InvalidInputError } from '../../../src/models';
 
 import { CommandTestHelper } from '../helper';
 

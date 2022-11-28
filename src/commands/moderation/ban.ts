@@ -7,10 +7,7 @@ import {
   GuildMember,
   PermissionsString,
 } from 'discord.js';
-import {
-  InvalidBanTargetError,
-  UnbannableUserError,
-} from '../../models/errors';
+import { InvalidBanTargetError, UnbannableUserError } from '../../models';
 import { EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 

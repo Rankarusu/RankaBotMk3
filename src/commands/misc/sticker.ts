@@ -8,13 +8,13 @@ import {
   ChatInputCommandInteraction,
   PermissionsString,
 } from 'discord.js';
-import { StickerListSelectEmbed } from '../../models';
 import {
   InvalidMediaTypeError,
   StickerAddError,
   StickerAlreadyExistsError,
+  StickerListSelectEmbed,
   StickerNotFoundError,
-} from '../../models/errors';
+} from '../../models';
 import {
   ClientUtils,
   DbUtils,
@@ -147,7 +147,10 @@ export class StickerCommand extends Command {
         break;
       case 'list':
         {
-          const paginatedEmbed = new StickerListSelectEmbed(interaction);
+          const paginatedEmbed = new StickerListSelectEmbed(
+            interaction,
+            undefined
+          );
           await paginatedEmbed.start();
           //merge list and remove into one as we did with remind.
           //rewrite remind pagination embed to fit poll style. waaaaay cleaner

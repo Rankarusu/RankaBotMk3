@@ -1,3 +1,3 @@
-export { Autocomplete } from './autocomplete';
-export { PokemonAutocomplete } from './dex';
-export { CommandAutocomplete } from './help';
+export * from './autocomplete';
+export * from './dex';
+export * from './help';

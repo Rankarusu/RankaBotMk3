@@ -5,7 +5,7 @@ import {
   EmbedBuilder,
   Message,
   MessageComponentInteraction,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import { InteractionUtils } from '../../utils';
 import { ExtendedEmbedPage } from './extended-embed-page';
@@ -17,7 +17,9 @@ export class ExtendedPaginationEmbed extends PaginationEmbed {
   constructor(
     interaction: CommandInteraction | MessageComponentInteraction,
     pages: EmbedBuilder[] | EmbedBuilder,
-    additionalRows?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
+    additionalRows?: ActionRowBuilder<
+      ButtonBuilder | StringSelectMenuBuilder
+    >[],
     limit?: number,
     timeout?: number
   ) {

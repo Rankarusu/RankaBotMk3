@@ -13,7 +13,7 @@ import {
   Message,
   MessageComponentInteraction,
   MessageEditOptions,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
   ThreadChannel,
   User,
 } from 'discord.js';
@@ -55,7 +55,7 @@ export class InteractionUtils {
       | EmbedBuilder
       | Array<EmbedBuilder>
       | InteractionReplyOptions,
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[],
+    components?: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[],
     files?: AttachmentBuilder[],
     hidden = false
   ): Promise<Message> {
@@ -120,7 +120,7 @@ export class InteractionUtils {
   public static async editReply(
     intr: CommandInteraction | MessageComponentInteraction,
     content: string | EmbedBuilder | Array<EmbedBuilder>,
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
+    components?: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions = this.setContent(
@@ -146,7 +146,7 @@ export class InteractionUtils {
       | EmbedBuilder
       | Array<EmbedBuilder>
       | InteractionUpdateOptions,
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
+    components?: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: InteractionUpdateOptions = this.setContent(

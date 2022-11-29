@@ -10,8 +10,8 @@ import {
   MessageEditOptions,
   MessageReaction,
   MessageReplyOptions,
-  SelectMenuBuilder,
   StartThreadOptions,
+  StringSelectMenuBuilder,
   TextBasedChannel,
   ThreadChannel,
   User,
@@ -80,7 +80,7 @@ export class MessageUtils {
   public static async edit(
     msg: Message,
     content?: string | EmbedBuilder | Array<EmbedBuilder> | MessageEditOptions,
-    components?: ActionRowBuilder<ButtonBuilder | SelectMenuBuilder>[]
+    components?: ActionRowBuilder<ButtonBuilder | StringSelectMenuBuilder>[]
   ): Promise<Message> {
     try {
       const options: MessageEditOptions = this.setContent(content);

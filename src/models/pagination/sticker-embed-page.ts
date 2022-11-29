@@ -2,8 +2,8 @@ import { Sticker } from '@prisma/client';
 import {
   ActionRowBuilder,
   EmbedField,
-  SelectMenuBuilder,
-  SelectMenuOptionBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
 } from 'discord.js';
 import { EmbedUtils } from '../../utils';
 import { ExtendedEmbedPage } from './extended-embed-page';
@@ -26,8 +26,8 @@ export class StickerEmbedPage extends ExtendedEmbedPage {
   private createSelectMenuRow() {
     const options = this.createSelectMenuOptions();
     const selectMenuRow =
-      new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-        new SelectMenuBuilder()
+      new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
           .setCustomId('delete-sticker')
           .setPlaceholder('Select one or more stickers to delete')
           .addOptions(options)
@@ -38,10 +38,10 @@ export class StickerEmbedPage extends ExtendedEmbedPage {
   }
 
   private createSelectMenuOptions() {
-    const options: SelectMenuOptionBuilder[] = this.data.map(
+    const options: StringSelectMenuOptionBuilder[] = this.data.map(
       (sticker, index) => {
         const id = (this.pageNum - 1) * this.pageSize + index + 1;
-        return new SelectMenuOptionBuilder()
+        return new StringSelectMenuOptionBuilder()
           .setLabel(`ID: ${id.toString().padStart(3, '0')}`)
           .setDescription(`${sticker.stickerName}`)
           .setValue(sticker.interactionId);

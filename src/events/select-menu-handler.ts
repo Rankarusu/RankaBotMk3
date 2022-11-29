@@ -1,4 +1,4 @@
-import { Message, SelectMenuInteraction } from 'discord.js';
+import { Message, StringSelectMenuInteraction } from 'discord.js';
 import { EventHandler } from '.';
 import { SelectMenu, SelectMenuDeferType } from '../menus';
 import { InteractionUtils } from '../utils';
@@ -7,7 +7,7 @@ export class SelectMenuHandler implements EventHandler {
   constructor(public menus: SelectMenu[]) {}
 
   public async process(
-    intr: SelectMenuInteraction,
+    intr: StringSelectMenuInteraction,
     msg: Message
   ): Promise<void> {
     // Don't respond to self, or other bots

@@ -2,19 +2,20 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   EmbedBuilder,
-  SelectMenuBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import { EmbedPage } from './embed-page';
 
 export class ExtendedEmbedPage extends EmbedPage {
-  additionalRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[] = [];
+  additionalRows: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[] =
+    [];
 
   constructor(
     embed: EmbedBuilder,
     pageNum: number,
     lastPageNum: number,
     pageSize: number,
-    actionRows: ActionRowBuilder<SelectMenuBuilder | ButtonBuilder>[]
+    actionRows: ActionRowBuilder<StringSelectMenuBuilder | ButtonBuilder>[]
   ) {
     super(embed, pageNum, lastPageNum, pageSize);
     this.additionalRows = actionRows;

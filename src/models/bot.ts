@@ -123,7 +123,7 @@ export class Bot {
       }
       // else if(interaction instanceof ButtonInteraction){}
       //TODO: buttonInteraction later
-    } else if (interaction.isSelectMenu()) {
+    } else if (interaction.isStringSelectMenu()) {
       try {
         await this.selectMenuHandler.process(interaction, interaction.message);
       } catch (error) {

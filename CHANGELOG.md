@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.4...v1.3.6) (2023-03-04)
+
+
+### Bug Fixes
+
+* **fact:** replace fact api because the old one died ([a1df49b](https://github.com/Rankarusu/RankaBotMk3/commit/a1df49b87982c65478e82146dbbf6edde04d60ca))
+* **remind:** check for channel access before setting reminders and delete them either way on 403 ([328a792](https://github.com/Rankarusu/RankaBotMk3/commit/328a792e1bdd0490513427c2df68cd68d9b9a97f))
+
 ### [1.3.5](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.4...v1.3.5) (2023-03-04)
 
 

@@ -5,7 +5,7 @@ import { APICommunicationError } from '../../models';
 import { ClientUtils, EmbedUtils, InteractionUtils } from '../../utils';
 import { Command, CommandCategory, CommandDeferType } from '../command';
 
-const url = 'https://www.thefact.space/random';
+const url = 'https://uselessfacts.jsph.pl/api/v2/facts/random';
 
 export class FactCommand extends Command {
   public metadata: RESTPostAPIChatInputApplicationCommandsJSONBody = {

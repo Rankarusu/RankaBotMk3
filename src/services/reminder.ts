@@ -1,10 +1,12 @@
-import { Client } from 'discord.js';
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
+import { Client, DiscordAPIError } from 'discord.js';
 import * as cron from 'node-cron';
 import { Scheduler } from '../models';
 import LogMessages from '../static/logs.json';
 import { ClientUtils, DbUtils, EmbedUtils, MessageUtils } from '../utils';
 import { Logger } from './logger';
 
+const IGNORED_ERRORS = [RESTJSONErrorCodes.MissingAccess];
 export class ReminderScheduler extends Scheduler {
   client: Client;
 
@@ -31,12 +33,22 @@ export class ReminderScheduler extends Scheduler {
           reminder.channelId
         );
 
-        await MessageUtils.send(channel, {
-          //mentions inside embeds do not provoke a ping, therefore we put the mention in the message itself.
-          content: `<@${reminder.userId}>`,
-          embeds: [embed],
-        });
-
+        try {
+          await MessageUtils.send(channel, {
+            //mentions inside embeds do not provoke a ping, therefore we put the mention in the message itself.
+            content: `<@${reminder.userId}>`,
+            embeds: [embed],
+          });
+        } catch (error) {
+          if (
+            error instanceof DiscordAPIError &&
+            IGNORED_ERRORS.includes(error.code as number)
+          ) {
+            return;
+          } else {
+            throw error;
+          }
+        }
         await DbUtils.deleteReminderById(reminder.interactionId);
       }
     });

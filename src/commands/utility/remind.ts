@@ -69,7 +69,10 @@ export class RemindCommand extends Command {
 
   public deferType: CommandDeferType = CommandDeferType.HIDDEN;
 
-  public requireClientPerms: PermissionsString[] = ['SendMessages'];
+  public requireClientPerms: PermissionsString[] = [
+    'SendMessages',
+    'ViewChannel',
+  ];
 
   public async execute(
     interaction: ChatInputCommandInteraction

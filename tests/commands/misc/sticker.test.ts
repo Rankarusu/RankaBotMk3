@@ -40,8 +40,6 @@ const addInput: CommandInteractionOption[] = [
         type: 11,
         value: '0',
         attachment: {
-          attachment:
-            'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
           name: '0.gif',
           id: '0',
           size: 256,
@@ -53,6 +51,10 @@ const addInput: CommandInteractionOption[] = [
           contentType: 'image/gif',
           description: null,
           ephemeral: true,
+          duration: 5000,
+          spoiler: false,
+          waveform: null,
+          toJSON: {},
         } as Attachment,
       },
     ],
@@ -70,8 +72,6 @@ const addInputInvalidType: CommandInteractionOption[] = [
         type: 11,
         value: '0',
         attachment: {
-          attachment:
-            'https://cdn.discordapp.com/ephemeral-attachments/0/0/0.gif',
           name: '0.gif',
           id: '0',
           size: 256,
@@ -83,6 +83,10 @@ const addInputInvalidType: CommandInteractionOption[] = [
           contentType: 'image/bmp',
           description: null,
           ephemeral: true,
+          duration: 5000,
+          spoiler: false,
+          waveform: null,
+          toJSON: {},
         } as Attachment,
       },
     ],

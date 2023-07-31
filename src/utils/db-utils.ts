@@ -160,7 +160,7 @@ export class DbUtils {
       where: {
         guildId,
         userId: {
-          in: userIds,
+          in: [...userIds],
         },
       },
     });

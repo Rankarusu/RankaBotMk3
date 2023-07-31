@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.7](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.6...v1.3.7) (2023-07-31)
+
+
+### Bug Fixes
+
+* fix reminder list deletion bug by updating prisma and djs ([1cdb5ef](https://github.com/Rankarusu/RankaBotMk3/commit/1cdb5ef6bb8914c4e2de0ff5fd9b37c220a779bd))
+
 ### [1.3.6](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.4...v1.3.6) (2023-03-04)
 
 

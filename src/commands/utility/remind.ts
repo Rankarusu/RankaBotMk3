@@ -57,7 +57,7 @@ export class RemindCommand extends Command {
 
   public usage = () => `${this.mention(
     'set'
-  )} \`next thursday at 3pm\` \`do something funny\`
+  )} \`next Thursday at 3pm\` \`do something funny\`
     ${this.mention('set')} \`tomorrow\`
     ${this.mention('set')} \`in 3 days\` \`do the thing\`
     ${this.mention('set')} \`5 mins\` \`get food\`
@@ -107,7 +107,7 @@ export class RemindCommand extends Command {
           interaction.options.getString('notification-text') || 'do something';
 
         // send error if someone abuses mentions
-        if (notificationMessage.match(/<@(.*?)>/)) {
+        if (RegExp(/<@(.*?)>/).exec(notificationMessage)) {
           throw new PingInInputError();
         }
 

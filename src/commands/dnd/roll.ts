@@ -36,7 +36,7 @@ export class RollCommand extends Command {
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
     const dice = interaction.options.getString('dice');
-    if (!dice.match(/^[\d\sdDwW+-]+$/)) {
+    if (!RegExp(/^[\d\sdDwW+-]+$/).exec(dice)) {
       //anything that is not a number, d,D,w,W
       throw new InvalidInputError();
     }
@@ -62,7 +62,7 @@ export class RollCommand extends Command {
 
   private rollDice(str: string): { result: number; resultStr: string } {
     //match everything up to 100d100
-    const roll = str.match(/^([1-9]\d?|100)?[dDwW]([1-9]\d?|100)$/);
+    const roll = RegExp(/^([1-9]\d?|100)?[dDwW]([1-9]\d?|100)$/).exec(str);
 
     let result = 0;
     const resultArr = [];
@@ -99,7 +99,7 @@ export class RollCommand extends Command {
           sign = item;
         }
         resultStr.push(item);
-      } else if (item.match(/^\d+$/)) {
+      } else if (RegExp(/^\d+$/).exec(item)) {
         //add numbers
         if (!sign || sign === '+') {
           result = result + parseInt(item);

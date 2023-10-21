@@ -128,7 +128,7 @@ export class RedditCommand extends Command {
     posts.forEach((post) => {
       //using id for shorter links
       if (!post.stickied && links.length < amount) {
-        links.push(`${baseUrl}/r/${post.subreddit}/${post.id}`);
+        links.push(`${baseUrl}/r/${post.subreddit}/comments/${post.id}`);
       }
     });
 

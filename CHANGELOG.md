@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.8](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.7...v1.3.8) (2023-10-21)
+
+
+### Bug Fixes
+
+* **reddit:** fix reddit link ([fe38c87](https://github.com/Rankarusu/RankaBotMk3/commit/fe38c877266df37eb5add85cec4255838a39a4cf))
+
 ### [1.3.7](https://github.com/Rankarusu/RankaBotMk3/compare/v1.3.6...v1.3.7) (2023-07-31)
 
 

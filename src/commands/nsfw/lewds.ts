@@ -43,7 +43,6 @@ export class LewdsCommand extends Command {
 
   public nsfw?: boolean = true;
 
-  // eslint-disable-next-line require-await
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
@@ -62,8 +61,8 @@ export class LewdsCommand extends Command {
 
     const partitionedEmbeds = ArrayUtils.partition(embeds, 5);
 
-    partitionedEmbeds.forEach(async (chunk) => {
+    for (const chunk of partitionedEmbeds) {
       await InteractionUtils.send(interaction, chunk);
-    });
+    }
   }
 }

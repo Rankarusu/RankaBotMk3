@@ -45,7 +45,9 @@ export class Poll {
 
   public async start(interaction: ChatInputCommandInteraction) {
     this.message = await InteractionUtils.send(interaction, this.embed);
-    this.options.forEach((option) => this.message.react(option.emoji));
+    for (const option of this.options) {
+      await this.message.react(option.emoji);
+    }
     this.createVoteCollector();
   }
 

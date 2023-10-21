@@ -57,7 +57,7 @@ const actions = [
   '*walks away*',
   '*sees bulge*',
   '*looks at you*',
-  '*notices buldge*',
+  '*notices bulge*',
   '*starts twerking*',
   '*huggles tightly*',
   '*boops your nose*',
@@ -89,7 +89,6 @@ export class UwuifyCommand extends Command {
 
   public requireClientPerms: PermissionsString[] = ['SendMessages'];
 
-  // eslint-disable-next-line require-await
   public async execute(
     interaction: ChatInputCommandInteraction
   ): Promise<void> {
@@ -100,9 +99,9 @@ export class UwuifyCommand extends Command {
 
     const textChunks = this.splitText(text); //we split the text in case it gets too large for one message
 
-    textChunks.forEach(async (chunk) => {
+    for (const chunk of textChunks) {
       await InteractionUtils.send(interaction, chunk);
-    });
+    }
   }
 
   private splitText(text: string) {

@@ -12,33 +12,33 @@ export class DateUtils {
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
 
-    let output = '';
+    const output = [];
 
     if (d === 1) {
-      output += `${d} day`;
+      output.push(`${d} day`);
     } else if (d > 1) {
-      output += `${d} days`;
+      output.push(`${d} days`);
     }
 
     if (h === 1) {
-      output += `${h} hour`;
+      output.push(`${h} hour`);
     } else if (h > 1) {
-      output += `${h} hours`;
+      output.push(`${h} hours`);
     }
 
     if (m === 1) {
-      output += `${m} minute`;
+      output.push(`${m} minute`);
     } else if (m > 1) {
-      output += `${m} minutes`;
+      output.push(`${m} minutes`);
     }
 
     if (s === 1) {
-      output += `${s} second`;
+      output.push(`${s} second`);
     } else if (s > 1) {
-      output += `${s} seconds`;
+      output.push(`${s} seconds`);
     }
 
-    return output;
+    return output.join(', ');
   }
 
   private static weekdays: string[] = [

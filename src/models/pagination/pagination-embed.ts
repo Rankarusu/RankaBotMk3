@@ -63,7 +63,7 @@ export class PaginationEmbed {
     timeout?: number
   ) {
     this.interaction = interaction;
-    this.limit = limit ? limit : 5;
+    this.limit = limit || 5;
     if (pages instanceof EmbedBuilder) {
       this.pages = this.splitEmbedIntoPages(pages, this.limit);
     } else {
@@ -73,7 +73,7 @@ export class PaginationEmbed {
       );
     }
     this.author = interaction.user;
-    this.timeout = timeout ? timeout : 60000;
+    this.timeout = timeout || 60000;
   }
 
   public async start(): Promise<void> {

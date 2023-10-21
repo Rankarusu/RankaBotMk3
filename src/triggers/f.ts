@@ -13,6 +13,7 @@ export class FTrigger implements Trigger {
 
   async execute(msg: Message) {
     const channel = msg.channel;
+    await msg.react('🇫');
     await MessageUtils.send(channel, 'F');
   }
 }

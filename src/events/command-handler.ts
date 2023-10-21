@@ -21,7 +21,7 @@ import { EmbedUtils, InteractionUtils, StringUtils } from '../utils';
 
 const Config = require('../../config/config.json');
 
-const nsfwimage = 'https://imgur.com/73eRGtC.png';
+const nsfwImage = 'https://imgur.com/73eRGtC.png';
 
 export class CommandHandler implements EventHandler {
   private rateLimiter = new RateLimiter(
@@ -151,7 +151,7 @@ export class CommandHandler implements EventHandler {
     }
 
     if (!InteractionUtils.isTooLewdForChannel(interaction, command)) {
-      throw new LewdWarning(nsfwimage);
+      throw new LewdWarning(nsfwImage);
     }
   }
 
@@ -165,19 +165,15 @@ export class CommandHandler implements EventHandler {
     interaction: CommandInteraction,
     error?: Error
   ): Promise<void> {
-    {
-      const embed = EmbedUtils.errorEmbed(error);
-      await InteractionUtils.send(interaction, embed);
-    }
+    const embed = EmbedUtils.errorEmbed(error);
+    await InteractionUtils.send(interaction, embed);
   }
 
   private async sendWarning(
     interaction: CommandInteraction,
     error?: DiscordCommandWarning
   ): Promise<void> {
-    {
-      const embed = EmbedUtils.warnEmbed(error, error.imageUrl);
-      await InteractionUtils.send(interaction, embed);
-    }
+    const embed = EmbedUtils.warnEmbed(error, error.imageUrl);
+    await InteractionUtils.send(interaction, embed);
   }
 }

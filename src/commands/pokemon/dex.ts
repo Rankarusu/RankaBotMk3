@@ -246,7 +246,7 @@ export class DexCommand extends Command {
 
   public usage = () => `
   ${this.mention('pokemon')} \`Mega Charizard X\`
-  ${this.mention('abiliy')} \`pressure\`
+  ${this.mention('ability')} \`pressure\`
   ${this.mention('berry')} \`enigma\`
   ${this.mention('item')} \`potion\`
   ${this.mention('move')} \`hyper-beam\`
